@@ -8,8 +8,10 @@ body {
   margin: 0;
 }
 
+#lyrics-panel {width: 500px;}
+
 /* Mobile optimization */
-@media screen and (max-height: 800px) {
+@media screen and (max-width: 800px) {
   .navbar {
     padding-top: 0px;
     height: 120px;
@@ -26,4 +28,5 @@ body {
     margin: 0;
   }
   #navbar-header { display: none; }
+  #lyrics-panel {width: 350px;}
 }

@@ -1,9 +1,8 @@
-import song_overview
-import album_overview
 from flask import Flask, redirect, jsonify, render_template, request
-from flask_pymongo import PyMongo
 import json
 import logging
+import song_overview
+import album_overview
 
 from bson import ObjectId
 from bson import json_util

@@ -15,6 +15,7 @@ import rh_config
 from rh_config import id_
 from rh_config import secret
 from rh_config import token
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=ccm)
@@ -53,10 +54,6 @@ def clean_lyrics(lyrics):
     lyrics = lyrics.replace(r'?', '')
     lyrics = lyrics.replace(r'&', 'and')
     return lyrics
-
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
-analyser = SentimentIntensityAnalyzer()
 
 def sentiment_analyzer_scores(sentence):
     score = analyser.polarity_scores(sentence)

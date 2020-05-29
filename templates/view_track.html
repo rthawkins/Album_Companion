@@ -30,10 +30,15 @@
   <script>var selected_album = '{{song_dict.album_id}}';</script>
   <script>var selected_song = '{{song_dict.sp_id}}';</script>
   <script>var s_energy = '{{song_dict.energy}}';</script>
+  <script>var s_mood = '{{song_dict.mood}}';</script>
   <script>var s_valence = '{{song_dict.valence}}';</script>
+  <script>var s_lyrvalence = '{{song_dict.lyr_valence}}';</script>
+  <script>var s_dance = '{{song_dict.danceability}}';</script>
   <script>var s_title = '{{song_dict.title}}';</script>
   <script>var s_tracknum = '{{song_dict.track}}';</script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
@@ -104,14 +109,58 @@
           </div>
           <!-- <div class="panel-body" id="attributes"> -->
             <!-- <div id="attributes-placeholder">No data.</div> -->
-            <p>{{album_new_data.name}}</p>
-            <p><b>Time Signature</b>: {{ song_dict.time_signature}}/4</p>
+            <!-- <p><b>Time Signature</b>: {{ song_dict.time_signature}}/4</p>
             <p><b>Key</b>: {{ song_dict.song_key}} {{ song_dict.mode}}</p>
             <p><b>Energy</b>: {{ song_dict.energy_des}} ({{ song_dict.energy}})</p>
             <p><b>Overall Mood</b>: {{ song_dict.mood_des}} ({{ song_dict.mood}})</p>
             <p><b>Musical Valence</b>: {{ song_dict.valence_des}} ({{ song_dict.valence}})</p>
             <p><b>Lyrical Sentiment</b>: {{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</p>
-            <p><b>Danceability</b>: {{ song_dict.dance_des}} ({{ song_dict.danceability}})</p>
+            <p><b>Danceability</b>: {{ song_dict.dance_des}} ({{ song_dict.danceability}})</p> -->
+            <table class="table table-striped table-hover ">
+              <tbody>
+                <tr>
+            <td><b>Time Signature</b></td><td>{{ song_dict.time_signature}}/4</td><td><span></span></td></tr>
+            <tr><td><b>Key</b></td><td>{{ song_dict.song_key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
+            <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
+            <tr><td><b>Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
+            <tr><td><b>Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.valence}})</td><td><span class="barchart-valence"></span></td></tr>
+            <tr><td><b>Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
+            <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
+            
+            <script type="text/javascript">
+            
+              $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
+                type: 'bullet',
+                targetWidth: 1,
+                targetColor: '#000000',
+                performanceColor: '#2b64bf'});
+
+              $(".barchart-mood").sparkline([0.5,s_mood,1,0,0], {
+                type: 'bullet',
+                targetWidth: 1,
+                targetColor: '#000000',
+                performanceColor: '#2b64bf'});
+
+              $(".barchart-valence").sparkline([0.5,s_valence,1,0,0], {
+                type: 'bullet',
+                targetWidth: 1,
+                targetColor: '#000000',
+                performanceColor: '#2b64bf'});
+
+              $(".barchart-lyrics").sparkline([0.5,s_lyrvalence,1,0,0], {
+                type: 'bullet',
+                targetWidth: 1,
+                targetColor: '#000000',
+                performanceColor: '#2b64bf'});
+
+              $(".barchart-dance").sparkline([0.5,s_dance,1,0,0], {
+                type: 'bullet',
+                targetWidth: 1,
+                targetColor: '#000000',
+                performanceColor: '#2b64bf'});
+              </script>
+          </tbody>
+          </table>
           </div>
           <div id="vibe_chart"></div>
           <div id="track_chart"></div>

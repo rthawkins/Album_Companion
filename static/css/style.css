@@ -8,6 +8,10 @@ body {
   margin: 0;
 }
 
+tr {
+  font-size: 13px;
+}
+
 #lyrics-panel {width: 500px;}
 
 /* Mobile optimization */

@@ -54,9 +54,9 @@
       </div>
       <div class="col-sm-3">
         <div id="spotify_player" align="center">
-          <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="400" height="250" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+          <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="350" height="250" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
           </div>
-          <table table class="table table-striped table-hover " style="width:400px" align="center">
+          <table table class="table table-striped table-hover " style="width:350px" align="center">
             <thead>
               <tr tr class="active">
                 <th>#</th>
@@ -68,7 +68,7 @@
       </div>
       <div class="col-sm-4">
       <div align="center">
-        <div class="panel panel-primary">
+        <div class="panel panel-primary" style="width:500px">
           <div class="panel-heading">
             <h3 class="panel-title" id="header">"{{ song_dict.title }}" by {{ song_dict.artist }}</h3>
           </div>
@@ -80,7 +80,7 @@
         </div>
              </div></div>
       <div align="center" class="col-sm-3">
-        <div class="panel panel-primary">
+        <div class="panel panel-primary" style="width:350px">
           <div class="panel-heading">
             <h3 class="panel-title">Track Attributes</h3>
           </div>
@@ -88,7 +88,7 @@
             <!-- <div id="attributes-placeholder">No data.</div> -->
             <p>{{album_new_data.name}}</p>
             <p><b>Time Signature</b>: {{ song_dict.time_signature}}/4</p>
-            <p><b>Key</b>: {{ song_dict.key}} {{ song_dict.mode}}</p>
+            <p><b>Key</b>: {{ song_dict.song_key}} {{ song_dict.mode}}</p>
             <p><b>Energy</b>: {{ song_dict.energy_des}} ({{ song_dict.energy}})</p>
             <p><b>Overall Mood</b>: {{ song_dict.mood_des}} ({{ song_dict.mood}})</p>
             <p><b>Musical Valence</b>: {{ song_dict.valence_des}} ({{ song_dict.valence}})</p>

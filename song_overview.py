@@ -71,7 +71,7 @@ def request_song_info(song_title, artist_name):
 def get_song_features(song_id):
     song_dict = sp.audio_features(song_id)[0]
     df = pd.DataFrame([song_dict])
-    df["key"] = df['key'].map(music_keys, na_action='ignore')
+    df["song_key"] = df["key"].map(music_keys, na_action='ignore')
     df["mode"] = df['mode'].map(mode, na_action='ignore')
     df["title"] = sp.track(song_id)['name']
     df["track"] = sp.track(song_id)['track_number']
@@ -92,9 +92,6 @@ def get_song_features(song_id):
     pos_neg(df, 'mood_des', 'mood')
     high_low(df, 'energy_des', 'energy')
     high_low(df, 'dance_des', 'danceability')
-    # criteria = [df['a'].between(1, 3), df['a'].between(4, 7), df['a'].between(8, 10)]
-    # values = [1, 2, 3]
-    # df['b'] = np.select(criteria, values, 0)
     response = request_song_info(df["title"][0], df["artist"][0])
     json_response = response.json()
     df["url"] = json_response['response']['hits'][0]['result']['url']
@@ -105,7 +102,7 @@ def get_song_features(song_id):
 def get_simple_features(song_id):
     song_dict = sp.audio_features(song_id)[0]
     df = pd.DataFrame([song_dict])
-    df["key"] = df['key'].map(music_keys, na_action='ignore')
+    df["song_key"] = df['key'].map(music_keys, na_action='ignore')
     df["mode"] = df['mode'].map(mode, na_action='ignore')
     df["track"] = sp.track(song_id)['track']
     df["title"] = sp.track(song_id)['name']

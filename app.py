@@ -10,16 +10,10 @@ from song_overview import search_song_id
 from album_overview import analyze_album
 
 
-from bson import ObjectId
-from bson import json_util
-from flask.json import JSONEncoder
-
-
 #################################################
 # Flask Setup
 #################################################
 app = Flask(__name__)
-app.json_encoder = JSONEncoder()
 
 #################################################
 # Flask Routes

@@ -19,19 +19,14 @@ import plotly.graph_objects as go
 from song_overview import clean_lyrics
 from song_overview import sentiment_analyzer_scores
 import rh_config
+from rh_config import SpotifyClientCredentials
+from rh_config import id_
+from rh_config import secret
 from rh_config import token
-from rh_config import sp
-from rh_config import genius
 
-
-# genius = lyricsgenius.Genius("4I9B6Ee7dz4ZielbofNgpRCnnnkpfAbQSReqWo3K0Ge7UDG2JBy6rKc-B5Rbl6zf")
-# sp = spotipy.Spotify() 
-# from spotipy.oauth2 import SpotifyClientCredentials 
-# cid ="5a1378624b714bd49ac1f55eb755f579" 
-# secret = "7bb688c810ad47a68dae9a80aa384e75" 
-# client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret) 
-# sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager) 
-# sp.trace=False 
+ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=ccm)
+genius = lyricsgenius.Genius(token)
 analyser = SentimentIntensityAnalyzer()
 
 

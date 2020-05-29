@@ -12,10 +12,14 @@ import requests
 import numpy as np
 import json
 import rh_config
+from rh_config import id_
+from rh_config import secret
 from rh_config import token
-from rh_config import sp
-from rh_config import genius
 
+ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=ccm)
+genius = lyricsgenius.Genius(token)
+analyser = SentimentIntensityAnalyzer()
 
 music_keys = {0:'C',1:'C#',2:'D',3:'D#',4:'E',5:'F',6:'F#',7:'G',8:'G#',9:'A',10:'A#',11:'B'}
 mode = {0:'Minor',1:'Major'}

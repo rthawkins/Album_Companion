@@ -4,7 +4,7 @@ $.getJSON(`/album/${selected_album}`,
         for (var i = 0; i < data.length; i++) {
             tr = $('<tr class="active"/>');
             tr.append("<td> "+ data[i].track+"</td>");
-            tr.append("<td> <a href='https://album-companion.herokuapp.com/"+ data[i].id + "'> " + data[i].name + "</td>");
+            tr.append("<td> <a href='/"+ data[i].id + "'> " + data[i].name + "</td>");
             $('#album_table').append(tr);
         }
     });

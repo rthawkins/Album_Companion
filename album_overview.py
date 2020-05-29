@@ -3,19 +3,12 @@ import pandas as pd
 import spotipy 
 import json
 import os
-import pprint
-import matplotlib.pyplot as plt
-import plotly.express as px
 import numpy as np
 import mpld3
 from scipy import stats
 from pandas.io.json import json_normalize
-import ipywidgets as widgets
-from ipywidgets import interact, interact_manual
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import lyricsgenius
-import re
-import plotly.graph_objects as go
 from song_overview import clean_lyrics
 from song_overview import sentiment_analyzer_scores
 import rh_config

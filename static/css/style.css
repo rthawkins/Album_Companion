@@ -4,7 +4,7 @@ p {
 }
 
 body {
-  padding: 0;
+  padding-top:70px;
   margin: 0;
 }
 
@@ -13,6 +13,7 @@ body,
 html {
   height: 585px;
 }
+
 
 .info {
   padding: 6px 8px;
@@ -34,33 +35,6 @@ html {
   float: left;
   margin-right: 8px;
   opacity: 0.7;
-}
-
-.navbar {
-  min-height: 125px;
-  background-color: #6dbdb0;
-  color: white;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.navbar-brand { 
-  float: none;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 35px; 
-}
-
-.navbar-sub {
-  font-weight: 600;
-  margin-bottom: auto;
-  font-size: 19px; 
-  float: none;
-  position: absolute;
-  top: 68%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 /* The sidebar menu */
@@ -127,10 +101,26 @@ html {
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
+@media screen and (max-height: 800px) {
   .sidebar {padding-top: 15px;}
   .sidebar a {font-size: 18px;}
+  .navbar {
+    padding-top: 0px;
+    height: 120px;
+    width: 100%;
+    z-index: 150;
+    top: 0;
+    position: fixed;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .4);
+    border: 5px black;
+    overflow: hidden;
+  }
+  body {
+    padding-top:150px;
+    margin: 0;
+  }
 }
+
 
 
 .panel-heading{

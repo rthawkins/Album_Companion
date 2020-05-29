@@ -3,7 +3,6 @@ import spotipy.util as util
 import pandas as pd
 from scipy import stats
 from math import log
-from os import path
 from wordcloud import WordCloud
 from spotipy.oauth2 import SpotifyClientCredentials
 import re

@@ -1,8 +1,14 @@
 from flask import Flask, redirect, jsonify, render_template, request
 import json
 import logging
-import song_overview 
-import album_overview 
+import song_overview
+import album_overview
+from song_overview import get_song_features
+from song_overview import get_simple_features
+from song_overview import get_album_id
+from song_overview import search_song_id
+from album_overview import analyze_album
+
 
 from bson import ObjectId
 from bson import json_util

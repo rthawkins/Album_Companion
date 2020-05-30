@@ -1,22 +1,22 @@
+console.log(selected_album)
+
 $.getJSON(`/album/${selected_album}`,
     function (data) {
         var tr;
         for (var i = 0; i < data.length; i++) {
             tr = $('<tr class="active"/>');
             tr.append("<td> "+ data[i].track+"</td>");
-            tr.append("<td> <a href='/"+ data[i].id + "'> " + data[i].name + "</td>");
+            tr.append("<td> <a href='/"+ data[i].sp_id + "'> " + data[i].title + "</td>");
             $('#album_table').append(tr);
         }
     });
 
-
 Plotly.d3.json(`/album/${selected_album}`, function(data){
-
 
     // arrays for plotting selected states
     chart_track = [];
     chart_energy = [];
-    chart_valence = [];
+    chart_mood = [];
     chart_unique = [];
     hover_vibe = [];
 
@@ -24,11 +24,10 @@ Plotly.d3.json(`/album/${selected_album}`, function(data){
     data.forEach(d => {
         chart_track.push(d.track);
         chart_energy.push(d.energy);
-        chart_valence.push(d.mus_valence);
+        chart_mood.push(d.mood);
         chart_unique.push(d.uniqueness * 10);
-        hover_vibe.push(d.name)});
+        hover_vibe.push(d.title)});
 
-    console.log(hover_vibe)
     var trace1 = {
         x: chart_track,
         y: chart_energy,
@@ -49,7 +48,7 @@ Plotly.d3.json(`/album/${selected_album}`, function(data){
 
     var trace2 = {
         x: chart_track,
-        y: chart_valence,
+        y: chart_mood,
         hovertemplate: '%{text}',
         text: hover_vibe,
                 marker: {
@@ -60,13 +59,13 @@ Plotly.d3.json(`/album/${selected_album}`, function(data){
             color: '#d9c468',
             width: 1
           },
-        name: 'Valence',
+        name: 'Mood',
         mode: 'lines+markers',
         type: 'scatter'
       };
 
     var trace3 = {
-        x: chart_valence,
+        x: chart_mood,
         y: chart_energy,
         hovertemplate: '',
         text: hover_vibe,
@@ -79,7 +78,7 @@ Plotly.d3.json(`/album/${selected_album}`, function(data){
       };
 
     var song_highlight_track = {
-        x: [s_valence],
+        x: [s_mood],
         y: [s_energy],
         hovertemplate: '',
         text: hover_vibe[s_tracknum-1],
@@ -94,10 +93,10 @@ Plotly.d3.json(`/album/${selected_album}`, function(data){
 
     var song_highlight_mood = {
         x: [s_tracknum],
-        y: [s_valence],
+        y: [s_mood],
         hovertemplate: 'This Song',
         text: hover_vibe[s_tracknum-1],
-        name: 'Valence',
+        name: 'Mood',
         mode: 'markers',
         type: 'scatter',
         marker: {color: '#d9a868',size: 7, line: {
@@ -215,7 +214,6 @@ Plotly.d3.json(`/album/${selected_album}`, function(data){
         plot_bgcolor: 'rgba(0, 0, 0,0)',
         hovermode: 'closest'
         };
-    
-    Plotly.newPlot('vibe_chart', vibe_chart, layout_vibe,{displayModeBar: false});
-    Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false});
+Plotly.newPlot('vibe_chart', vibe_chart, layout_vibe,{displayModeBar: false});
+Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false});
 })

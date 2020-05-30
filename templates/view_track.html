@@ -126,38 +126,52 @@
             <tr><td><b>Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.valence}})</td><td><span class="barchart-valence"></span></td></tr>
             <tr><td><b>Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
             <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
-            
+            <style type="text/css">
+              .tooltip-class {
+                  width: 29px;
+                  height: 23px;
+                  color:#00FFFF;
+                  background-color: transparent;
+                  margin: 0;    
+              }
+        </style>
             <script type="text/javascript">
             
               $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
                 type: 'bullet',
                 targetWidth: 1,
                 targetColor: '#000000',
-                performanceColor: '#2b64bf'});
+                performanceColor: '#2b64bf',
+                disableInteraction: true
+              });
 
               $(".barchart-mood").sparkline([0.5,s_mood,1,0,0], {
                 type: 'bullet',
                 targetWidth: 1,
                 targetColor: '#000000',
-                performanceColor: '#2b64bf'});
+                performanceColor: '#2b64bf',
+                disableInteraction: true});
 
               $(".barchart-valence").sparkline([0.5,s_valence,1,0,0], {
                 type: 'bullet',
                 targetWidth: 1,
                 targetColor: '#000000',
-                performanceColor: '#2b64bf'});
+                performanceColor: '#2b64bf',
+                disableInteraction: true});
 
               $(".barchart-lyrics").sparkline([0.5,s_lyrvalence,1,0,0], {
                 type: 'bullet',
                 targetWidth: 1,
                 targetColor: '#000000',
-                performanceColor: '#2b64bf'});
+                performanceColor: '#2b64bf',
+                disableInteraction: true});
 
               $(".barchart-dance").sparkline([0.5,s_dance,1,0,0], {
                 type: 'bullet',
                 targetWidth: 1,
                 targetColor: '#000000',
-                performanceColor: '#2b64bf'});
+                performanceColor: '#2b64bf',
+                disableInteraction: true});
               </script>
           </tbody>
           </table>

@@ -15,6 +15,7 @@ from rh_config import id_
 from rh_config import secret
 from rh_config import token
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from bs4 import BeautifulSoup
 
 ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=ccm)
@@ -42,6 +43,7 @@ def clean_lyrics(lyrics):
     lyrics = lyrics.replace(r'Pre-Chorus', '')
     lyrics = lyrics.replace(r'Chorus', '')
     lyrics = lyrics.replace(r'Post-Chorus', '')
+    lyrics = lyrics.replace(r'Guitar Solo', '')
     lyrics = lyrics.replace(r'Outro', '')
     lyrics = lyrics.replace(r'Bridge', '')
     lyrics = lyrics.replace(r'uh-huh', '')
@@ -58,29 +60,38 @@ def sentiment_analyzer_scores(sentence):
     score = analyser.polarity_scores(sentence)
     return score['compound']
 
-
+# https://github.com/willamesoares/lyrics-crawler
 def request_song_info(song_title, artist_name):
     base_url = 'https://api.genius.com'
     headers = {'Authorization': 'Bearer ' + token}
     search_url = base_url + '/search'
     data = {'q': song_title + ' ' + artist_name}
     response = requests.get(search_url, data=data, headers=headers)
-    return response
+    json = response.json()
+    remote_song_info = None
+    for hit in json['response']['hits']:
+        if artist_name[0].lower() in hit['result']['primary_artist']['name'][0].lower():
+            remote_song_info = hit
+            break
+    return remote_song_info
 
 
 def get_song_features(song_id):
-    song_dict = sp.audio_features(song_id)[0]
-    df = pd.DataFrame([song_dict])
+    song_dict = sp.audio_features(song_id)
+    df = pd.DataFrame(song_dict)
     df["song_key"] = df["key"].map(music_keys, na_action='ignore')
     df["mode"] = df['mode'].map(mode, na_action='ignore')
     df["title"] = sp.track(song_id)['name']
+    df["title"] = df["title"][0].split("- Remaster", 1)[0]
     df["track"] = sp.track(song_id)['track_number']
     df["sp_id"] = sp.track(song_id)['id']
     df["album_id"] = sp.track(song_id)["album"]["id"]
     df["artist"] = sp.track(song_id)['artists'][0]['name']
-    title_search = genius.search_song(df["title"][0], df["artist"][0])
-    df["lyrics"] = title_search.lyrics
-    df["lyr_valence"] = (sentiment_analyzer_scores(clean_lyrics(title_search.lyrics)) + 1) / 2
+    remote_song_info = request_song_info(df["title"][0], df["artist"][0])
+    df["url"] = remote_song_info['result']['url']
+    df["genius_songid"] = remote_song_info['result']['id']
+    df["lyrics"] = get_lyrics(df["url"][0])
+    df["lyr_valence"] = (sentiment_analyzer_scores(clean_lyrics(df["lyrics"][0])) + 1) / 2
     df["lyr_valence"] = round(df["lyr_valence"],3)
     df["mood"] = (df["lyr_valence"] + df["valence"]) / 2
     df["mood"] = round(df["mood"],3)
@@ -92,34 +103,20 @@ def get_song_features(song_id):
     pos_neg(df, 'mood_des', 'mood')
     high_low(df, 'energy_des', 'energy')
     high_low(df, 'dance_des', 'danceability')
-    response = request_song_info(df["title"][0], df["artist"][0])
-    json_response = response.json()
-    df["url"] = json_response['response']['hits'][0]['result']['url']
-    df["genius_songid"] = json_response['response']['hits'][0]['result']['id']
-    song_dict = df.to_dict('records')[0]
-    return song_dict
-
-def get_simple_features(song_id):
-    song_dict = sp.audio_features(song_id)[0]
-    df = pd.DataFrame([song_dict])
-    df["song_key"] = df['key'].map(music_keys, na_action='ignore')
-    df["mode"] = df['mode'].map(mode, na_action='ignore')
-    df["track"] = sp.track(song_id)['track']
-    df["title"] = sp.track(song_id)['name']
-    df["sp_id"] = sp.track(song_id)['id']
-    df["album_id"] = sp.track(song_id)["album"]["id"]
-    df["artist"] = sp.track(song_id)['artists'][0]['name']
-    df["energy"] = round(df["energy"],3)
-    df["valence"] = round(df["valence"],3)
-    df["tempo"] = round(df["tempo"],1)
     song_dict = df.to_dict('records')[0]
     return song_dict
 
 def search_song_id(query):
-    track = sp.search(query)
+    track = sp.search(query, limit=1, type='track')
     sp_song_id = track["tracks"]["items"][0]["id"]
     return sp_song_id
 
 def get_album_id(song_id):
     return sp.track(song_id)["album"]["id"]
+
+def get_lyrics(url):
+    page = requests.get(url)
+    html = BeautifulSoup(page.text, 'html.parser')
+    lyrics = html.find('div', class_='lyrics').get_text()
+    return lyrics
 

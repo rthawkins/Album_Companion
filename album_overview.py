@@ -11,17 +11,27 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import lyricsgenius
 from song_overview import clean_lyrics
 from song_overview import sentiment_analyzer_scores
+from song_overview import request_song_info
+from song_overview import get_lyrics
 import rh_config
 from rh_config import SpotifyClientCredentials
 from rh_config import id_
 from rh_config import secret
 from rh_config import token
+import re
+import requests
+from bs4 import BeautifulSoup
+from song_overview import high_low
+from song_overview import pos_neg
 
 ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=ccm)
 genius = lyricsgenius.Genius(token)
 analyser = SentimentIntensityAnalyzer()
 
+def search_album(query):
+    album_id = sp.search(query, limit=1, type='album')['albums']['items'][0]['id']
+    return album_id
 
 def analyze_album(album_id):
         tracks = []
@@ -40,7 +50,7 @@ def analyze_album(album_id):
         album_name = sp.album(album_id)["name"]
         album_name = clean_lyrics(album_name)
         release_date = sp.album(album_id)["release_date"]
-
+        
         regex = '\[.*?\]'
         regex2 = '\-.*'
 
@@ -61,15 +71,67 @@ def analyze_album(album_id):
         df['track'] = df['track_number']
         df = df.loc[df["disc_number"]==1]
         df = df.set_index('track_number')
-        df = df[["name", "energy", "valence", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","id","track"]]
+        df["album_id"] = album_id
+        
+        sent_score = []
+        song_lyrics = []
+        new_titles = []
+        genius_url =[]
+        genius_songid = []
+        
+
+        for title in df["name"]:
+            try:
+                title = re.sub(regex,'',title)
+                title = re.sub(regex2,'',title)
+                title = title.split("- Remaster", 1)[0]
+                new_titles.append(title)
+                remote_song_info = request_song_info(title, artist)
+                url = remote_song_info['result']['url']
+                genius_url.append(url)
+                genius_songid.append(remote_song_info['result']['id'])
+                lyrics = clean_lyrics(get_lyrics(url))
+                sent_score.append(sentiment_analyzer_scores(lyrics))
+                song_lyrics.append(lyrics)
+            except:
+                sent_score.append(None)
+                song_lyrics.append(None)
+
+        
+        df['title'] = new_titles
+        df["lyr_valence"] = sent_score
+        df["lyr_valence"] = (df["lyr_valence"] + 1) / 2
+        df['lyr_valence'] = df['lyr_valence'].fillna(df['valence'])
+        df["lyr_valence"] = round(df["lyr_valence"],3)
+        df["mood"] = (df["lyr_valence"] + df["valence"]) / 2
+        df["mood"] = round(df["mood"],3)
+        df["mood_discrep"] = df["valence"] - df["lyr_valence"]
+        df["lyrics"] = song_lyrics
+        pos_neg(df, 'lyr_valence_des', 'lyr_valence')
+        pos_neg(df, 'valence_des', 'valence')
+        pos_neg(df, 'mood_des', 'mood')
+        high_low(df, 'energy_des', 'energy')
+        high_low(df, 'dance_des', 'danceability')
+        df["artist"] = artist
+        df["album_name"] = album_name
+        df["release_date"] = release_date
+        df["sp_id"] = df["id"]
+        df["genius_songid"] = genius_songid
+        df["url"] = genius_url
+        
+        
         df = df.rename(columns={"valence": "mus_valence"})
+        df = df.rename(columns={"external_urls.spotify": "external_urls_spotify"})
         
         energy_z = abs(stats.zscore(df["energy"]))
         valence_z = abs(stats.zscore(df["mus_valence"]))   
         dance_z = abs(stats.zscore(df["danceability"]))
         duration_z = abs(stats.zscore(df["duration"])) 
         loudness_z = abs(stats.zscore(df["loudness"])) 
-        df["uniqueness"] = (energy_z + valence_z + dance_z + duration_z + loudness_z) / 5
+        lyr_valence_z = abs(stats.zscore(df["lyr_valence"])) 
+        df["uniqueness"] = (energy_z + valence_z + dance_z + duration_z + loudness_z + lyr_valence_z) / 6
+        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid"]]
+
 
         # print("Breakdown:")
         # print("")
@@ -83,6 +145,5 @@ def analyze_album(album_id):
         # print("Quietest: " + df.loc[df['loudness'].idxmin()]["name"])
         
         df = df.to_dict('records')
-        df = json.dumps(df)
         return df
     

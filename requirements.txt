@@ -13,3 +13,5 @@ requests==2.22.0
 wordcloud==1.6.0
 plotly==4.2.1
 plotly-express==0.4.1
+Flask-PyMongo==2.3.0
+bs4==0.0.1

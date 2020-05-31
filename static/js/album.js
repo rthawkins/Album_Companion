@@ -1,4 +1,8 @@
 
+$('#submit-button').click(function() {
+  $('#submit-button').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+});
+
 $.getJSON(`/album/${selected_album}`,
     function (data) {
         var tr;
@@ -171,7 +175,7 @@ $.getJSON(`/album/${selected_album}`,
         },
         showlegend: false,
         xaxis: {
-            title: 'Negative   <->   Positive',
+            title: 'Negative   < - >   Positive',
             titlefont: {
                 color: '#f2f0f0',
                 size: 11
@@ -187,7 +191,7 @@ $.getJSON(`/album/${selected_album}`,
             range: [0,1],
         },
         yaxis: {
-            title: 'Slow   <->   Energetic',
+            title: 'Slow   < - >   Energetic',
             titlefont: {
                 color: '#f2f0f0',
                 size: 11

@@ -1,4 +1,3 @@
-console.log(selected_album)
 
 $.getJSON(`/album/${selected_album}`,
     function (data) {
@@ -11,7 +10,7 @@ $.getJSON(`/album/${selected_album}`,
         }
     });
 
-Plotly.d3.json(`/album/${selected_album}`, function(data){
+  Plotly.d3.json(`/album/${selected_album}`, function(data){
 
     // arrays for plotting selected states
     chart_track = [];
@@ -214,6 +213,8 @@ Plotly.d3.json(`/album/${selected_album}`, function(data){
         plot_bgcolor: 'rgba(0, 0, 0,0)',
         hovermode: 'closest'
         };
-Plotly.newPlot('vibe_chart', vibe_chart, layout_vibe,{displayModeBar: false});
-Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false});
-})
+
+        Plotly.newPlot('vibe_chart', vibe_chart, layout_vibe,{displayModeBar: false});
+        Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false});
+
+});

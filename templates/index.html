@@ -31,9 +31,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="{{ url_for('static', filename='js/album.js') }}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/postscribe/2.0.8/postscribe.min.js"></script>
-  <!-- <script src="{{ url_for('static', filename='js/album.js') }}"></script> -->
   <!-- <script src="{{ url_for('static', filename='js/song_data.js') }}"></script> -->
 </head>
 
@@ -65,7 +65,6 @@
       <div class="col-sm-4" align="center">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#home" data-toggle="tab" aria-expanded="true">About</a></li>
-          <li class=""><a href="#profile" data-toggle="tab" aria-expanded="false">Credits</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
           <div class="tab-pane fade active in" id="home">
@@ -82,22 +81,6 @@
                 <p><a href="/3OsUjkcv1C1v5udFhgRSFg">'OK Computer' by Radiohead</a></p>
                     </div>
                  </div></div>
-          <div class="tab-pane fade" id="profile">
-            <div class="panel panel-default" align="center">
-              <div class="panel-body">
-                <p>This app will give you background about the album you're listening to, including lyric content/insights from Genius.com, song attributes from Spotify, and a graphical overview of the album journey.</p>
-                <p>Please use the search tool at the top to find the starting song.</p>
-                <br>
-                <p>Here are some examples to get you started:</p>
-                <p><a href="/4nzyOwogJuWn1s6QuGFZ6w">'Weezer (The Blue Album)' by Weezer</a></p>
-                <p><a href="/62c60jSWnJWI4EImxeNeSW">'Wings' by BTS</a></p>
-                <p><a href="/7yNK27ZTpHew0c55VvIJgm">'My Beautiful Dark Twisted Fantasy' by Kanye West</a></p>
-                <p><a href="/6ie2Bw3xLj2JcGowOlcMhb">'Melodrama' by Lorde</a></p>
-                <p><a href="/16dTcp6dokMKhm1Guz9K2W">'Neon Bible' by The Arcade Fire</a></p>
-                <p><a href="/3OsUjkcv1C1v5udFhgRSFg">'OK Computer' by Radiohead</a></p>
-                    </div>
-                 </div>
-              </div></div>
       </div>
       <div class="col-sm-4">
       <div align="center">
@@ -112,8 +95,8 @@
       </div>
       <div class="col-sm-1">
       </div>
-    <!-- </div>
-  </div> -->
+    <!-- </div> -->
+  </div>
 </body>
 
 

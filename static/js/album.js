@@ -219,6 +219,6 @@ $.getJSON(`/album/${selected_album}`,
         };
 
         Plotly.newPlot('vibe_chart', vibe_chart, layout_vibe,{displayModeBar: false});
-        Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false});
+        Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false})
 
 });

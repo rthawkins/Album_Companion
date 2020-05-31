@@ -11,6 +11,8 @@ import requests
 import numpy as np
 import json
 import rh_config
+import textblob
+from textblob import TextBlob 
 from rh_config import id_
 from rh_config import secret
 from rh_config import token
@@ -56,9 +58,10 @@ def clean_lyrics(lyrics):
     lyrics = lyrics.replace(r'&', 'and')
     return lyrics
 
-def sentiment_analyzer_scores(sentence):
-    score = analyser.polarity_scores(sentence)
-    return score['compound']
+# https://github.com/salimzubair/lyric-sentiment
+def get_lyric_sentiment(lyrics): 
+    analysis = clean_lyrics(TextBlob(lyrics)) 
+    return analysis.sentiment.polarity
 
 # https://github.com/willamesoares/lyrics-crawler
 def request_song_info(song_title, artist_name):
@@ -91,7 +94,7 @@ def get_song_features(song_id):
     df["url"] = remote_song_info['result']['url']
     df["genius_songid"] = remote_song_info['result']['id']
     df["lyrics"] = get_lyrics(df["url"][0])
-    df["lyr_valence"] = (sentiment_analyzer_scores(clean_lyrics(df["lyrics"][0])) + 1) / 2
+    df["lyr_valence"] = (get_lyric_sentiment(clean_lyrics(df["lyrics"][0])) + 1) / 2
     df["lyr_valence"] = round(df["lyr_valence"],3)
     df["mood"] = (df["lyr_valence"] + df["valence"]) / 2
     df["mood"] = round(df["mood"],3)

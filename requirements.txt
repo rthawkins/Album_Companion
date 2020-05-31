@@ -16,3 +16,8 @@ plotly-express==0.4.1
 Flask-PyMongo==2.3.0
 bs4==0.0.1
 dnspython==1.16.0
+gensim==3.8.3
+spacy==2.2.4
+nltk==3.4.5
+NRCLex==2.0.2
+textblob==0.15.3

@@ -9,8 +9,20 @@ from scipy import stats
 from pandas.io.json import json_normalize
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import lyricsgenius
+import gensim
+from gensim.summarization import keywords
+import spacy
+import nltk
+import nrclex
+from nrclex import NRCLex
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+stopwords = set(stopwords.words('english'))
+from spacy.lang.en import English
+nlp = English()
+nlp.max_length = 10000000
 from song_overview import clean_lyrics
-from song_overview import sentiment_analyzer_scores
+from song_overview import get_lyric_sentiment
 from song_overview import request_song_info
 from song_overview import get_lyrics
 import rh_config
@@ -28,6 +40,27 @@ ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=ccm)
 genius = lyricsgenius.Genius(token)
 analyser = SentimentIntensityAnalyzer()
+
+def preprocess(text):
+    # Create Doc object
+    doc = nlp(text, disable=['ner', 'parser'])
+    # Generate lemmas
+    lemmas = [token.lemma_ for token in doc]
+    # Remove stopwords and non-alphabetic characters
+    a_lemmas = [lemma for lemma in lemmas 
+            if lemma.isalpha() and lemma not in stopwords]
+    
+    return ' '.join(a_lemmas)
+
+def return_keywords(texts):
+    xkeywords = []
+    values = keywords(text=preprocess(texts),split='\n',scores=True)
+    for x in values[:10]:
+        xkeywords.append(x[0])
+    try:
+        return xkeywords 
+    except:
+        return "no content"
 
 def search_album(query):
     album_id = sp.search(query, limit=1, type='album')['albums']['items'][0]['id']
@@ -78,6 +111,8 @@ def analyze_album(album_id):
         new_titles = []
         genius_url =[]
         genius_songid = []
+        keywords = []
+        affect_freq = []
         
 
         for title in df["name"]:
@@ -91,8 +126,11 @@ def analyze_album(album_id):
                 url = remote_song_info['result']['url']
                 genius_url.append(url)
                 genius_songid.append(remote_song_info['result']['id'])
-                lyrics = clean_lyrics(get_lyrics(url))
-                sent_score.append(sentiment_analyzer_scores(lyrics))
+                lyrics = get_lyrics(url)
+                keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
+                sent_score.append(get_lyric_sentiment(lyrics))
+                text_object = NRCLex(lyrics)
+                affect_freq.append(text_object.affect_frequencies)
                 song_lyrics.append(lyrics)
             except:
                 sent_score.append(None)
@@ -119,6 +157,8 @@ def analyze_album(album_id):
         df["sp_id"] = df["id"]
         df["genius_songid"] = genius_songid
         df["url"] = genius_url
+        df['keywords'] = keywords
+        df['affect_freq'] = affect_freq
         
         
         df = df.rename(columns={"valence": "mus_valence"})
@@ -131,7 +171,7 @@ def analyze_album(album_id):
         loudness_z = abs(stats.zscore(df["loudness"])) 
         lyr_valence_z = abs(stats.zscore(df["lyr_valence"])) 
         df["uniqueness"] = (energy_z + valence_z + dance_z + duration_z + loudness_z + lyr_valence_z) / 6
-        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid"]]
+        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq"]]
 
 
         # print("Breakdown:")

@@ -13,6 +13,7 @@ import gensim
 from gensim.summarization import keywords
 import spacy
 import nltk
+from nltk import tokenize
 import nrclex
 from nrclex import NRCLex
 from nltk.corpus import stopwords
@@ -66,6 +67,10 @@ def return_keywords(texts):
 def search_album(query):
     album_id = sp.search(query, limit=1, type='album')['albums']['items'][0]['id']
     return album_id
+
+def sentiment_analyzer_scores(sentence):
+    score = analyser.polarity_scores(sentence)
+    return score['compound']
 
 def analyze_album(album_id):
         tracks = []
@@ -129,7 +134,7 @@ def analyze_album(album_id):
                 genius_songid.append(remote_song_info['result']['id'])
                 lyrics = get_lyrics(url)
                 keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
-                sent_score.append(get_lyric_sentiment(lyrics))
+                sent_score.append(sentiment_analyzer_scores(lyrics))
                 text_object = NRCLex(lyrics)
                 affect_freq.append(text_object.affect_frequencies)
                 song_lyrics.append(lyrics)

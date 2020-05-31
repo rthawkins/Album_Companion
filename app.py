@@ -55,7 +55,7 @@ def song_data(song_id):
         response.append(document)
     song_json = JSONEncoder().encode(response)
     song_dict = json.loads(song_json)[0]
-    documents = collection.find({"album_id": song_dict['album_id']})
+    documents = collection.find({"album_id": song_dict['album_id']}).sort([("album_id", 1), ("track", 1)])
     response = []
     for document in documents:
         document['_id'] = str(document['_id'])
@@ -65,7 +65,7 @@ def song_data(song_id):
 
 @app.route("/album/<album_id>")
 def album_data(album_id):
-    documents = collection.find({"album_id": album_id})
+    documents = collection.find({"album_id": album_id}).sort([("album_id", 1), ("track", 1)])
     response = []
     for document in documents:
         document['_id'] = str(document['_id'])
@@ -77,7 +77,7 @@ def search_result():
     album_search = search_album(request.form['album-search'])
     try: 
         if collection.find({"album_id": album_search}):
-            documents = collection.find({"album_id": album_search})
+            documents = collection.find({"album_id": album_search}).sort([("album_id", 1), ("track", 1)])
             response = []
             for document in documents:
                 document['_id'] = str(document['_id'])
@@ -95,4 +95,4 @@ def search_result():
     return render_template("view_track.html", song_dict=song_dict, album_new_data = album_new_data)
         
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

@@ -85,6 +85,7 @@ def analyze_album(album_id):
                 title = re.sub(regex,'',title)
                 title = re.sub(regex2,'',title)
                 title = title.split("- Remaster", 1)[0]
+                title = title.split("- Mono", 1)[0]
                 new_titles.append(title)
                 remote_song_info = request_song_info(title, artist)
                 url = remote_song_info['result']['url']

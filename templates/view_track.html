@@ -40,6 +40,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="{{ url_for('static', filename='js/album.js') }}" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
@@ -119,7 +120,7 @@
               <tbody>
                 <tr>
             <td><b>Time Signature</b></td><td>{{ song_dict.time_signature}}/4</td><td><span></span></td></tr>
-            <tr><td><b>Key</b></td><td>{{ song_dict.song_key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
+            <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
             <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
             <tr><td><b>Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
             <tr><td><b>Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
@@ -177,7 +178,6 @@
           </div>
           <div id="vibe_chart"></div>
           <div id="track_chart"></div>
-          <script src="{{ url_for('static', filename='js/album.js') }}"></script>
         </div>
       </div>
       <div class="col-sm-1">

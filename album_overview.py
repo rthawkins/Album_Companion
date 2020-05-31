@@ -135,6 +135,10 @@ def analyze_album(album_id):
             except:
                 sent_score.append(None)
                 song_lyrics.append(None)
+                keywords.append(None)
+                affect_freq.append(None)
+                genius_url.append(None)
+                genius_songid.append(None)
 
         
         df['title'] = new_titles

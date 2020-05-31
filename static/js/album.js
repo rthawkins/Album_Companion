@@ -168,7 +168,7 @@ $.getJSON(`/album/${selected_album}`,
                 };
 
     var layout_track = {
-        title: 'Album Tracks',
+        title: 'Album Track Quadrants',
         titlefont: {
                 color: '#f2f0f0',
                 size: 14

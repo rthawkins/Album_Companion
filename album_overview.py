@@ -17,6 +17,7 @@ import nrclex
 from nrclex import NRCLex
 from nltk.corpus import stopwords
 nltk.download('stopwords')
+nltk.download('punkt')
 stopwords = set(stopwords.words('english'))
 from spacy.lang.en import English
 nlp = English()

@@ -20,7 +20,7 @@ from bs4 import BeautifulSoup
 id_ = config('spotify_id')
 secret = config("spotify_secret")
 genius_token = config('genius_token')
-mg_usr = 'rthawkins'
+mg_usr = config('mg_usr')
 
 token = util.prompt_for_user_token(username= mg_usr,
                            scope='user-read-currently-playing',

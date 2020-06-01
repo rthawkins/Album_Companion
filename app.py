@@ -15,15 +15,18 @@ from song_overview import get_album_id
 from song_overview import search_song_id
 from album_overview import analyze_album
 from album_overview import search_album
+import rh_config
+from rh_config import mg_usr
+from rh_config import mg_pwd
+from rh_config import id_
+from rh_config import secret
+from rh_config import genius_token
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
             return str(o)
         return json.JSONEncoder.default(self, o)
-
-mg_usr = config('mg_usr')
-mg_pwd = config('mgr_pwd')
 
 #################################################
 # Flask Setup

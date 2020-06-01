@@ -35,6 +35,11 @@ import requests
 from bs4 import BeautifulSoup
 from song_overview import high_low
 from song_overview import pos_neg
+import rh_config
+from rh_config import mg_usr
+from rh_config import id_
+from rh_config import secret
+from rh_config import genius_token
 
 id_ = config("spotify_id")
 secret = config("spotify_secret")
@@ -43,8 +48,8 @@ mg_usr = config('mg_usr')
 
 token = util.prompt_for_user_token(username= mg_usr,
                            scope='user-read-currently-playing',
-                           client_id= config("spotify_id"),
-                           client_secret= config("spotify_secret"),
+                           client_id= id_,
+                           client_secret= secret,
                            redirect_uri='https://album-companion.herokuapp.com/')
 
 ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)

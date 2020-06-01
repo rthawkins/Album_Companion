@@ -1,5 +1,19 @@
 #mobile-view { display: none; }
 
+/* #first-column {
+  position: 20px;
+} */
+
+/* #second-column {
+  position: relative;
+  left: 50px;
+}
+
+#third-column {
+  position: relative;
+  left: 200px;
+} */
+
 p {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 13px;
@@ -71,7 +85,7 @@ margin-bottom: -1px;
 
 
 /* Mobile optimization */
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1230px) {
   body {
     padding-top:80px;
   }

@@ -2,9 +2,12 @@
 import pandas as pd 
 import spotipy 
 import json
-import os
+import locale
+from decouple import config
 import numpy as np
 import mpld3
+import spotipy.util as util
+from spotipy.oauth2 import SpotifyClientCredentials
 from scipy import stats
 from pandas.io.json import json_normalize
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -27,20 +30,25 @@ from song_overview import clean_lyrics
 from song_overview import get_lyric_sentiment
 from song_overview import request_song_info
 from song_overview import get_lyrics
-import rh_config
-from rh_config import SpotifyClientCredentials
-from rh_config import id_
-from rh_config import secret
-from rh_config import token
 import re
 import requests
 from bs4 import BeautifulSoup
 from song_overview import high_low
 from song_overview import pos_neg
 
+id_ = config("spotify_id")
+secret = config("spotify_secret")
+genius_token = config('genius_token')
+
+token = util.prompt_for_user_token(username= config('mg_usr'),
+                           scope='user-read-currently-playing',
+                           client_id= config("spotify_id"),
+                           client_secret= config("spotify_secret"),
+                           redirect_uri='https://album-companion.herokuapp.com/')
+
 ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=ccm)
-genius = lyricsgenius.Genius(token)
+genius = lyricsgenius.Genius(genius_token)
 analyser = SentimentIntensityAnalyzer()
 
 def preprocess(text):

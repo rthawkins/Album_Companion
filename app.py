@@ -6,7 +6,8 @@ log = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
 import song_overview
 import album_overview
-import os
+import locale
+from decouple import config
 from pymongo.errors import BulkWriteError
 from bson import ObjectId
 from song_overview import get_song_features
@@ -14,8 +15,6 @@ from song_overview import get_album_id
 from song_overview import search_song_id
 from album_overview import analyze_album
 from album_overview import search_album
-from rh_config import mg_pwd
-from rh_config import mg_usr
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -23,6 +22,8 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
+mg_usr = config('mg_usr')
+mg_pwd = config('mg_pwd')
 
 #################################################
 # Flask Setup

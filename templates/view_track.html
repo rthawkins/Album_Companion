@@ -30,7 +30,7 @@
 </head>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
+  <div class="container-fluid" align="center">
     <div class="navbar-header" id="navbar-header">
       <a class="navbar-brand" href="/" id="home-button">Home</a>
     </div>
@@ -48,9 +48,7 @@
     
     <div class="container-fluid" id="full-screen">
     <div class="row">
-      <div class="col-sm-1">
-      </div>
-      <div class="col-sm-3">
+      <div class="col-xs-3" id="first-column">
         <div id="spotify_player" align="center">
           <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="350" height="250" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
           </div>
@@ -65,7 +63,9 @@
             <tbody id="album_table"></tbody>
           </table>
       </div>
-      <div class="col-sm-4">
+      <div class="col-xs-1">
+      </div>
+      <div class="col-xs-4" id="second-column">
       <div align="center">
         <div class="panel panel-primary" id="lyrics-panel">
           <div class="panel-heading">
@@ -78,7 +78,9 @@
         <div id="rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}">Read <a href="{{song_dict.url}}">{{song_dict.title}} by {{song_dict.artist}}</a> on Genius</div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js"></script>          </div>
         </div>
              </div></div>
-      <div align="center" class="col-sm-3">
+             <div class="col-xs-1">
+            </div>
+      <div align="center" class="col-xs-3" id="third-column">
         <div class="panel panel-primary" style="width:350px">
           <div class="panel-heading">
             <h3 class="panel-title">Track Attributes</h3>
@@ -156,15 +158,13 @@
           <div id="track_chart"></div>
         </div>
       </div>
-      <div class="col-sm-1">
-      </div>
     </div>
 
  <!-- Mobile view -->
 
- <div class="container-fluid" id="mobile-view">
+ <div class="container-fluid" id="mobile-view" align="center">
   <div class="row">
-    <div class="col-xs-4">
+    <div class="col-xs-12">
       <div id="spotify_player-mobile" align="center">
         <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="350" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>

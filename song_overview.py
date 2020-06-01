@@ -6,22 +6,30 @@ from math import log
 from wordcloud import WordCloud
 from spotipy.oauth2 import SpotifyClientCredentials
 import re
+import locale
+from decouple import config
 import lyricsgenius
 import requests
 import numpy as np
 import json
-import rh_config
 import textblob
 from textblob import TextBlob 
-from rh_config import id_
-from rh_config import secret
-from rh_config import token
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from bs4 import BeautifulSoup
 
+id_ = config('spotify_id')
+secret = config("spotify_secret")
+genius_token = config('genius_token')
+
+token = util.prompt_for_user_token(username= config('mg_usr'),
+                           scope='user-read-currently-playing',
+                           client_id= config("spotify_id"),
+                           client_secret= config("spotify_secret"),
+                           redirect_uri='https://album-companion.herokuapp.com/')
+
 ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=ccm)
-genius = lyricsgenius.Genius(token)
+genius = lyricsgenius.Genius(genius_token)
 analyser = SentimentIntensityAnalyzer()
 
 music_keys = {0:'C',1:'C#',2:'D',3:'D#',4:'E',5:'F',6:'F#',7:'G',8:'G#',9:'A',10:'A#',11:'B'}
@@ -66,7 +74,7 @@ def get_lyric_sentiment(lyrics):
 # https://github.com/willamesoares/lyrics-crawler
 def request_song_info(song_title, artist_name):
     base_url = 'https://api.genius.com'
-    headers = {'Authorization': 'Bearer ' + token}
+    headers = {'Authorization': 'Bearer ' + genius_token}
     search_url = base_url + '/search'
     data = {'q': song_title + ' ' + artist_name}
     response = requests.get(search_url, data=data, headers=headers)

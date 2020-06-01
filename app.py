@@ -96,4 +96,4 @@ def search_result():
     return render_template("view_track.html", song_dict=song_dict, album_new_data = album_new_data)
         
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

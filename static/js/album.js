@@ -12,6 +12,13 @@ $.getJSON(`/album/${selected_album}`,
             tr.append("<td> <a href='/"+ data[i].sp_id + "'> " + data[i].title + "</td>");
             $('#album_table').append(tr);
         }
+        var tr_mobile;
+        for (var i = 0; i < data.length; i++) {
+          tr_mobile = $('<tr class="active"/>');
+          tr_mobile.append("<td> "+ data[i].track+"</td>");
+          tr_mobile.append("<td> <a href='/"+ data[i].sp_id + "'> " + data[i].title + "</td>");
+          $('#album_table_mobile').append(tr_mobile);
+      }
     });
 
   Plotly.d3.json(`/album/${selected_album}`, function(data){
@@ -73,7 +80,9 @@ $.getJSON(`/album/${selected_album}`,
         hovertemplate: '',
         text: hover_vibe,
         marker: {
-            size: chart_unique
+            size: chart_unique, line: {
+              color: 'black', width: 2
+          }
         },
         name: 'Album Tracks',
         mode: 'markers',
@@ -167,6 +176,50 @@ $.getJSON(`/album/${selected_album}`,
                   hovermode: 'closest'
                 };
 
+        var layout_vibe_mobile = {
+          title: 'Album Vibe',
+          titlefont: {
+                color: 'black',
+                size: 14
+          },
+          showlegend: false,
+          xaxis: {
+            title: false,
+            titlefont: {
+                color: 'black',
+                size: 10
+                },
+            showgrid: false,
+            zeroline: true,
+            linecolor: 'black',
+            ticks: 'outside',
+            tickfont: {color: 'black',
+            size: 10
+        }
+          },
+          yaxis: {
+            linecolor: 'black',
+            gridwidth: 2,
+            gridcolor: 'black',
+            tickvals: [0,.5,1], 
+            range: [0,1],
+            tickfont: {color: 'black',
+            size: 10
+        },
+          },
+          margin: {
+            l: 50,
+            r: 50,
+            b: 50,
+            t: 50
+          },
+          width: 290,
+          height: 290,
+          paper_bgcolor: 'rgba(0, 0, 0,0)',
+          plot_bgcolor: 'rgba(0, 0, 0,0)',
+          hovermode: 'closest'
+        };
+
     var layout_track = {
         title: 'Album Track Quadrants',
         titlefont: {
@@ -218,7 +271,60 @@ $.getJSON(`/album/${selected_album}`,
         hovermode: 'closest'
         };
 
+    var layout_track_mobile = {
+      title: 'Album Track Quadrants',
+      titlefont: {
+              color: 'black',
+              size: 14
+      },
+      showlegend: false,
+      xaxis: {
+          title: 'Negative   < - >   Positive',
+          titlefont: {
+              color: 'black',
+              size: 11
+              },
+          showgrid: true,
+          zeroline: true,
+          linecolor: 'black',
+          ticks: 'outside',
+          tickfont: {color: 'black',
+                  size: 10
+              },
+          tickvals: [0,.5,1], 
+          range: [0,1],
+      },
+      yaxis: {
+          title: 'Slow   < - >   Energetic',
+          titlefont: {
+              color: '#black',
+              size: 11
+              },
+          linecolor: 'black',
+          gridwidth: 2,
+          gridcolor: 'black',
+          tickvals: [0,.5,1], 
+          range: [0,1],
+          tickfont: {color: 'black',
+          size: 10
+      },
+      },
+      margin: {
+          l: 50,
+          r: 50,
+          b: 50,
+          t: 50
+      },
+      width: 290,
+      height: 290,
+      paper_bgcolor: 'rgba(0, 0, 0,0)',
+      plot_bgcolor: 'rgba(0, 0, 0,0)',
+      hovermode: 'closest'
+      };
+
         Plotly.newPlot('vibe_chart', vibe_chart, layout_vibe,{displayModeBar: false});
-        Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false})
+        Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false});
+        Plotly.newPlot('vibe_chart_mobile', vibe_chart, layout_vibe_mobile,{displayModeBar: false});
+        Plotly.newPlot('track_chart_mobile', track_chart, layout_track_mobile,{displayModeBar: false});
 
 });

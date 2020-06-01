@@ -1,3 +1,5 @@
+#mobile-view { display: none; }
+
 p {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 13px;
@@ -65,24 +67,18 @@ margin-bottom: -1px;
     background-color: #4a9fe9;
 }
 
+
+
+
 /* Mobile optimization */
 @media screen and (max-width: 800px) {
-  .navbar {
-    padding-top: 0px;
-    height: 120px;
-    width: 100%;
-    z-index: 150;
-    top: 0;
-    position: fixed;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, .4);
-    border: 5px black;
-    overflow: hidden;
-  }
   body {
-    padding-top:150px;
-    margin: 0;
+    padding-top:80px;
   }
   #navbar-header { display: none; }
   #lyrics-panel {width: 350px;}
   #home-panel {width: 350px;}
+  #full-screen { display: none; }
+  #mobile-view { display: block; }
+  #search_form_input {width: 150px}
 }

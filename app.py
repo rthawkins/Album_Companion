@@ -22,8 +22,8 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-mg_usr = '***REMOVED***'
-mg_pwd = '=w=Qb2017'
+mg_usr = config('mg_usr')
+mg_pwd = config('mgr_pwd')
 
 #################################################
 # Flask Setup

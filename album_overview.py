@@ -39,8 +39,9 @@ from song_overview import pos_neg
 id_ = config("spotify_id")
 secret = config("spotify_secret")
 genius_token = config('genius_token')
+mg_usr = 'rthawkins'
 
-token = util.prompt_for_user_token(username= config('mg_usr'),
+token = util.prompt_for_user_token(username= mg_usr,
                            scope='user-read-currently-playing',
                            client_id= config("spotify_id"),
                            client_secret= config("spotify_secret"),

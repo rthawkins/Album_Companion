@@ -70,7 +70,8 @@ def album_data(album_id):
     for document in documents:
         document['_id'] = str(document['_id'])
         response.append(document)
-    return JSONEncoder().encode(response)
+    result = JSONEncoder().encode(response)
+    return result
 
 @app.route('/search_result', methods=['POST'])
 def search_result():

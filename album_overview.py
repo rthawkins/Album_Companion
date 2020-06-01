@@ -83,8 +83,12 @@ def analyze_album(album_id):
         for track in tracks:
             track_ids.append(track['id'])
         track_str = ','.join(map("'{0}'".format, track_ids)) 
-        analysis_df = json_normalize(sp.audio_features(tracks=track_ids))
-        tracks_df = json_normalize(sp.album_tracks(album_id)["items"])
+        analysis_json = sp.audio_features(tracks=track_ids)
+        analysis_json = list(filter(None, analysis_json)) 
+        tracks_json = sp.album_tracks(album_id)["items"]
+        tracks_json = list(filter(None, tracks_json)) 
+        analysis_df = json_normalize(analysis_json)
+        tracks_df = json_normalize(tracks_json)
         df = analysis_df.merge(tracks_df, on='id', how='inner')
         album_name = sp.album(album_id)["name"]
         album_name = clean_lyrics(album_name)

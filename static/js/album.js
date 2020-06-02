@@ -29,6 +29,7 @@ $.getJSON(`/album/${selected_album}`,
     chart_mood = [];
     chart_unique = [];
     hover_vibe = [];
+    song_links = [];
 
     // populate arrays differently, controlling for if the user is looking at all states, highlighting a state, or isolating a state
     data.forEach(d => {
@@ -36,48 +37,43 @@ $.getJSON(`/album/${selected_album}`,
         chart_energy.push(d.energy);
         chart_mood.push(d.mood);
         chart_unique.push(d.uniqueness * 10);
+        song_links.push(d.sp_id);
         hover_vibe.push(d.title)});
 
-    var trace1 = {
+    var vibe_chart_trace = {
         x: chart_track,
         y: chart_energy,
-        hovertemplate: '%{text}',
+        hovertemplate: '<b>%{text}</b><br>Energy: %{y:.2f}<br>Mood: %{marker.color:.2f}<extra></extra>',
         text: hover_vibe,
         marker: {
-            color: '#ae68d9',
-            size: 6
+        color: chart_mood, cmin: 0, cmax: 1,
+          colorscale: [
+            ['0.0', '#a11d33'],
+            ['0.1', '#b21e35'],
+            ['0.2', '#c71f37'],
+            ['0.3', '#f26a8d'],
+            ['0.4', '#000000'],
+            ['0.5', '#000000'],
+            ['0.6', '#000000'],
+            ['0.7', '#02c39a'],
+            ['0.8', '#00a896'],
+            ['0.9', '#028090'],
+            ['1.0', '#05668d']],
+            size: 8
           },
           line: {
-            color: '#ae68d9',
+            color: '#000000',
             width: 1
           },
-        name: 'Energy',
+        title: false,
         mode: 'lines+markers',
         type: 'scatter'
       };
 
-    var trace2 = {
-        x: chart_track,
-        y: chart_mood,
-        hovertemplate: '%{text}',
-        text: hover_vibe,
-                marker: {
-            color: '#d9c468',
-            size: 6
-          },
-          line: {
-            color: '#d9c468',
-            width: 1
-          },
-        name: 'Mood',
-        mode: 'lines+markers',
-        type: 'scatter'
-      };
-
-    var trace3 = {
+    var track_chart_trace = {
         x: chart_mood,
         y: chart_energy,
-        hovertemplate: '',
+        hovertemplate: '<b>%{text}</b><br>Energy: %{y:.2f}<br>Mood: %{x:.2f}<extra></extra>',
         text: hover_vibe,
         marker: {
             size: chart_unique, line: {
@@ -92,8 +88,8 @@ $.getJSON(`/album/${selected_album}`,
     var song_highlight_track = {
         x: [s_mood],
         y: [s_energy],
-        hovertemplate: '',
-        text: hover_vibe[s_tracknum-1],
+        hovertemplate: '<b>%{text}</b><br>Energy: %{y:.2f}<br>Mood: %{x:.2f}<extra></extra>',
+        text: [hover_vibe[s_tracknum-1]],
         name: 'This Song',
         mode: 'markers',
         type: 'scatter',
@@ -103,34 +99,35 @@ $.getJSON(`/album/${selected_album}`,
         }}
       };
 
-    var song_highlight_mood = {
-        x: [s_tracknum],
-        y: [s_mood],
-        hovertemplate: 'This Song',
-        text: hover_vibe[s_tracknum-1],
-        name: 'Mood',
-        mode: 'markers',
-        type: 'scatter',
-        marker: {color: '#d9a868',size: 7, line: {
-            color: 'black', width: 2
-        }}
-      };
-
-    var song_highlight_energy = {
+    var song_highlight_vibe = {
         x: [s_tracknum],
         y: [s_energy],
-        hovertemplate: 'This Song',
-        text: hover_vibe[s_tracknum-1],
-        name: 'Energy',
+        hovertemplate: '<b>%{text}</b><br>Energy: %{y:.2f}<br>Mood: %{marker.color:.2f}<extra></extra>',
+        text: [hover_vibe[s_tracknum-1]],
         mode: 'markers',
         type: 'scatter',
-        marker: {color: '#d9a868',size: 7, line: {
-            color: 'black', width: 2
+        marker: {
+          color: chart_mood, cmin: 0, cmax: 1,
+            colorscale: [
+              ['0.0', '#a11d33'],
+              ['0.1', '#b21e35'],
+              ['0.2', '#c71f37'],
+              ['0.3', '#f26a8d'],
+              ['0.4', '#000000'],
+              ['0.5', '#000000'],
+              ['0.6', '#000000'],
+              ['0.7', '#02c39a'],
+              ['0.8', '#00a896'],
+              ['0.9', '#028090'],
+              ['1.0', '#05668d']],
+              size: 8,
+              line: {
+            color: '#d9a868', width: 2
         }}
       };
     
-    var vibe_chart = [trace1,trace2,song_highlight_mood,song_highlight_energy];
-    var track_chart = [trace3, song_highlight_track];
+    var vibe_chart_ref = [vibe_chart_trace,song_highlight_vibe];
+    var track_chart_ref = [track_chart_trace, song_highlight_track];
 
     var layout_vibe = {
                   title: 'Album Vibe',
@@ -228,7 +225,7 @@ $.getJSON(`/album/${selected_album}`,
         },
         showlegend: false,
         xaxis: {
-            title: 'Negative   < - >   Positive',
+            title: 'Mood',
             titlefont: {
                 color: '#f2f0f0',
                 size: 11
@@ -244,7 +241,7 @@ $.getJSON(`/album/${selected_album}`,
             range: [0,1],
         },
         yaxis: {
-            title: 'Slow   < - >   Energetic',
+            title: 'Energy',
             titlefont: {
                 color: '#f2f0f0',
                 size: 11
@@ -268,7 +265,57 @@ $.getJSON(`/album/${selected_album}`,
         height: 290,
         paper_bgcolor: 'rgba(0, 0, 0,0)',
         plot_bgcolor: 'rgba(0, 0, 0,0)',
-        hovermode: 'closest'
+        hovermode: 'closest',
+        annotations: [
+          {
+            x: .75,
+            y: .99,
+            xref: 'x',
+            yref: 'y',
+            text: 'Upbeat',
+            font: {
+              family: 'Verdana',
+              size: 9,
+              color: '#AEAEAE'},
+            showarrow: false,
+          },
+          {
+            x: .25,
+            y: .99,
+            xref: 'x',
+            yref: 'y',
+            text: 'Aggressive',
+            font: {
+              family: 'Verdana',
+              size: 9,
+              color: '#AEAEAE'},
+            showarrow: false,
+          },
+          {
+            x: .25,
+            y: .05,
+            xref: 'x',
+            yref: 'y',
+            text: 'Somber',
+            font: {
+              family: 'Verdana',
+              size: 9,
+              color: '#AEAEAE'},
+            showarrow: false,
+          },
+          {
+            x: .75,
+            y: .05,
+            xref: 'x',
+            yref: 'y',
+            text: 'Chill',
+            font: {
+              family: 'Verdana',
+              size: 9,
+              color: '#AEAEAE'},
+            showarrow: false,
+          },
+        ]
         };
 
     var layout_track_mobile = {
@@ -286,6 +333,8 @@ $.getJSON(`/album/${selected_album}`,
               },
           showgrid: true,
           zeroline: true,
+          gridwidth: 2,
+          gridcolor: 'black',
           linecolor: 'black',
           ticks: 'outside',
           tickfont: {color: 'black',
@@ -319,12 +368,95 @@ $.getJSON(`/album/${selected_album}`,
       height: 290,
       paper_bgcolor: 'rgba(0, 0, 0,0)',
       plot_bgcolor: 'rgba(0, 0, 0,0)',
-      hovermode: 'closest'
+      hovermode: 'closest',
+      annotations: [
+        {
+          x: .75,
+          y: .99,
+          xref: 'x',
+          yref: 'y',
+          text: 'Upbeat',
+          font: {
+            family: 'Verdana',
+            size: 9,
+            color: '#AEAEAE'},
+          showarrow: false,
+        },
+        {
+          x: .25,
+          y: .99,
+          xref: 'x',
+          yref: 'y',
+          text: 'Aggressive',
+          font: {
+            family: 'Verdana',
+            size: 9,
+            color: '#AEAEAE'},
+          showarrow: false,
+        },
+        {
+          x: .25,
+          y: .05,
+          xref: 'x',
+          yref: 'y',
+          text: 'Somber',
+          font: {
+            family: 'Verdana',
+            size: 9,
+            color: '#AEAEAE'},
+          showarrow: false,
+        },
+        {
+          x: .75,
+          y: .05,
+          xref: 'x',
+          yref: 'y',
+          text: 'Chill',
+          font: {
+            family: 'Verdana',
+            size: 9,
+            color: '#AEAEAE'},
+          showarrow: false,
+        },
+      ]
       };
 
-        Plotly.newPlot('vibe_chart', vibe_chart, layout_vibe,{displayModeBar: false});
-        Plotly.newPlot('track_chart', track_chart, layout_track,{displayModeBar: false});
-        Plotly.newPlot('vibe_chart_mobile', vibe_chart, layout_vibe_mobile,{displayModeBar: false});
-        Plotly.newPlot('track_chart_mobile', track_chart, layout_track_mobile,{displayModeBar: false});
+        Plotly.newPlot('vibe_chart', vibe_chart_ref, layout_vibe,{displayModeBar: false});
+        Plotly.newPlot('track_chart', track_chart_ref, layout_track,{displayModeBar: false});
+        Plotly.newPlot('vibe_chart_mobile', vibe_chart_ref, layout_vibe_mobile,{displayModeBar: false});
+        Plotly.newPlot('track_chart_mobile', track_chart_ref, layout_track_mobile,{displayModeBar: false});
+
+        vibe_chart.on('plotly_click', function(data){
+          if (data.points.length === 1) {
+            var link = song_links[data.points[0].pointNumber];
+            
+            // Note: window navigation here.
+            window.location = link;
+          }
+        });
+        track_chart.on('plotly_click', function(data){
+        if (data.points.length === 1) {
+          var link = song_links[data.points[0].pointNumber];
+          
+          // Note: window navigation here.
+          window.location = link;
+          }
+        });
+        vibe_chart_mobile.on('plotly_click', function(data){
+          if (data.points.length === 1) {
+            var link = song_links[data.points[0].pointNumber];
+            
+            // Note: window navigation here.
+            window.location = link;
+          }
+        });
+        track_chart_mobile.on('plotly_click', function(data){
+        if (data.points.length === 1) {
+          var link = song_links[data.points[0].pointNumber];
+          
+          // Note: window navigation here.
+          window.location = link;
+          }
+        });
 
 });

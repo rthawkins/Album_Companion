@@ -82,6 +82,32 @@ def search_album(query):
     album_id = sp.search(query, limit=1, type='album')['albums']['items'][0]['id']
     return album_id
 
+def search_metacritic(artist_name, album_name):
+    
+    query = f'{album_name}'
+    url = f'https://www.metacritic.com/search/album/{query}/results'
+
+    user_agent = {'User-agent': 'Mozilla/5.0'}
+    response = requests.get(url, headers = user_agent)
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    results = soup.find_all('h3', class_="product_title basic_stat")
+    for result in results:
+        if artist_name.replace('-', ' ') in result.find('a')['href'].replace('-', ' '):
+            s_result = result.find('a')['href']
+            break
+            return s_result
+    try:
+        review_url = f'https://www.metacritic.com{s_result}'
+        response = requests.get(review_url, headers = user_agent)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        result = soup.find('div', class_="metascore_w xlarge album positive")
+        score = result.find('span').text
+        return score
+    except:
+        print('Could not find.')
+        None
+
 def sentiment_analyzer_scores(sentence):
     score = analyser.polarity_scores(sentence)
     return score['compound']
@@ -129,6 +155,7 @@ def analyze_album(album_id):
         df = df.loc[df["disc_number"]==1]
         df = df.set_index('track_number')
         df["album_id"] = album_id
+        df["metacritic"] = search_metacritic(artist, album_name)
         
         sent_score = []
         song_lyrics = []
@@ -199,19 +226,17 @@ def analyze_album(album_id):
         loudness_z = abs(stats.zscore(df["loudness"])) 
         lyr_valence_z = abs(stats.zscore(df["lyr_valence"])) 
         df["uniqueness"] = (energy_z + valence_z + dance_z + duration_z + loudness_z + lyr_valence_z) / 6
-        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq"]]
+        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic"]]
 
 
-        # print("Breakdown:")
-        # print("")
-        # print("Representative: " + df.loc[df['uniqueness'].idxmin()]["name"])
-        # print("Unique: " + df.loc[df['uniqueness'].idxmax()]["name"])
-        # print("Energetic: " + df.loc[df['energy'].idxmax()]["name"])
-        # print("Slowest: " + df.loc[df['energy'].idxmin()]["name"])
-        # print("Positive: " + df.loc[df['mood'].idxmax()]["name"])
-        # print("Negative: " + df.loc[df['mood'].idxmin()]["name"])
-        # print("Loudest: " + df.loc[df['loudness'].idxmax()]["name"])
-        # print("Quietest: " + df.loc[df['loudness'].idxmin()]["name"])
+        df["Representative"] = df.loc[df['uniqueness'].idxmin()]["title"]
+        df["Unique"] = df.loc[df['uniqueness'].idxmax()]["title"]
+        df["Energetic"] = df.loc[df['energy'].idxmax()]["title"]
+        df["Slowest"] =  df.loc[df['energy'].idxmin()]["title"]
+        df["Positive"] =  df.loc[df['mood'].idxmax()]["title"]
+        df["Negative"] =  df.loc[df['mood'].idxmin()]["title"]
+        df["Loudest"] =  df.loc[df['loudness'].idxmax()]["title"]
+        df["Quietest"] = df.loc[df['loudness'].idxmin()]["title"]
         
         df = df.to_dict('records')
         return df

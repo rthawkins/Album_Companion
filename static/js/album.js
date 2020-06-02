@@ -442,21 +442,6 @@ $.getJSON(`/album/${selected_album}`,
           window.location = link;
           }
         });
-        vibe_chart_mobile.on('plotly_click', function(data){
-          if (data.points.length === 1) {
-            var link = song_links[data.points[0].pointNumber];
-            
-            // Note: window navigation here.
-            window.location = link;
-          }
-        });
-        track_chart_mobile.on('plotly_click', function(data){
-        if (data.points.length === 1) {
-          var link = song_links[data.points[0].pointNumber];
-          
-          // Note: window navigation here.
-          window.location = link;
-          }
-        });
+       
 
 });

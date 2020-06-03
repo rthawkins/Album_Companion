@@ -18,6 +18,8 @@
   background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
 }
 
+#ui-id-1 {z-index: 9999;}
+
 p {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 13px;

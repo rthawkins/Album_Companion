@@ -41,6 +41,7 @@ from rh_config import id_
 from rh_config import secret
 from rh_config import genius_token
 
+
 id_ = config("spotify_id")
 secret = config("spotify_secret")
 genius_token = config('genius_token')

@@ -21,6 +21,7 @@ from rh_config import mg_pwd
 from rh_config import id_
 from rh_config import secret
 from rh_config import genius_token
+from album_overview import sp
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -98,6 +99,19 @@ def search_result():
         collection.insert_many(album)
         album_new_data = JSONEncoder().encode(album)
     return render_template("view_track.html", song_dict=song_dict, album_new_data = album_new_data)
+
+
+@app.route('/autocomplete',methods=['GET'])
+def autocomplete():
+    search = request.args.get('q')
+    top3results = sp.search(search, limit=3, type='album')['albums']['items']
+    album_name_results = [(d['name']) for d in top3results]
+    artist_name_results = [d['artists'][0]['name'] for d in top3results]
+    year_results = [d['release_date'][0:4] for d in top3results]
+    search_results =[]
+    for i in range(0,len(album_name_results)):
+        search_results.append(f'{album_name_results[i]} - {artist_name_results[i]}')
+    return jsonify(matching_results=search_results)
         
 if __name__ == '__main__':
     app.run(debug=True)

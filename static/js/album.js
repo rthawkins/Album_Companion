@@ -442,6 +442,5 @@ $.getJSON(`/album/${selected_album}`,
           window.location = link;
           }
         });
-       
-
+      
 });

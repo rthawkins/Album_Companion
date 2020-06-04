@@ -63,7 +63,7 @@ $.getJSON(`/album/${selected_album}`,
             ['0.8', '#00a896'],
             ['0.9', '#028090'],
             ['1.0', '#05668d']],
-            size: 8
+            size: 10, symbol: 'diamond'
           },
           line: {
             color: '#000000',
@@ -124,7 +124,7 @@ $.getJSON(`/album/${selected_album}`,
               ['0.8', '#00a896'],
               ['0.9', '#028090'],
               ['1.0', '#05668d']],
-              size: 8,
+              size: 8, symbol: 'diamond',
               line: {
             color: '#d9a868', width: 2
         }}

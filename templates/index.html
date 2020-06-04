@@ -5,8 +5,8 @@
   <title>Album Companion</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+  <link rel="icon" href="#" type="image/x-icon"/>
+  <link rel="shortcut icon" href="#" type="image/x-icon"/>
   <link rel="stylesheet" href="https://bootswatch.com/3/cosmo/bootstrap.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
@@ -16,7 +16,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="{{ url_for('static', filename='js/album.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/autocomplete.js') }}" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/postscribe/2.0.8/postscribe.min.js"></script>
   <!-- <script src="{{ url_for('static', filename='js/song_data.js') }}"></script> -->
@@ -37,11 +37,6 @@
       });
     });
   </script>
-  <script>
-    $( function() {
-      $( document ).tooltip();
-    } );
-    </script>
 </head>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -77,11 +72,12 @@
                       <p>This app will give you background about the album you're listening to, including lyric content/insights from Genius.com, song attributes from Spotify, and a graphical overview of the album journey.</p>
                       <p>Please use the search tool at the top to find the album.</p>
                       <p>Here are some examples to get you started:</p>
-                      <p><a href="/4nzyOwogJuWn1s6QuGFZ6w">'Weezer (The Blue Album)' by Weezer</a></p>
-                      <p><a href="/4BRkPBUxOYffM2QXVlq7aC">'Revolver' by The Beatles</a></p>
-                      <p><a href="/5CaXxLM568tBh1PwhXdciZ">'Graduation' by Kanye West</a></p>
-                      <p><a href="/3OsUjkcv1C1v5udFhgRSFg">'OK Computer' by Radiohead</a></p>
-                      <p><a href="/6ie2Bw3xLj2JcGowOlcMhb">'Melodrama' by Lorde</a></p>
+                      <img src="images/information.png">
+                      <p><a href="/song/4nzyOwogJuWn1s6QuGFZ6w">'Weezer (The Blue Album)' by Weezer</a></p>
+                      <p><a href="/song/4BRkPBUxOYffM2QXVlq7aC">'Revolver' by The Beatles</a></p>
+                      <p><a href="/song/5CaXxLM568tBh1PwhXdciZ">'Graduation' by Kanye West</a></p>
+                      <p><a href="/song/3OsUjkcv1C1v5udFhgRSFg">'OK Computer' by Radiohead</a></p>
+                      <p><a href="/song/6ie2Bw3xLj2JcGowOlcMhb">'Melodrama' by Lorde</a></p>
                     </div>
                     <div class="tab-pane fade" id="tab2primary">
                       <div class="panel-group" id="faqAccordion">

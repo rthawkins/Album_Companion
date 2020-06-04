@@ -51,7 +51,7 @@ collection = db['album_collection']
 def welcome():
     return render_template("index.html")
 
-@app.route("/<song_id>")
+@app.route("/song/<song_id>")
 def song_data(song_id):
     documents = collection.find({"sp_id": song_id})
     response = []
@@ -114,4 +114,4 @@ def autocomplete():
     return jsonify(matching_results=search_results)
         
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

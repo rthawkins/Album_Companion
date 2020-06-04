@@ -36,7 +36,7 @@ $.getJSON(`/album/${selected_album}`,
         chart_energy.push(d.energy);
         chart_mood.push(d.mood);
         chart_unique.push(d.uniqueness * 10);
-        song_links.push(d.sp_id);
+        song_links.push("/song/"+d.sp_id);
         hover_vibe.push(d.title)});
 
     var vibe_chart_trace = {

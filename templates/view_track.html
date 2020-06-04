@@ -5,8 +5,8 @@
   <title>Album Companion</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+  <link rel="icon" href="#" type="image/x-icon"/>
+  <link rel="shortcut icon" href="#" type="image/x-icon"/>
   <script>var album_data = '{{album_new_data}}';</script>
   <script>var selected_album = '{{song_dict.album_id}}';</script>
   <script>var selected_song = '{{song_dict.sp_id}}';</script>
@@ -20,12 +20,16 @@
   <link rel="stylesheet" href="https://bootswatch.com/3/cosmo/bootstrap.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+  <script src="{{ url_for('static', filename='js/jbox.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/album.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/autocomplete.js') }}" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
@@ -151,19 +155,10 @@
             <td><b>Time Signature</b></td><td>{{ song_dict.time_signature}}/4</td><td><span></span></td></tr>
             <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
             <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
-            <tr><td><b>Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
-            <tr><td><b>Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
-            <tr><td><b>Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
+            <tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
+            <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
+            <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
             <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
-            <style type="text/css">
-              .tooltip-class {
-                  width: 29px;
-                  height: 23px;
-                  color:#00FFFF;
-                  background-color: transparent;
-                  margin: 0;    
-              }
-        </style>
             <script type="text/javascript">
             
               $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
@@ -251,9 +246,9 @@
                     <td><b>Time Signature</b></td><td>{{ song_dict.time_signature}}/4</td><td><span></span></td></tr>
                     <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
                     <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
-                    <tr><td><b>Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
-                    <tr><td><b>Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
-                    <tr><td><b>Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
+                    <tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
+                    <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
+                    <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
                     <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
                     </tbody></table>
                     

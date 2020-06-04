@@ -19,6 +19,30 @@
   background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
 }
 
+#vibe-header {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+  color: #f2f0f0;
+}
+
+#track-header {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+  color: #f2f0f0;
+}
+
+#vibe-header-mobile {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+  color: black;
+}
+
+#track-header-mobile {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+  color: black;
+}
+
 #ui-id-1 {z-index: 9999;}
 
 p {

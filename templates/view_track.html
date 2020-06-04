@@ -29,8 +29,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
-  <script src="{{ url_for('static', filename='js/jbox.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/album.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/jbox.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/autocomplete.js') }}" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -106,7 +106,7 @@
                     <table table class="table table-striped table-hover " style="width:300px" align="center">
                       <thead>
                         <tr>
-                          <th>Album's most...</th>
+                          <th><i class="fa fa-info-circle" title="Highlights are based on the highest and <br>lowest values on the album.<br><br><b>Note:</b> Being <i>representative</i> or <i>unique</i> is<br>based around how similar the track is<br>to the album in terms of duration, loudness,<br>energy, mood and danceability."></i> Album's most...</th>
                           <th>Title</th>
                         </tr>
                       </thead>
@@ -199,9 +199,9 @@
               </script>
           </tbody>
           </table>
-          </div>
-          <div id="vibe_chart"></div>
-          <div id="track_chart"></div>
+        </div>
+          <div id="vibe-header"><i class="fa fa-info-circle" title="The journey of the album from start to finish.<br><br>The energy of the album is charted, while the colors <br>represent a <b><span style='color:#05668d;'>positive</span></b>, <b>neutral</b>, or <b><span style='color:#a11d33;'>negative</span></b> mood."></i> Vibe Chart</div><div id="vibe_chart"></div>
+          <div id="track-header"><i class="fa fa-info-circle" title="A breakdown of the album based on four quadrants <br>around a song's mood and energy.<br><br>The larger the circle, the more <b>unique</b> the song is <br>compared to the rest of the album."></i> Track Analysis</div><div id="track_chart"></div>
         </div>
       </div>
     </div>
@@ -265,14 +265,14 @@
                     </table>
                   </div>
                   <div class="tab-pane fade" id="tab4primary">
-                    <div id="vibe_chart_mobile"></div>
-                    <div id="track_chart_mobile"></div>
+                    <div id="vibe-header-mobile"><i class="fa fa-info-circle" title="The journey of the album from start to finish.<br><br>The energy of the album is charted, while the colors <br>represent a <b><span style='color:#05668d;'>positive</span></b>, <b>neutral</b>, or <b><span style='color:#a11d33;'>negative</span></b> mood."></i> Vibe Chart</div><div id="vibe_chart_mobile"></div>
+                    <div id="track-header-mobile"><i class="fa fa-info-circle" title="A breakdown of the album based on four quadrants <br>around a song's mood and energy.<br><br>The larger the circle, the more <b>unique</b> the song is <br>compared to the rest of the album."></i> Track Analysis</div><div id="track_chart_mobile"></div>
                   </div>
                   <div class="tab-pane fade" id="tab5primary">
                     <table table class="table table-striped table-hover " style="width:300px" align="center">
                       <thead>
                         <tr tr class="active">
-                          <th>Album's most...</th>
+                          <th><i class="fa fa-info-circle" title="Highlights are based on the highest and <br>lowest values on the album.<br><br><b>Note:</b> Being <i>representative</i> or <i>unique</i> is<br>based around how similar the track is<br>to the album in terms of duration, loudness,<br>energy, mood and danceability."></i> Album's most...</th>
                           <th>Title</th>
                         </tr>
                       </thead>

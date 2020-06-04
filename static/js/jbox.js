@@ -2,8 +2,8 @@ $(document).ready(function() {
 
     new jBox('Tooltip', {
         attach: '.fa',
-        trigger: 'click',
-        closeOnClick: true
-      });
+        delayOpen: 150,
+        delayClose: 250
+        });
 
 });

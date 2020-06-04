@@ -129,7 +129,7 @@ $.getJSON(`/album/${selected_album}`,
     var track_chart_ref = [track_chart_trace, song_highlight_track];
 
     var layout_vibe = {
-                  title: 'Album Vibe',
+                  title: false,
                   titlefont: {
                         color: '#f2f0f0',
                         size: 14
@@ -163,17 +163,17 @@ $.getJSON(`/album/${selected_album}`,
                     l: 50,
                     r: 50,
                     b: 50,
-                    t: 50
+                    t: 10
                   },
                   width: 290,
-                  height: 290,
+                  height: 250,
                   paper_bgcolor: 'rgba(0, 0, 0,0)',
                   plot_bgcolor: 'rgba(0, 0, 0,0)',
                   hovermode: 'closest'
                 };
 
         var layout_vibe_mobile = {
-          title: 'Album Vibe',
+          title: false,
           titlefont: {
                 color: 'black',
                 size: 14
@@ -207,17 +207,17 @@ $.getJSON(`/album/${selected_album}`,
             l: 50,
             r: 50,
             b: 50,
-            t: 50
+            t: 10
           },
           width: 290,
-          height: 290,
+          height: 250,
           paper_bgcolor: 'rgba(0, 0, 0,0)',
           plot_bgcolor: 'rgba(0, 0, 0,0)',
           hovermode: 'closest'
         };
 
     var layout_track = {
-        title: 'Album Track Quadrants',
+        title: false,
         titlefont: {
                 color: '#f2f0f0',
                 size: 14
@@ -258,10 +258,10 @@ $.getJSON(`/album/${selected_album}`,
             l: 50,
             r: 50,
             b: 50,
-            t: 50
+            t: 10
         },
         width: 290,
-        height: 290,
+        height: 250,
         paper_bgcolor: 'rgba(0, 0, 0,0)',
         plot_bgcolor: 'rgba(0, 0, 0,0)',
         hovermode: 'closest',
@@ -318,7 +318,7 @@ $.getJSON(`/album/${selected_album}`,
         };
 
     var layout_track_mobile = {
-      title: 'Album Track Quadrants',
+      title: false,
       titlefont: {
               color: 'black',
               size: 14
@@ -361,10 +361,10 @@ $.getJSON(`/album/${selected_album}`,
           l: 50,
           r: 50,
           b: 50,
-          t: 50
+          t: 10
       },
       width: 290,
-      height: 290,
+      height: 250,
       paper_bgcolor: 'rgba(0, 0, 0,0)',
       plot_bgcolor: 'rgba(0, 0, 0,0)',
       hovermode: 'closest',

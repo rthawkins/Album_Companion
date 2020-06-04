@@ -54,10 +54,10 @@ $.getJSON(`/album/${selected_album}`,
             ['0.4', '#000000'],
             ['0.5', '#000000'],
             ['0.6', '#000000'],
-            ['0.7', '#02c39a'],
-            ['0.8', '#00a896'],
-            ['0.9', '#028090'],
-            ['1.0', '#05668d']],
+            ['0.7', '#05668d'],
+            ['0.8', '#028090'],
+            ['0.9', '#00a896'],
+            ['1.0', '#02c39a']],
             size: 10, symbol: 'diamond'
           },
           line: {
@@ -115,10 +115,10 @@ $.getJSON(`/album/${selected_album}`,
               ['0.4', '#000000'],
               ['0.5', '#000000'],
               ['0.6', '#000000'],
-              ['0.7', '#02c39a'],
-              ['0.8', '#00a896'],
-              ['0.9', '#028090'],
-              ['1.0', '#05668d']],
+              ['0.7', '#05668d'],
+              ['0.8', '#028090'],
+              ['0.9', '#00a896'],
+              ['1.0', '#02c39a']],
               size: 8, symbol: 'diamond',
               line: {
             color: '#d9a868', width: 2
@@ -136,20 +136,25 @@ $.getJSON(`/album/${selected_album}`,
                   },
                   showlegend: false,
                   xaxis: {
-                    title: false,
+                    title: 'Tracks',
                     titlefont: {
-                        color: '#f2f0f0',
-                        size: 10
+                        color: '#AEAEAE',
+                        size: 8
                         },
                     showgrid: false,
                     zeroline: false,
                     linecolor: 'white',
+                    dtick: 1,
                     ticks: 'outside',
                     tickfont: {color: '#f2f0f0',
                     size: 10
                 }
                   },
                   yaxis: {
+                    titlefont: {
+                        color: '#AEAEAE',
+                        size: 10
+                        },
                     linecolor: 'white',
                     gridwidth: 2,
                     gridcolor: '#E1E1E1',
@@ -180,14 +185,15 @@ $.getJSON(`/album/${selected_album}`,
           },
           showlegend: false,
           xaxis: {
-            title: false,
+            title: 'Tracks',
             titlefont: {
-                color: 'black',
-                size: 10
+                color: '#AEAEAE',
+                size: 8
                 },
             showgrid: false,
             zeroline: false,
             linecolor: 'black',
+            dtick: 1,
             ticks: 'outside',
             tickfont: {color: 'black',
             size: 10
@@ -236,7 +242,7 @@ $.getJSON(`/album/${selected_album}`,
             tickfont: {color: '#f2f0f0',
                     size: 10
                 },
-            tickvals: [0,.5,1], 
+            tickvals: [.5,1], 
             range: [0,1],
         },
         yaxis: {
@@ -325,7 +331,7 @@ $.getJSON(`/album/${selected_album}`,
       },
       showlegend: false,
       xaxis: {
-          title: 'Negative   < - >   Positive',
+          title: 'Mood',
           titlefont: {
               color: 'black',
               size: 11
@@ -339,11 +345,11 @@ $.getJSON(`/album/${selected_album}`,
           tickfont: {color: 'black',
                   size: 10
               },
-          tickvals: [0,.5,1], 
+          tickvals: [.5,1], 
           range: [0,1],
       },
       yaxis: {
-          title: 'Slow   < - >   Energetic',
+          title: 'Energy',
           titlefont: {
               color: '#black',
               size: 11

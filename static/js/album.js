@@ -7,7 +7,7 @@ $.getJSON(`/album/${selected_album}`,
     function (data) {
         var tr;
         for (var i = 0; i < data.length; i++) {
-            tr = $('<tr class="active"/>');
+            tr = $('<tr/>');
             tr.append("<td> "+ data[i].track+"</td>");
             tr.append("<td> <a href='/"+ data[i].sp_id + "'> " + data[i].title + "</td>");
             $('#album_table').append(tr);
@@ -19,6 +19,17 @@ $.getJSON(`/album/${selected_album}`,
           tr_mobile.append("<td> <a href='/"+ data[i].sp_id + "'> " + data[i].title + "</td>");
           $('#album_table_mobile').append(tr_mobile);
       }
+
+      let tr_summary = $("<tr><td><i>Representative</i></td><td><a href='/" + _.minBy(data, 'uniqueness').sp_id + "'> " +  _.minBy(data, 'uniqueness').title + "</td></tr>"
+      +"<tr><td><i>Unique</i></td><td><a href='/" + _.maxBy(data, 'uniqueness').sp_id + "'> " + _.maxBy(data, 'uniqueness').title + "</td></tr>"
+      +"<tr><td><i>Energetic</i></td><td><a href='/" + _.maxBy(data, 'energy').sp_id + "'> " + _.maxBy(data, 'energy').title + "</td></tr>"
+      +"<tr><td><i>Slow</i></td><td><a href='/" + _.minBy(data, 'energy').sp_id + "'> " + _.minBy(data, 'energy').title + "</td></tr>"
+      +"<tr><td><i>Positive</i></td><td><a href='/" + _.maxBy(data, 'mood').sp_id + "'> " + _.maxBy(data, 'mood').title + "</td></tr>"
+      +"<tr><td><i>Negative</i></td><td><a href='/" + _.minBy(data, 'mood').sp_id + "'> " + _.minBy(data, 'mood').title + "</td></tr>"
+      +"<tr><td><i>Loud</i></td><td><a href='/" + _.maxBy(data, 'loudness').sp_id + "'> " + _.maxBy(data, 'loudness').title + "</td></tr>"
+      +"<tr><td><i>Quiet</i></td><td><a href='/" + _.minBy(data, 'loudness').sp_id + "'> " + _.minBy(data, 'loudness').title + "</td></tr>")
+      $('#album_highlights_mobile').append(tr_summary);
+      $('#album_highlights').append(tr_summary);
     });
 
   Plotly.d3.json(`/album/${selected_album}`, function(data){

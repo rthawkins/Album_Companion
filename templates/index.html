@@ -5,7 +5,8 @@
   <title>Album Companion</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
   <link rel="stylesheet" href="https://bootswatch.com/3/cosmo/bootstrap.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
@@ -19,24 +20,29 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/postscribe/2.0.8/postscribe.min.js"></script>
   <!-- <script src="{{ url_for('static', filename='js/song_data.js') }}"></script> -->
-</head>
-<script>
-  $(function() {
-    $("#search_form_input").autocomplete({
-        source:function(request, response) {
-            $.getJSON("{{url_for('autocomplete')}}",{
-                q: request.term, // in flask, "q" will be the argument to look for using request.args
-            }, function(data) {
-                response(data.matching_results); // matching_results from jsonify
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            console.log(ui.item.value);
-        }
+  <script>
+    $(function() {
+      $("#search_form_input").autocomplete({
+          source:function(request, response) {
+              $.getJSON("{{url_for('autocomplete')}}",{
+                  q: request.term, // in flask, "q" will be the argument to look for using request.args
+              }, function(data) {
+                  response(data.matching_results); // matching_results from jsonify
+              });
+          },
+          minLength: 2,
+          select: function(event, ui) {
+              console.log(ui.item.value);
+          }
+      });
     });
-  });
-</script>
+  </script>
+  <script>
+    $( function() {
+      $( document ).tooltip();
+    } );
+    </script>
+</head>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">

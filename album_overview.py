@@ -94,7 +94,7 @@ def search_metacritic(artist_name, album_name):
     soup = BeautifulSoup(response.text, 'html.parser')
     results = soup.find_all('h3', class_="product_title basic_stat")
     for result in results:
-        if artist_name.replace('-', ' ') in result.find('a')['href'].replace('-', ' '):
+        if artist_name.lower().replace('-', ' ') in result.find('a')['href'].lower().replace('-', ' '):
             s_result = result.find('a')['href']
             break
             return s_result
@@ -104,7 +104,7 @@ def search_metacritic(artist_name, album_name):
         soup = BeautifulSoup(response.text, 'html.parser')
         result = soup.find('div', class_="metascore_w xlarge album positive")
         score = result.find('span').text
-        return score
+        return int(score)
     except:
         print('Could not find.')
         None
@@ -135,7 +135,6 @@ def analyze_album(album_id):
         album_name = clean_lyrics(album_name)
         release_date = sp.album(album_id)["release_date"]
         
-        regex = '\[.*?\]'
         regex2 = '\-.*'
 
         titles = df["name"]
@@ -156,7 +155,6 @@ def analyze_album(album_id):
         df = df.loc[df["disc_number"]==1]
         df = df.set_index('track_number')
         df["album_id"] = album_id
-        df["metacritic"] = search_metacritic(artist, album_name)
         
         sent_score = []
         song_lyrics = []
@@ -165,14 +163,23 @@ def analyze_album(album_id):
         genius_songid = []
         keywords = []
         affect_freq = []
+        df["metacritic"] = search_metacritic(artist, album_name)
         
 
         for title in df["name"]:
             try:
-                title = re.sub(regex,'',title)
                 title = re.sub(regex2,'',title)
                 title = title.split("- Remaster", 1)[0]
+                title = title.split("[Remaster", 1)[0]
+                title = title.split("(Remaster", 1)[0]
                 title = title.split("- Mono", 1)[0]
+                title = title.split("(Mono", 1)[0]
+                title = title.split("[Mono", 1)[0]
+                title = title.split("(with", 1)[0]
+                title = title.split("[with", 1)[0]
+                title = title.split("(featuring", 1)[0]
+                title = title.split("- featuring", 1)[0]
+                title = title.split("[featuring", 1)[0]
                 new_titles.append(title)
                 remote_song_info = request_song_info(title, artist)
                 url = remote_song_info['result']['url']
@@ -195,8 +202,8 @@ def analyze_album(album_id):
         
         df['title'] = new_titles
         df["lyr_valence"] = sent_score
-        df["lyr_valence"] = (df["lyr_valence"] + 1) / 2
         df['lyr_valence'] = df['lyr_valence'].fillna(df['valence'])
+        df["lyr_valence"] = (df["lyr_valence"] + 1) / 2
         df["lyr_valence"] = round(df["lyr_valence"],3)
         df["mood"] = (df["lyr_valence"] + df["valence"]) / 2
         df["mood"] = round(df["mood"],3)
@@ -228,16 +235,6 @@ def analyze_album(album_id):
         lyr_valence_z = abs(stats.zscore(df["lyr_valence"])) 
         df["uniqueness"] = (energy_z + valence_z + dance_z + duration_z + loudness_z + lyr_valence_z) / 6
         df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic"]]
-
-
-        df["Representative"] = df.loc[df['uniqueness'].idxmin()]["title"]
-        df["Unique"] = df.loc[df['uniqueness'].idxmax()]["title"]
-        df["Energetic"] = df.loc[df['energy'].idxmax()]["title"]
-        df["Slowest"] =  df.loc[df['energy'].idxmin()]["title"]
-        df["Positive"] =  df.loc[df['mood'].idxmax()]["title"]
-        df["Negative"] =  df.loc[df['mood'].idxmin()]["title"]
-        df["Loudest"] =  df.loc[df['loudness'].idxmax()]["title"]
-        df["Quietest"] = df.loc[df['loudness'].idxmin()]["title"]
         
         df = df.to_dict('records')
         return df

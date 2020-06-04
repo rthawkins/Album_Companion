@@ -5,7 +5,8 @@
   <title>Album Companion</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
   <script>var album_data = '{{album_new_data}}';</script>
   <script>var selected_album = '{{song_dict.album_id}}';</script>
   <script>var selected_song = '{{song_dict.sp_id}}';</script>
@@ -24,6 +25,7 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
   <script src="{{ url_for('static', filename='js/album.js') }}" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -42,9 +44,9 @@
                     response(data.matching_results); // matching_results from jsonify
                 });
             },
-            minLength: 2,
+            minLength: 3,
             select: function(event, ui) {
-                console.log(ui.item.value); // not in your question, but might help later
+                console.log(ui.item.value);
             }
         });
     })
@@ -71,20 +73,45 @@
     
     <div class="container-fluid" id="full-screen">
     <div class="row">
-      <div class="col-xs-3" id="first-column">
+      <div class="col-xs-3" id="first-column"  align="center">
         <div id="spotify_player" align="center">
           <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="350" height="250" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
           </div>
-    
-          <table table class="table table-striped table-hover " style="width:350px" align="center">
-            <thead>
-              <tr tr class="active">
-                <th>#</th>
-                <th>Track</th>
-              </tr>
-            </thead>
-            <tbody id="album_table"></tbody>
-          </table>
+          <div class="panel with-nav-tabs panel-primary" id="album-panel" style="width:350px">
+            <div class="panel-heading">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tracklist" data-toggle="tab">Tracklist</a></li>
+                        <li><a href="#summary" data-toggle="tab">Highlights</a></li>
+                    </ul>
+            </div>
+            <div class="panel-body">
+              <div class="tab-content">
+                  <div class="tab-pane fade in active" id="tracklist">
+                    <table table class="table table-striped table-hover " style="width:300px" align="center">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Track</th>
+                        </tr>
+                      </thead>
+                      <tbody id="album_table"></tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane fade" id="summary">
+                    <table table class="table table-striped table-hover " style="width:300px" align="center">
+                      <thead>
+                        <tr>
+                          <th>Album's most...</th>
+                          <th>Title</th>
+                        </tr>
+                      </thead>
+                      <tbody id="album_highlights"></tbody>
+                    </table>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+            
       </div>
       <div class="col-xs-1">
       </div>
@@ -197,8 +224,18 @@
                   <ul class="nav nav-tabs">
                       <li class="active"><a href="#tab1primary" data-toggle="tab">Lyrics</a></li>
                       <li><a href="#tab2primary" data-toggle="tab">Attributes</a></li>
-                      <li><a href="#tab3primary" data-toggle="tab">Tracklist</a></li>
-                      <li><a href="#tab4primary" data-toggle="tab">Graphs</a></li>
+                      <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        Album Info<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a href="#tab3primary" data-toggle="tab">Tracklist</a></li>
+                          <li class="divider"></li>
+                          <li><a href="#tab4primary" data-toggle="tab">Graphs</a></li>
+                          <li class="divider"></li>
+                          <li><a href="#tab5primary" data-toggle="tab">Highlights</a></li>
+                        </ul>
+                      </li>
                   </ul>
           </div>
           <div class="panel-body">
@@ -234,6 +271,17 @@
                   <div class="tab-pane fade" id="tab4primary">
                     <div id="vibe_chart_mobile"></div>
                     <div id="track_chart_mobile"></div>
+                  </div>
+                  <div class="tab-pane fade" id="tab5primary">
+                    <table table class="table table-striped table-hover " style="width:300px" align="center">
+                      <thead>
+                        <tr tr class="active">
+                          <th>Album's most...</th>
+                          <th>Title</th>
+                        </tr>
+                      </thead>
+                      <tbody id="album_highlights_mobile"></tbody>
+                    </table>
                   </div>
               </div>
           </div>

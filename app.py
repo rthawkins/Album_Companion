@@ -2,6 +2,7 @@ from flask import Flask, redirect, jsonify, render_template, request
 from flask_pymongo import pymongo
 import json
 import logging
+import pandas as pd
 log = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
 import song_overview
@@ -80,7 +81,7 @@ def album_data(album_id):
 
 @app.route('/search_result', methods=['POST'])
 def search_result():
-    album_search = search_album(request.form['album-search'])
+    album_search = request.form['album-search']
     try: 
         if collection.find({"album_id": album_search}):
             documents = collection.find({"album_id": album_search}).sort([("album_id", 1), ("track", 1)])
@@ -108,10 +109,15 @@ def autocomplete():
     album_name_results = [(d['name']) for d in top3results]
     artist_name_results = [d['artists'][0]['name'] for d in top3results]
     year_results = [d['release_date'][0:4] for d in top3results]
+    id_results = [d['id'] for d in top3results]
     search_results =[]
     for i in range(0,len(album_name_results)):
-        search_results.append(f'{album_name_results[i]} - {artist_name_results[i]}')
-    return jsonify(matching_results=search_results)
+        search_results.append(f'"{album_name_results[i]}" by {artist_name_results[i]} ({year_results[i]})')
+    new_results = list(dict.fromkeys(search_results))
+    df = pd.DataFrame(list(zip(new_results, id_results)), 
+               columns =['label', 'value']) 
+    df = df.to_dict('records')
+    return jsonify(matching_results=df)
         
 if __name__ == '__main__':
     app.run(debug=False)

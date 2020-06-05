@@ -31,9 +31,10 @@
                   response(data.matching_results); // matching_results from jsonify
               });
           },
-          minLength: 2,
+          minLength: 3,
           select: function(event, ui) {
-              console.log(ui.item.value);
+              $("#search_form_input").val(ui.item.value);
+              $("#search_form").submit();
           }
       });
     });
@@ -46,7 +47,7 @@
       <a class="navbar-brand">Search for your album</a>
     </div>
       <div class="input-group">
-      <form class="navbar-form navbar-left" action="{{ url_for('search_result') }}" method="post" role="search"> 
+      <form class="navbar-form navbar-left" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
           <input type="text" id="search_form_input" class="form-control" name="album-search" placeholder="Artist + album" autocomplete="off">
         
         <button type="submit" class="btn btn-default" id="submit-button">Submit</button>

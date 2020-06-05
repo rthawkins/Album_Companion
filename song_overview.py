@@ -83,7 +83,7 @@ def request_song_info(song_title, artist_name):
     json = response.json()
     remote_song_info = None
     for hit in json['response']['hits']:
-        if artist_name[0].lower() in hit['result']['primary_artist']['name'][0].lower():
+        if artist_name.lower() in hit['result']['primary_artist']['name'].lower():
             remote_song_info = hit
             break
     return remote_song_info

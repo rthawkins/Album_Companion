@@ -17,11 +17,11 @@
   <script>var s_dance = '{{song_dict.danceability}}';</script>
   <script>var s_title = '{{song_dict.title}}';</script>
   <script>var s_tracknum = '{{song_dict.track}}';</script>
-  <script>console.log('{{song_dict.genius_songid}}')</script>
   <link rel="stylesheet" href="https://bootswatch.com/3/cosmo/bootstrap.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="{{ url_for('static', filename='js/pace.min.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
   <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
@@ -58,6 +58,13 @@
       });
     });
   </script>
+  <script>
+    function lyricsFunction() {
+      var lyrics = "{{song_dict.genius_songid}}";
+      if (lyrics == "None"){
+      document.getElementById("myText").innerHTML = "No lyrics found on Genius.";
+    }};
+  </script>
 </head>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -75,7 +82,7 @@
   </div>
 </nav>
 
-<body style="background-color:#4a5266;">
+<body style="background-color:#4a5266;" onload="lyricsFunction()">
 
     
     <div class="container-fluid" id="full-screen">
@@ -132,7 +139,7 @@
             <!-- <div id="lyrics-placeholder">No data.</div> -->
         <!-- <div id="embed_lyrics"></div> -->
         <!-- <script id = "genius_script"></script> -->
-        <div id="rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}">Read <a href="{{song_dict.url}}">{{song_dict.title}} by {{song_dict.artist}}</a> on Genius</div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js"></script>          </div>
+        <div id="rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}"><span id="myText"></span></div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js"></script>          </div>
         </div>
              </div></div>
              <div class="col-xs-1">

@@ -58,6 +58,53 @@ sp = spotipy.Spotify(client_credentials_manager=ccm)
 genius = lyricsgenius.Genius(genius_token)
 analyser = SentimentIntensityAnalyzer()
 
+# Determine text similarity to error search + error handling    
+# https://www.datacamp.com/community/tutorials/fuzzy-string-python
+def levenshtein_ratio_and_distance(s, t, ratio_calc = False):
+    """ levenshtein_ratio_and_distance:
+        Calculates levenshtein distance between two strings.
+        If ratio_calc = True, the function computes the
+        levenshtein distance ratio of similarity between two strings
+        For all i and j, distance[i,j] will contain the Levenshtein
+        distance between the first i characters of s and the
+        first j characters of t
+    """
+    # Initialize matrix of zeros
+    rows = len(s)+1
+    cols = len(t)+1
+    distance = np.zeros((rows,cols),dtype = int)
+
+    # Populate matrix of zeros with the indeces of each character of both strings
+    for i in range(1, rows):
+        for k in range(1,cols):
+            distance[i][0] = i
+            distance[0][k] = k
+
+    # Iterate over the matrix to compute the cost of deletions,insertions and/or substitutions    
+    for col in range(1, cols):
+        for row in range(1, rows):
+            if s[row-1] == t[col-1]:
+                cost = 0 # If the characters are the same in the two strings in a given position [i,j] then the cost is 0
+            else:
+                # In order to align the results with those of the Python Levenshtein package, if we choose to calculate the ratio
+                # the cost of a substitution is 2. If we calculate just distance, then the cost of a substitution is 1.
+                if ratio_calc == True:
+                    cost = 2
+                else:
+                    cost = 1
+            distance[row][col] = min(distance[row-1][col] + 1,      # Cost of deletions
+                                 distance[row][col-1] + 1,          # Cost of insertions
+                                 distance[row-1][col-1] + cost)     # Cost of substitutions
+    if ratio_calc == True:
+        # Computation of the Levenshtein Distance Ratio
+        Ratio = ((len(s)+len(t)) - distance[row][col]) / (len(s)+len(t))
+        return Ratio
+    else:
+        # print(distance) # Uncomment if you want to see the matrix showing how the algorithm computes the cost of deletions,
+        # insertions and/or substitutions
+        # This is the minimum number of edits needed to convert string a to string b
+        return "The strings are {} edits away".format(distance[row][col])
+
 def preprocess(text):
     # Create Doc object
     doc = nlp(text, disable=['ner', 'parser'])
@@ -182,15 +229,28 @@ def analyze_album(album_id):
                 title = title.split("[featuring", 1)[0]
                 new_titles.append(title)
                 remote_song_info = request_song_info(title, artist)
-                url = remote_song_info['result']['url']
-                genius_url.append(url)
-                genius_songid.append(str(remote_song_info['result']['id']))
-                lyrics = get_lyrics(url)
-                keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
-                sent_score.append(sentiment_analyzer_scores(lyrics))
-                text_object = NRCLex(lyrics)
-                affect_freq.append(text_object.affect_frequencies)
-                song_lyrics.append(lyrics)
+                matching_artist = remote_song_info['result']['primary_artist']['name']
+                matching_artist = matching_artist.lower()
+                ratio = levenshtein_ratio_and_distance(artist.lower(),matching_artist,ratio_calc = True)
+                if ratio > .6:
+                    url = remote_song_info['result']['url']
+                    genius_url.append(url)
+                    genius_songid.append(str(remote_song_info['result']['id']))
+                    lyrics = get_lyrics(url)
+                    keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
+                    sent = sentiment_analyzer_scores(lyrics)
+                    sent = round((sent + 1) / 2,3)
+                    sent_score.append(sent)
+                    text_object = NRCLex(lyrics)
+                    affect_freq.append(text_object.affect_frequencies)
+                    song_lyrics.append(lyrics)
+                else:
+                    sent_score.append(None)
+                    song_lyrics.append(None)
+                    keywords.append(None)
+                    affect_freq.append(None)
+                    genius_url.append(None)
+                    genius_songid.append(None)
             except:
                 sent_score.append(None)
                 song_lyrics.append(None)
@@ -201,12 +261,9 @@ def analyze_album(album_id):
 
         
         df['title'] = new_titles
-        df["lyr_valence"] = sent_score
-        df['lyr_valence'] = df['lyr_valence'].fillna(df['valence'])
-        df["lyr_valence"] = (df["lyr_valence"] + 1) / 2
-        df["lyr_valence"] = round(df["lyr_valence"],3)
-        df["mood"] = (df["lyr_valence"] + df["valence"]) / 2
-        df["mood"] = round(df["mood"],3)
+        df["lyr_valence"] = sent_score   
+        # I still need to fix the following line so it disregards blank lyrics
+        df['mood'] = np.where(df['lyr_valence'].isnull(), df['valence'], round((df["lyr_valence"] + df["valence"]) / 2,3) )
         df["mood_discrep"] = df["valence"] - df["lyr_valence"]
         df["lyrics"] = song_lyrics
         pos_neg(df, 'lyr_valence_des', 'lyr_valence')
@@ -222,18 +279,20 @@ def analyze_album(album_id):
         df["url"] = genius_url
         df['keywords'] = keywords
         df['affect_freq'] = affect_freq
+        df["lyr_valence"] = df["lyr_valence"].replace({np.nan: None}) 
+        df["mood_discrep"] = df["mood_discrep"].replace({np.nan: None}) 
+        df["lyr_valence_des"] = df["lyr_valence_des"].replace({'0': 'Not Found'}) 
         
         
         df = df.rename(columns={"valence": "mus_valence"})
         df = df.rename(columns={"external_urls.spotify": "external_urls_spotify"})
         
         energy_z = abs(stats.zscore(df["energy"]))
-        valence_z = abs(stats.zscore(df["mus_valence"]))   
+        mood_z = abs(stats.zscore(df["mood"]))   
         dance_z = abs(stats.zscore(df["danceability"]))
         duration_z = abs(stats.zscore(df["duration"])) 
         loudness_z = abs(stats.zscore(df["loudness"])) 
-        lyr_valence_z = abs(stats.zscore(df["lyr_valence"])) 
-        df["uniqueness"] = (energy_z + valence_z + dance_z + duration_z + loudness_z + lyr_valence_z) / 6
+        df["uniqueness"] = (energy_z + dance_z + duration_z + loudness_z + mood_z) / 5
         df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic"]]
         
         df = df.to_dict('records')

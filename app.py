@@ -76,8 +76,8 @@ def album_data(album_id):
     for document in documents:
         document['_id'] = str(document['_id'])
         response.append(document)
-    result = JSONEncoder().encode(response)
-    return result
+    # result = JSONEncoder().encode(response)
+    return jsonify(response)
 
 @app.route('/search_result', methods=['POST'])
 def search_result():

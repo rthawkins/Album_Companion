@@ -184,7 +184,7 @@ def analyze_album(album_id):
                 remote_song_info = request_song_info(title, artist)
                 url = remote_song_info['result']['url']
                 genius_url.append(url)
-                genius_songid.append(remote_song_info['result']['id'])
+                genius_songid.append(str(remote_song_info['result']['id']))
                 lyrics = get_lyrics(url)
                 keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
                 sent_score.append(sentiment_analyzer_scores(lyrics))

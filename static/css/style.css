@@ -23,6 +23,12 @@
   background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
 }
 
+.album-header {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+  color: 'black';
+}
+
 #vibe-header {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 14px;

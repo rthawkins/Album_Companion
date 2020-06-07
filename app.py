@@ -23,6 +23,7 @@ from rh_config import id_
 from rh_config import secret
 from rh_config import genius_token
 from album_overview import sp
+from album_overview import album_wordcloud
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -76,8 +77,17 @@ def album_data(album_id):
     for document in documents:
         document['_id'] = str(document['_id'])
         response.append(document)
-    # result = JSONEncoder().encode(response)
     return jsonify(response)
+
+@app.route("/album/<album_id>/lyrics")
+def lyrics_test(album_id):
+    documents = collection.find({"album_id": album_id}).sort([("album_id", 1), ("track", 1)])
+    response = []
+    for document in documents:
+        document['_id'] = str(document['_id'])
+        response.append(document)
+    x = album_wordcloud(response)
+    return jsonify(x)
 
 @app.route('/search_result', methods=['POST'])
 def search_result():
@@ -120,4 +130,4 @@ def autocomplete():
     return jsonify(matching_results=df)
         
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

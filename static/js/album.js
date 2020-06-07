@@ -1,3 +1,50 @@
+$.getJSON(`/album/${selected_album}/lyrics`,
+function (myWords) {
+
+      // set the dimensions and margins of the graph
+var margin = {top: 0, right: 0, bottom: 0, left: 0},
+width = 300 - margin.left - margin.right,
+height = 350 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.selectAll("#wordchart,#wordchartmobile").append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")");
+
+// Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
+// Wordcloud features that are different from one word to the other must be here
+var layout = d3.layout.cloud()
+.size([width, height])
+.words(myWords.map(function(d) { return {text: d.word, size:d.size}; }))
+.padding(5)        //space between words
+// .rotate(function() { return ~~(Math.random() * 2) * 90; })
+.fontSize(function(d) { return d.size * 3; })      // font size of words
+.on("end", draw);
+layout.start();
+
+// This function takes the output of 'layout' above and draw the words
+// Wordcloud features that are THE SAME from one word to the other can be here
+function draw(words) {
+svg
+.append("g")
+  .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+  .selectAll("text")
+    .data(words)
+  .enter().append("text")
+    .style("font-size", function(d) { return d.size; })
+    .style("fill", "#116aa6")
+    .attr("text-anchor", "middle")
+    .style("font-family", "Verdana")
+    .attr("transform", function(d) {
+      return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+    })
+    .text(function(d) { return d.text; });
+}
+    });
+
 $.getJSON(`/album/${selected_album}`,
     function (data) {
         var tr;
@@ -18,6 +65,47 @@ $.getJSON(`/album/${selected_album}`,
       +"<tr><td><i>Loud</i></td><td><a href='/song/" + _.maxBy(data, 'loudness').sp_id + "'> " + _.maxBy(data, 'loudness').title + "</td></tr>"
       +"<tr><td><i>Quiet</i></td><td><a href='/song/" + _.minBy(data, 'loudness').sp_id + "'> " + _.minBy(data, 'loudness').title + "</td></tr>")
       tr_summary.appendTo("#album_highlights_mobile, #album_highlights");
+
+// Charting total album attributes
+      function meanVal(value) {
+        return d3.mean(data, function(d) {return d [value] })
+    }
+
+    function text_value(value) {
+      if(value>.8){var description="Very High";}
+      else if(value>.6){var description="High";}
+      else if(value>.4){var description="Neutral";}
+      else if(value>.2){var description="Low";}
+      else{var description="Very Low";}
+      return description
+    }
+
+    function pos_neg(value) {
+      if(value>.8){var description="Very Positive";}
+      else if(value>.6){var description="Positive";}
+      else if(value>.4){var description="Neutral";}
+      else if(value>.2){var description="Negative";}
+      else{var description="Very Negative";}
+      return description
+    }
+
+    var album_energy = meanVal('energy').toFixed(3);
+    var album_energy_desc = text_value(album_energy);
+    var album_mood = meanVal('mood').toFixed(3);
+    var album_mood_desc = pos_neg(album_mood);
+    var album_mus_valence = meanVal('mus_valence').toFixed(3);
+    var album_mus_valence_desc = pos_neg(album_mus_valence);
+    var album_lyr_valence = meanVal('lyr_valence').toFixed(3);
+    var album_lyr_valence_desc = pos_neg(album_lyr_valence);
+    var album_dance = meanVal('danceability').toFixed(3);
+    var album_dance_desc = text_value(album_dance);
+
+    let tr_album_stats = $("<tr><td><b>Energy</b></td><td>" + album_energy_desc + " (" + album_energy + ") </td></tr>"
+      +"<tr><td><b>Overall Mood</b></td><td>" + album_mood_desc + " (" + album_mood + ") </td></tr>"
+      +"<tr><td><b>Musical Valence</b></td><td>" + album_mus_valence_desc + " (" + album_mus_valence + ") </td></tr>"
+      +"<tr><td><b>Lyrical Sentiment</b></td><td>" + album_lyr_valence_desc + " (" + album_lyr_valence + ") </td></tr>"
+      +"<tr><td><b>Danceability</b></td><td>" + album_dance_desc + " (" + album_dance + ") </td></tr>")
+      tr_album_stats.appendTo("#album-stats,#album-stats-mobile");
     });
 
   Plotly.d3.json(`/album/${selected_album}`, function(data){
@@ -106,7 +194,7 @@ $.getJSON(`/album/${selected_album}`,
         mode: 'markers',
         type: 'scatter',
         marker: {
-          color: chart_mood, cmin: 0, cmax: 1,
+          color: [chart_mood[s_tracknum-1]], cmin: 0, cmax: 1,
             colorscale: [
               ['0.0', '#a11d33'],
               ['0.1', '#b21e35'],

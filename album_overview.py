@@ -262,7 +262,6 @@ def analyze_album(album_id):
         
         df['title'] = new_titles
         df["lyr_valence"] = sent_score   
-        # I still need to fix the following line so it disregards blank lyrics
         df['mood'] = np.where(df['lyr_valence'].isnull(), df['valence'], round((df["lyr_valence"] + df["valence"]) / 2,3) )
         df["mood_discrep"] = df["valence"] - df["lyr_valence"]
         df["lyrics"] = song_lyrics
@@ -298,3 +297,40 @@ def analyze_album(album_id):
         df = df.to_dict('records')
         return df
     
+def album_wordcloud(dict):
+
+    all_lyrics = ', '.join(d['lyrics'] for d in dict)
+    all_lyrics = preprocess(clean_lyrics(all_lyrics))
+
+    results = []
+
+    nlp = spacy.load("en_core_web_sm")
+    doc = nlp(all_lyrics)
+    for token in doc:
+        lyrics_overview ={'token_text':token.text, 
+        'token_lemma':token.lemma_, 
+        'token_pos':token.pos_, 
+        'token_tag':token.tag_, 
+        'token_dep':token.dep_,
+        'token_shape':token.shape_, 
+        'token_isalpha':token.is_alpha,
+        'token_isstop':token.is_stop
+        }
+        results.append(lyrics_overview)
+    df_lyrics = pd.DataFrame(results)
+    # Remove irrelevant words
+    df_lyrics = df_lyrics.loc[df_lyrics["token_isstop"]==False]
+    df_lyrics = df_lyrics.loc[df_lyrics["token_pos"]!='PUNCT']
+    df_lyrics = df_lyrics.loc[df_lyrics["token_isalpha"]==True]
+    df_lyrics = df_lyrics.loc[df_lyrics["token_pos"]!='INTJ']
+    # Have to take out pronouns since it usually contains the artist's name from the lyrics
+    df_lyrics = df_lyrics.loc[df_lyrics["token_pos"]!='PROPN']
+    df_lyrics = df_lyrics[df_lyrics["token_lemma"].apply(lambda x:x not in ['\n','oh','verse','like','get','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing'])]
+    # Tranform into a dict with words and counts, sorted
+    count_df = df_lyrics[["token_lemma"]].reset_index()
+    count_df = count_df.groupby('token_lemma').count().reset_index()
+    count_df.columns = ["word", "size"]
+    count_df = count_df.loc[count_df["size"]>1]
+    count_df = count_df.sort_values('size',ascending=False)
+    return count_df.to_dict('records')
+        

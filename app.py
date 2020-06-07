@@ -80,7 +80,7 @@ def album_data(album_id):
     return jsonify(response)
 
 @app.route("/album/<album_id>/lyrics")
-def lyrics_test(album_id):
+def lyrics(album_id):
     documents = collection.find({"album_id": album_id}).sort([("album_id", 1), ("track", 1)])
     response = []
     for document in documents:
@@ -130,4 +130,4 @@ def autocomplete():
     return jsonify(matching_results=df)
         
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

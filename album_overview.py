@@ -7,6 +7,7 @@ from decouple import config
 import numpy as np
 import mpld3
 import spotipy.util as util
+import en_core_web_sm
 from spotipy.oauth2 import SpotifyClientCredentials
 from scipy import stats
 from pandas.io.json import json_normalize
@@ -304,7 +305,7 @@ def album_wordcloud(dict):
 
     results = []
 
-    nlp = spacy.load("en_core_web_sm")
+    nlp = en_core_web_sm.load()
     doc = nlp(all_lyrics)
     for token in doc:
         lyrics_overview ={'token_text':token.text, 

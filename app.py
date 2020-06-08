@@ -16,12 +16,6 @@ from song_overview import get_album_id
 from song_overview import search_song_id
 from album_overview import analyze_album
 from album_overview import search_album
-# import rh_config
-# from rh_config import mg_usr
-# from rh_config import mg_pwd
-# from rh_config import id_
-# from rh_config import secret
-# from rh_config import genius_token
 from album_overview import sp
 from album_overview import album_wordcloud
 

@@ -16,11 +16,7 @@ import textblob
 from textblob import TextBlob 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from bs4 import BeautifulSoup
-# import rh_config
-# from rh_config import mg_usr
-# from rh_config import id_
-# from rh_config import secret
-# from rh_config import genius_token
+
 
 id_ = config("spotify_id")
 secret = config("spotify_secret")

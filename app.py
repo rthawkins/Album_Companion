@@ -16,12 +16,12 @@ from song_overview import get_album_id
 from song_overview import search_song_id
 from album_overview import analyze_album
 from album_overview import search_album
-import rh_config
-from rh_config import mg_usr
-from rh_config import mg_pwd
-from rh_config import id_
-from rh_config import secret
-from rh_config import genius_token
+# import rh_config
+# from rh_config import mg_usr
+# from rh_config import mg_pwd
+# from rh_config import id_
+# from rh_config import secret
+# from rh_config import genius_token
 from album_overview import sp
 from album_overview import album_wordcloud
 
@@ -36,8 +36,8 @@ class JSONEncoder(json.JSONEncoder):
 #################################################
 app = Flask(__name__)
 
-# usr = os.environ['***REMOVED***']
-# pwd = os.environ['***REMOVED***']
+mg_usr = config('mg_usr')
+mg_pwd = config('mg_pwd')
 # Need to secure first
 client = pymongo.MongoClient(f"mongodb+srv://{mg_usr}:{mg_pwd}@cluster0-xcn4s.mongodb.net/test?retryWrites=true&w=majority")
 db = client['albums_db']

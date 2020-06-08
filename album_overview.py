@@ -36,11 +36,11 @@ import requests
 from bs4 import BeautifulSoup
 from song_overview import high_low
 from song_overview import pos_neg
-import rh_config
-from rh_config import mg_usr
-from rh_config import id_
-from rh_config import secret
-from rh_config import genius_token
+# import rh_config
+# from rh_config import mg_usr
+# from rh_config import id_
+# from rh_config import secret
+# from rh_config import genius_token
 
 
 id_ = config("spotify_id")

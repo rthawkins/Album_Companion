@@ -15,7 +15,7 @@ This web was created as a companion to listening to an album, featuring:
 * <a href="https://spotipy.readthedocs.io/en/2.12.0/#" target="_blank">Spotipy Python Library</a>
 * <a href="https://docs.genius.com/" target="_blank">Genius API</a>
 * <a href="https://www.nltk.org/index.html" target="_blank">Natural Language Toolkit</a>
-* <a href="http://www.rcharlie.net/sentify/" target="_blank">RCharlie</a>
+* <a href="http://www.rcharlie.net/sentify/" target="_blank">Sentify by RCharlie</a>
 * <a href="https://github.com/salimzubair/lyric-sentiment" target="_blank">Lyric Sentiment Project</a>
 * <a href="https://github.com/willamesoares/lyrics-crawler" target="_blank">Lyrics Crawler</a>
 * <a href="https://www.datacamp.com/community/tutorials/fuzzy-string-python" target="_blank">Fuzzy String Matching</a>

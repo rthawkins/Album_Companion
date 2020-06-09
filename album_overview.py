@@ -100,7 +100,8 @@ def levenshtein_ratio_and_distance(s, t, ratio_calc = False):
         # insertions and/or substitutions
         # This is the minimum number of edits needed to convert string a to string b
         return "The strings are {} edits away".format(distance[row][col])
-
+    
+# https://github.com/salimzubair/lyric-sentiment
 def preprocess(text):
     # Create Doc object
     doc = nlp(text, disable=['ner', 'parser'])
@@ -112,6 +113,7 @@ def preprocess(text):
     
     return ' '.join(a_lemmas)
 
+# https://github.com/salimzubair/lyric-sentiment
 def return_keywords(texts):
     xkeywords = []
     values = keywords(text=preprocess(texts),split='\n',scores=True)

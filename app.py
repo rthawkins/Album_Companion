@@ -19,6 +19,7 @@ from album_overview import search_album
 from album_overview import sp
 from album_overview import album_wordcloud
 
+# JSON Encoding setup
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
@@ -30,9 +31,11 @@ class JSONEncoder(json.JSONEncoder):
 #################################################
 app = Flask(__name__)
 
+
+# Mongo DB configuration
 mg_usr = config('mg_usr')
 mg_pwd = config('mg_pwd')
-# Need to secure first
+
 client = pymongo.MongoClient(f"mongodb+srv://{mg_usr}:{mg_pwd}@cluster0-xcn4s.mongodb.net/test?retryWrites=true&w=majority")
 db = client['albums_db']
 collection = db['album_collection']
@@ -47,6 +50,7 @@ collection = db['album_collection']
 def welcome():
     return render_template("index.html")
 
+# Source for song information
 @app.route("/song/<song_id>")
 def song_data(song_id):
     documents = collection.find({"sp_id": song_id})
@@ -64,6 +68,7 @@ def song_data(song_id):
     album_new_data = JSONEncoder().encode(response)
     return render_template("view_track.html", song_dict=song_dict, album_new_data = album_new_data)
 
+# Source for album information
 @app.route("/album/<album_id>")
 def album_data(album_id):
     documents = collection.find({"album_id": album_id}).sort([("album_id", 1), ("track", 1)])
@@ -73,6 +78,7 @@ def album_data(album_id):
         response.append(document)
     return jsonify(response)
 
+# Album lyrics source for word cloud generation
 @app.route("/album/<album_id>/lyrics")
 def lyrics(album_id):
     documents = collection.find({"album_id": album_id}).sort([("album_id", 1), ("track", 1)])
@@ -83,6 +89,7 @@ def lyrics(album_id):
     x = album_wordcloud(response)
     return jsonify(x)
 
+# Trigger loading the album based on the selection
 @app.route('/search_result', methods=['POST'])
 def search_result():
     album_search = request.form['album-search']
@@ -105,7 +112,7 @@ def search_result():
         album_new_data = JSONEncoder().encode(album)
     return render_template("view_track.html", song_dict=song_dict, album_new_data = album_new_data)
 
-
+# Dynamic search results from Spotify API
 @app.route('/autocomplete',methods=['GET'])
 def autocomplete():
     search = request.args.get('q')

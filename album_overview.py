@@ -37,7 +37,6 @@ from bs4 import BeautifulSoup
 from song_overview import high_low
 from song_overview import pos_neg
 
-
 id_ = config("spotify_id")
 secret = config("spotify_secret")
 genius_token = config('genius_token')

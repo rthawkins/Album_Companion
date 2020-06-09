@@ -43,12 +43,6 @@ secret = config("spotify_secret")
 genius_token = config('genius_token')
 mg_usr = config('mg_usr')
 
-token = util.prompt_for_user_token(username= mg_usr,
-                           scope='user-read-currently-playing',
-                           client_id= id_,
-                           client_secret= secret,
-                           redirect_uri='https://album-companion.herokuapp.com/')
-
 ccm = SpotifyClientCredentials(client_id=id_, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=ccm)
 genius = lyricsgenius.Genius(genius_token)

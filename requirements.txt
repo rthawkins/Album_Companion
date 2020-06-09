@@ -24,3 +24,4 @@ textblob==0.15.3
 python-decouple==3.3
 python-dotenv==0.13.0
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.1.0/en_core_web_sm-2.1.0.tar.gz#egg=en_core_web_sm
+nltk.txt

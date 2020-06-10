@@ -7,19 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="#" type="image/x-icon"/>
   <link rel="shortcut icon" href="#" type="image/x-icon"/>
-  <link rel="stylesheet" href="https://bootswatch.com/3/cosmo/bootstrap.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="{{ url_for('static', filename='js/pace.min.js') }}"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap4-wizardry.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/pace.min.js') }}"></script>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="{{ url_for('static', filename='js/autocomplete.js') }}" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa|Roboto:300,400" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <!-- <script src="{{ url_for('static', filename='js/song_data.js') }}"></script> -->
   <script>
     $(function() {
@@ -42,115 +46,117 @@
   </script>
 </head>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header" id="navbar-header">
-      <a class="navbar-brand">Search for your album</a>
-    </div>
-      <div class="input-group">
-      <form class="navbar-form navbar-left" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
-          <input type="text" id="search_form_input" class="form-control" name="album-search" placeholder="Artist + album" autocomplete="off">
+
+<body>
+  <div class="jumbotron bg-wizardry bg-dark text-white mb-0 radius-0">
+    <div class="container">
+  
+        <h1 class="display-1 text-light">Album Companion
+          <span class="fa fa-magic text-warning display-icon"></span>
+        </h1>
+        <span class="lead">Follow the journey of an album through data<br><br></span>
+        <form class="form-inline" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input type="text" id="search_form_input" class="form-control form-control-sm ml-3 w-75" style="height:50px" name="album-search" placeholder="Search for your album" autocomplete="off">
         <button type="submit" class="btn btn-default" id="submit-button" disabled><span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Analyzing...</button>
       </form>
+  
     </div>
   </div>
-</nav>
+  <div class="container py-5" style="background-color:#fafafa;">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="pill" href="#tab1primary">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="pill" href="#tab2primary">Q&A</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="pill" href="#tab3primary">Credits</a>
+      </li>
+    </ul>
 
-<body style="background-color:#4a5266;">
-    <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-4">
-        <div class="panel with-nav-tabs panel-primary" id="home-panel">
-            <div class="panel-heading">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab1primary" data-toggle="tab">About</a></li>
-                        <li><a href="#tab2primary" data-toggle="tab">Q&A</a></li>
-                        <li><a href="#tab3primary" data-toggle="tab">Credits</a></li>
-                    </ul>
-            </div>
-            <div class="panel-body">
-                <div class="tab-content">
-                    <div class="tab-pane fade in active" id="tab1primary" align="center">
-                      <p>This app will give you background about the album you're listening to, including lyric content/insights from Genius.com, song attributes from Spotify, and a graphical overview of the album journey.</p>
-                      <p>Please use the search tool at the top to find the album.</p>
-                      <p>Here are some examples to get you started:</p>
-                      <p><a href="/song/4BRkPBUxOYffM2QXVlq7aC">'Revolver' by The Beatles</a></p>
-                      <p><a href="/song/5CaXxLM568tBh1PwhXdciZ">'Graduation' by Kanye West</a></p>
-                      <p><a href="/song/4nzyOwogJuWn1s6QuGFZ6w">'Weezer (The Blue Album)' by Weezer</a></p>
-                      <p><a href="/song/3OsUjkcv1C1v5udFhgRSFg">'OK Computer' by Radiohead</a></p>
-                      <p><a href="/song/6ie2Bw3xLj2JcGowOlcMhb">'Melodrama' by Lorde</a></p>
-                    </div>
-                    <div class="tab-pane fade" id="tab2primary">
-                      <div class="panel-group" id="faqAccordion">
-                        <div class="panel panel-default ">
-                            <div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question0">
-                                 <h4 class="panel-title">
-                                    <a href="#" class="ing">Q: How were the track attributes calculated?</a>
-                              </h4>
-                
-                            </div>
-                            <div id="question0" class="panel-collapse collapse" style="height: 0px;">
-                                <div class="panel-body">
-                                     <h5><span class="label label-primary">Answer</span></h5>
-                
-                                    <p>Apart from the mood and lyrical sentiment attributes, all of the attributes were generated by <a href="https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-audio-features/" target="_blank">Spotify's audio analysis</a>.
-                                        </p>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="panel panel-default ">
-                            <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question1">
-                                 <h4 class="panel-title">
-                                    <a href="#" class="ing">Q: What about the lyrical sentiment and mood attributes?</a>
-                              </h4>
-                
-                            </div>
-                            <div id="question1" class="panel-collapse collapse" style="height: 0px;">
-                                <div class="panel-body">
-                                     <h5><span class="label label-primary">Answer</span></h5>
-                
-                                    <p>The <b>lyrical sentiment</b> is estimated based on the <a href="https://www.nltk.org/index.html" target="_blank">Natural Language Toolkit</a> processing. A song's lyrics are processed through <a href="https://github.com/nltk/nltk/wiki/Sentiment-Analysis" target="_blank">sentiment analysis</a> to return the final number.
-                                    <br><br>The <b>mood</b> attribute takes the average of Spotify's musical valence attribute (i.e. how positive a song <i>sounds</i>) and the lyrical sentiment.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="panel panel-default ">
-                            <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question2">
-                                 <h4 class="panel-title">
-                                    <a href="#" class="ing">Q: How do I interpret the album track quadrant chart?</a>
-                              </h4>
-                
-                            </div>
-                            <div id="question2" class="panel-collapse collapse" style="height: 0px;">
-                                <div class="panel-body">
-                                     <h5><span class="label label-primary">Answer</span></h5>
-                
-                                    <p>The track analysis chart plots each song's <b>mood</b> and <b>energy</b> attribute that results in four quadrants: high energy/positive, high energy/negative, low energy/positive, low energy/negative.
-                                    <br><br>This was inspired by <a href="http://www.rcharlie.net/sentify/" target="_blank">RCharlie's Sentify app</a> which charts all of an artist's discography.</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    </div>
-                    <div class="tab-pane fade" id="tab3primary"><ul>
-                      <li><p><a href="https://developer.spotify.com/documentation/web-api/" target="_blank">Spotify API</a></p></li>
-                      <li><p><a href="https://spotipy.readthedocs.io/en/2.12.0/#" target="_blank">Spotipy Python Library</a></p></li>
-                      <li><p><a href="https://docs.genius.com/" target="_blank">Genius API</a></p></li>
-                      <li><p><a href="https://www.nltk.org/index.html" target="_blank">Natural Language Toolkit</a></p></li>
-                      <li><p><a href="http://www.rcharlie.net/sentify/" target="_blank">Sentify by RCharlie</a></p></li>
-                      <li><p><a href="https://github.com/salimzubair/lyric-sentiment" target="_blank">Lyric Sentiment Project</a></p></li>
-                      <li><p><a href="https://github.com/willamesoares/lyrics-crawler" target="_blank">Lyrics Crawler</a></p></li>
-                    </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="tab-content">
+      <div id="tab1primary" class="tab-pane container active">
+        <br>
+        <p>This app will give you background about the album you're listening to, including lyric content/insights from Genius.com, song attributes from Spotify, and a graphical overview of the album journey.</p>
+        <p>Please use the search tool at the top to find the album.</p>
+        <p>Here are some examples to get you started:</p>
+        <p><a href="/song/4BRkPBUxOYffM2QXVlq7aC">'Revolver' by The Beatles</a></p>
+        <p><a href="/song/5CaXxLM568tBh1PwhXdciZ">'Graduation' by Kanye West</a></p>
+        <p><a href="/song/4nzyOwogJuWn1s6QuGFZ6w">'Weezer (The Blue Album)' by Weezer</a></p>
+        <p><a href="/song/3OsUjkcv1C1v5udFhgRSFg">'OK Computer' by Radiohead</a></p>
+        <p><a href="/song/6ie2Bw3xLj2JcGowOlcMhb">'Melodrama' by Lorde</a></p>
+      </div>
+      <div id="tab2primary" class="tab-pane container fade">
+        <div class="panel-group" id="faqAccordion">
+          <div class="panel panel-default ">
+              <div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question0">
+                   <h4 class="panel-title">
+                     <br>
+                      <a href="#" class="ing">Q: How were the track attributes calculated?</a>
+                </h4>
+  
+              </div>
+              <div id="question0" class="panel-collapse collapse" style="height: 0px;">
+                  <div class="panel-body">
+                       <h5><span class="label label-primary">Answer</span></h5>
+  
+                      <p>Apart from the mood and lyrical sentiment attributes, all of the attributes were generated by <a href="https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-audio-features/" target="_blank">Spotify's audio analysis</a>.
+                          </p>
+                  </div>
+              </div>
+          </div>
+          <br>
+          <div class="panel panel-default ">
+              <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question1">
+                   <h4 class="panel-title">
+                      <a href="#" class="ing">Q: What about the lyrical sentiment and mood attributes?</a>
+                </h4>
+  
+              </div>
+              <div id="question1" class="panel-collapse collapse" style="height: 0px;">
+                  <div class="panel-body">
+                       <h5><span class="label label-primary">Answer</span></h5>
+  
+                      <p>The <b>lyrical sentiment</b> is estimated based on the <a href="https://www.nltk.org/index.html" target="_blank">Natural Language Toolkit</a> processing. A song's lyrics are processed through <a href="https://github.com/nltk/nltk/wiki/Sentiment-Analysis" target="_blank">sentiment analysis</a> to return the final number.
+                      <br><br>The <b>mood</b> attribute takes the average of Spotify's musical valence attribute (i.e. how positive a song <i>sounds</i>) and the lyrical sentiment.</p>
+                  </div>
+              </div>
+          </div>
+          <br>
+          <div class="panel panel-default ">
+              <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question2">
+                   <h4 class="panel-title">
+                      <a href="#" class="ing">Q: How do I interpret the album track quadrant chart?</a>
+                </h4>
+  
+              </div>
+              <div id="question2" class="panel-collapse collapse" style="height: 0px;">
+                  <div class="panel-body">
+                       <h5><span class="label label-primary">Answer</span></h5>
+  
+                      <p>The track analysis chart plots each song's <b>mood</b> and <b>energy</b> attribute that results in four quadrants: high energy/positive, high energy/negative, low energy/positive, low energy/negative.
+                      <br><br>This was inspired by <a href="http://www.rcharlie.net/sentify/" target="_blank">RCharlie's Sentify app</a> which charts all of an artist's discography.</p>
+                  </div>
+              </div>
+              </div>
+              </div>
+      </div>
+      <div id="tab3primary" class="tab-pane container fade">
+        <br>
+        <ul>
+          <li><p><a href="https://developer.spotify.com/documentation/web-api/" target="_blank">Spotify API</a></p></li>
+          <li><p><a href="https://spotipy.readthedocs.io/en/2.12.0/#" target="_blank">Spotipy Python Library</a></p></li>
+          <li><p><a href="https://docs.genius.com/" target="_blank">Genius API</a></p></li>
+          <li><p><a href="https://www.nltk.org/index.html" target="_blank">Natural Language Toolkit</a></p></li>
+          <li><p><a href="http://www.rcharlie.net/sentify/" target="_blank">Sentify by RCharlie</a></p></li>
+          <li><p><a href="https://github.com/salimzubair/lyric-sentiment" target="_blank">Lyric Sentiment Project</a></p></li>
+          <li><p><a href="https://github.com/willamesoares/lyrics-crawler" target="_blank">Lyrics Crawler</a></p></li>
+        </ul>
+      </div>
     </div>
-</div>
-</div>
+    </div>
 </body>
 
 

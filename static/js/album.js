@@ -241,7 +241,7 @@ $.getJSON(`/album/${selected_album}`,
                   yaxis: {
                     titlefont: {
                         color: '#AEAEAE',
-                        size: 10
+                        size: 8
                         },
                     linecolor: 'white',
                     gridwidth: 2,

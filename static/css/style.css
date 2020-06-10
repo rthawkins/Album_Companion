@@ -23,7 +23,12 @@
   background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
 }
 
-.album-header {
+.navbar-custom { 
+  background-color: #1b1e36; 
+} 
+
+
+/* .album-header {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 14px;
   color: 'black';
@@ -69,10 +74,10 @@ tr {
   font-size: 12px;
 }
 
-#lyrics-panel {width: 500px;}
+#lyrics-panel {width: 500px;} */
 
-/*** PANEL PRIMARY ***/
-
+/* ** PANEL PRIMARY ***/
+/* 
 .panel.with-nav-tabs .panel-heading{
   padding: 5px 5px 0 5px;
 }
@@ -120,13 +125,13 @@ margin-bottom: -1px;
 .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a:hover,
 .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a:focus {
     background-color: #4a9fe9;
-}
+} */
 
 
 
 
 /* Mobile optimization */
-@media screen and (max-width: 1230px) {
+/* @media screen and (max-width: 1230px) {
   body {
     padding-top:80px;
   }
@@ -136,4 +141,4 @@ margin-bottom: -1px;
   #full-screen { display: none; }
   #mobile-view { display: block; }
   #search_form_input {width: 150px}
-}
+} */

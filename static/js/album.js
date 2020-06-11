@@ -239,9 +239,10 @@ $.getJSON(`/album/${selected_album}`,
                 }
                   },
                   yaxis: {
+                    title: 'Energy',
                     titlefont: {
                         color: 'black',
-                        size: 8
+                        size: 11
                         },
                     linecolor: 'black',
                     gridwidth: 2,

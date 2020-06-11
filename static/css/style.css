@@ -184,7 +184,7 @@ tr:nth-child(even) {
 }
 
 
-/* Mobile optimization */
+/* Tablet optimization */
 @media screen and (max-width: 1400px) {
   /* body {
     padding-top:80px;
@@ -203,5 +203,10 @@ tr:nth-child(even) {
    #home-info {
      height: 100%;
    }
-  #search_form_input {width: 150px}
+   #track-nav {
+    float: none;
+    left: 5%;
+  }
+  #search_form_input {width: 180px}
 }
+

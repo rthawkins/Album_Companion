@@ -99,12 +99,18 @@ $.getJSON(`/album/${selected_album}`,
     var album_lyr_valence_desc = pos_neg(album_lyr_valence);
     var album_dance = meanVal('danceability').toFixed(3);
     var album_dance_desc = text_value(album_dance);
+    var upbeat_perc = ((data.filter(data => data.energy > .5 && data.mood >.5).length / data.length)*100).toFixed(0);
+    var chill_perc = ((data.filter(data => data.energy < .5 && data.mood >.5).length / data.length)*100).toFixed(0);
+    var aggr_perc = ((data.filter(data => data.energy > .5 && data.mood <.5).length / data.length)*100).toFixed(0);
+    var somber_perc = ((data.filter(data => data.energy < .5 && data.mood <.5).length / data.length)*100).toFixed(0);
+    
 
-    let tr_album_stats = $("<tr><td><b>Energy</b></td><td>" + album_energy_desc + " (" + album_energy + ") </td></tr>"
-      +"<tr><td><b>Overall Mood</b></td><td>" + album_mood_desc + " (" + album_mood + ") </td></tr>"
-      +"<tr><td><b>Musical Valence</b></td><td>" + album_mus_valence_desc + " (" + album_mus_valence + ") </td></tr>"
-      +"<tr><td><b>Lyrical Sentiment</b></td><td>" + album_lyr_valence_desc + " (" + album_lyr_valence + ") </td></tr>"
-      +"<tr><td><b>Danceability</b></td><td>" + album_dance_desc + " (" + album_dance + ") </td></tr>")
+
+    let tr_album_stats = $("<tr><td><b>Upbeat Tracks</b></td><td>" + upbeat_perc + "%</td></tr>"
+      +"<tr><td><b>Chill Tracks</b></td><td>" + chill_perc + "%</td></tr>"
+      +"<tr><td><b>Aggressive Tracks</b></td><td>" + aggr_perc + "%</td></tr>"
+      +"<tr><td><b>Somber Tracks</b></td><td>" + somber_perc + "%</td></tr>"
+      +"<tr><td><b>Danceability</b></td><td>" + album_dance_desc + "</td></tr>")
       tr_album_stats.appendTo("#album-stats,#album-stats-mobile");
     });
 

@@ -226,29 +226,29 @@ $.getJSON(`/album/${selected_album}`,
                   xaxis: {
                     title: 'Tracks',
                     titlefont: {
-                        color: '#AEAEAE',
+                        color: 'black',
                         size: 8
                         },
                     showgrid: false,
                     zeroline: false,
-                    linecolor: 'white',
+                    linecolor: 'black',
                     dtick: 1,
                     ticks: 'outside',
-                    tickfont: {color: '#f2f0f0',
+                    tickfont: {color: 'black',
                     size: 10
                 }
                   },
                   yaxis: {
                     titlefont: {
-                        color: '#AEAEAE',
-                        size: 10
+                        color: 'black',
+                        size: 8
                         },
-                    linecolor: 'white',
+                    linecolor: 'black',
                     gridwidth: 2,
-                    gridcolor: '#E1E1E1',
+                    gridcolor: 'black',
                     tickvals: [0,.5,1], 
                     range: [0,1],
-                    tickfont: {color: '#f2f0f0',
+                    tickfont: {color: 'black',
                     size: 10
                 },
                   },
@@ -313,21 +313,23 @@ $.getJSON(`/album/${selected_album}`,
     var layout_track = {
         title: false,
         titlefont: {
-                color: '#f2f0f0',
+                color: 'black',
                 size: 14
         },
         showlegend: false,
         xaxis: {
             title: 'Mood',
             titlefont: {
-                color: '#f2f0f0',
+                color: 'black',
                 size: 11
                 },
             showgrid: true,
             zeroline: true,
-            linecolor: 'white',
+            gridwidth: 1,
+            gridcolor: '#AEAEAE',
+            linecolor: 'black',
             ticks: 'outside',
-            tickfont: {color: '#f2f0f0',
+            tickfont: {color: 'black',
                     size: 10
                 },
             tickvals: [.5,1], 
@@ -336,15 +338,15 @@ $.getJSON(`/album/${selected_album}`,
         yaxis: {
             title: 'Energy',
             titlefont: {
-                color: '#f2f0f0',
+                color: 'black',
                 size: 11
                 },
-            linecolor: 'white',
-            gridwidth: 2,
-            gridcolor: '#E1E1E1',
+            linecolor: 'black',
+            gridwidth: 1,
+            gridcolor: '#AEAEAE',
             tickvals: [0,.5,1], 
             range: [0,1],
-            tickfont: {color: '#f2f0f0',
+            tickfont: {color: 'black',
             size: 10
         },
         },
@@ -516,8 +518,10 @@ $.getJSON(`/album/${selected_album}`,
 
         Plotly.newPlot('vibe_chart', vibe_chart_ref, layout_vibe,{displayModeBar: false});
         Plotly.newPlot('track_chart', track_chart_ref, layout_track,{displayModeBar: false});
-        Plotly.newPlot('vibe_chart_mobile', vibe_chart_ref, layout_vibe_mobile,{displayModeBar: false});
-        Plotly.newPlot('track_chart_mobile', track_chart_ref, layout_track_mobile,{displayModeBar: false});
+        Plotly.newPlot('vibe_chart_mobile', vibe_chart_ref, layout_vibe,{displayModeBar: false});
+        Plotly.newPlot('track_chart_mobile', track_chart_ref, layout_track,{displayModeBar: false});
+
+
 
         vibe_chart.on('plotly_click', function(data){
           if (data.points.length === 1) {

@@ -4,7 +4,7 @@
 <head>
   <title>Album Companion</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" href="#" type="image/x-icon"/>
   <link rel="shortcut icon" href="#" type="image/x-icon"/>
   <script>var album_data = '{{album_new_data}}';</script>
@@ -17,17 +17,17 @@
   <script>var s_dance = '{{song_dict.danceability}}';</script>
   <script>var s_title = '{{song_dict.title}}';</script>
   <script>var s_tracknum = '{{song_dict.track}}';</script>
-  <link rel="stylesheet" href="https://bootswatch.com/3/cosmo/bootstrap.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap4-wizardry.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa|Roboto:300,400" rel="stylesheet">
   <script src="{{ url_for('static', filename='js/pace.min.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
   <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
   <script src="https://d3js.org/d3.v4.js"></script>
@@ -36,8 +36,10 @@
   <script src="{{ url_for('static', filename='js/jbox.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/autocomplete.js') }}" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <!-- <script src="{{ url_for('static', filename='js/song_data.js') }}"></script> -->
   <!-- Autocomplete search script -->
   <!-- Source help: https://stackoverflow.com/questions/22449884/flask-jquery-autocomplete -->
@@ -64,255 +66,312 @@
       var lyrics = "{{song_dict.genius_songid}}";
       if (lyrics == "None"){
       document.getElementById("myText").innerHTML = "No lyrics found on Genius.";
-      document.getElementById("myText2").innerHTML = "No lyrics found on Genius.";
+      document.getElementById("myText_mobile").innerHTML = "No lyrics found on Genius.";
     }};
   </script>
 </head>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header" id="navbar-header">
-      <a class="navbar-brand" href="/" id="home-button">Home</a>
-    </div>
-      <div class="input-group">
-      <form class="navbar-form navbar-left" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
-          <input type="text" id="search_form_input" class="form-control" name="album-search" placeholder="Artist + album" autocomplete="off">
-          <button type="submit" class="btn btn-default" id="submit-button" disabled><span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Analyzing...</button>
-      </form>
+
+
+<body  onload="lyricsFunction()" id="body-view-album">
+  <div class="navbar navbar-custom fixed-top">
+    <div class="container">
+      <nav class="navbar navbar-inverse navbar-fixed-top" id="track-nav">
+        <div class="container-fluid">
+          <ul class="nav">
+          <div class="navbar-header" id="navbar-header">
+            <a class="navbar-brand" href="/" id="home-button"><i class="fa fa-fw fa-home" title="Home"></i></a>
+          </div>
+            <div class="input-form">
+            <form class="form-inline" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
+                <input type="text" id="search_form_input" class="form-control" name="album-search" placeholder="Search" autocomplete="off">
+                <button type="submit" class="btn btn-default" id="submit-button" disabled><span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Analyzing...</button>
+            </form>
+          </div>
+        </ul>
+        </div>
+      </nav>
     </div>
   </div>
-</nav>
 
-<body style="background-color:#4a5266;" onload="lyricsFunction()">
+  <div id="full-screen">
+  <div class="parent">
+    <div class="div4">
+      <div class="card">
+        <div class="card-header" align="center">
+      <h5>"{{song_dict.album_name}}" by {{song_dict.artist}}</h5>
+      <p>Released: {{song_dict.release_date}}</p>
+      <div id="spotify_player" align="center">
+        <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </div>
+    </div>
+          <ul class="nav nav-tabs" id="album-panel">
+          <li class="nav-item">
+            <a class="nav-link active" href="#tracklist" data-toggle="tab">Tracklist</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#summary" data-toggle="tab">Highlights</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#album_stats" data-toggle="tab">Stats</a>
+          </li>
+        </ul>
+            <div class="tab-content">
+                <div class="tab-pane container active" id="tracklist">
+                  <table table class="table table-hover" >
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>#</th>
+                        <th>Track</th>
+                      </tr>
+                    </thead>
+                    <tbody id="album_table"></tbody>
+                  </table>
+                </div>
+                <div class="tab-pane container fade" id="summary">
+                  <table table class="table table-hover">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th><i class="fa fa-info-circle" title="Highlights are based on the highest and <br>lowest values on the album.<br><br><b>Note:</b> Being <i>representative</i> or <i>unique</i> is<br>based around how similar the track is<br>to the album in terms of duration, loudness,<br>energy, mood and danceability."></i> Album's most...</th>
+                        <th>Title</th>
+                      </tr>
+                    </thead>
+                    <tbody id="album_highlights"></tbody>
+                  </table>
+                </div>
+                <div class="tab-pane container fade" id="album_stats">
+                  <table table class="table table-hover">
+                  <tbody id="album-stats"></tbody>
+                </table>
+                  <div class="album-header">Lyric Cloud:</div>
+                  <br>
+                  <div id="wordchart"></div>
+                </div>
+                </div>
+              </div>
+    </div>
+    <div class="div5" align="center" id="lyrics">
+      <div class="card">
+        <div class="card-header" align="center">
+          <h5>"{{song_dict.title}}"</h5></div>
+      <div id="rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}"><span id="myText"></span></div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js" ></script>
+    </div>
+    </div>
+    <div class="div6">
+      <div class="card">
+        <div class="card-header" align="center">
+          Track Attributes
+        </div>
+        <table class="table table-hover">
+        <tbody>
+          <tr>
+      <td><b>Time Signature</b></td><td>{{ song_dict.time_signature}}/4</td><td><span></span></td></tr>
+      <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
+      <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
+      <tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
+      <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
+      <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
+      <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
+      <script type="text/javascript">
+      
+        $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
+          type: 'bullet',
+          targetWidth: 1,
+          targetColor: '#000000',
+          performanceColor: '#2b64bf',
+          disableInteraction: true
+        });
 
-    
-    <div class="container-fluid" id="full-screen">
-    <div class="row">
-      <div class="col-xs-3" id="first-column"  align="center">
-        <div id="spotify_player" align="center">
-          <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="350" height="250" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-          </div>
-          <div class="panel with-nav-tabs panel-primary" id="album-panel" style="width:350px">
-            <div class="panel-heading">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tracklist" data-toggle="tab">Tracklist</a></li>
-                        <li><a href="#summary" data-toggle="tab">Highlights</a></li>
-                        <li><a href="#album_stats" data-toggle="tab">Album Stats</a></li>
-                    </ul>
+        $(".barchart-mood").sparkline([0.5,s_mood,1,0,0], {
+          type: 'bullet',
+          targetWidth: 1,
+          targetColor: '#000000',
+          performanceColor: '#2b64bf',
+          disableInteraction: true});
+
+        $(".barchart-valence").sparkline([0.5,s_valence,1,0,0], {
+          type: 'bullet',
+          targetWidth: 1,
+          targetColor: '#000000',
+          performanceColor: '#2b64bf',
+          disableInteraction: true});
+
+        $(".barchart-lyrics").sparkline([0.5,s_lyrvalence,1,0,0], {
+          type: 'bullet',
+          targetWidth: 1,
+          targetColor: '#000000',
+          performanceColor: '#2b64bf',
+          disableInteraction: true});
+
+        $(".barchart-dance").sparkline([0.5,s_dance,1,0,0], {
+          type: 'bullet',
+          targetWidth: 1,
+          targetColor: '#000000',
+          performanceColor: '#2b64bf',
+          disableInteraction: true});
+        </script>
+    </tbody>
+    </table>
+  </div>
+  <div class="card" id="charts">
+    <div id="vibe-header"><i class="fa fa-info-circle" title="The journey of the album from start to finish.<br><br>The energy of the album is charted, while the colors <br>represent a <b><span style='color:#02c39a;'>positive</span></b>, <b>neutral</b>, or <b><span style='color:#a11d33;'>negative</span></b> mood."></i> Album Vibe</div><div id="vibe_chart"></div>
+    <div id="track-header"><i class="fa fa-info-circle" title="A breakdown of the album based on four quadrants <br>around a song's mood and energy.<br><br>The larger the circle, the more <b>unique</b> the song is <br>compared to the rest of the album."></i> Mood Quadrants</div><div id="track_chart"></div>
+    </div>
+  </div>
+    </div>
+  </div>
+
+<!-- mobile view -->
+
+<div style="background-color:#f0f0f5;" id="mobile-view">
+  <div class="mobile-parent" id="mobile-parent" align="center">
+    <div class="div4" style="width:350px">
+      <div class="card">
+        <div class="card-header" align="center">
+      <h5>"{{song_dict.album_name}}" by {{song_dict.artist}}</h5>
+      <p>Released: {{song_dict.release_date}}</p>
+      <div id="spotify_player-mobile" align="center">
+        <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </div>
+    </div>
+          <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#lyrics-tab" data-toggle="tab">Lyrics</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#attributes-tab" data-toggle="tab">Attributes</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+            Album Info<span class="caret"></span>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" data-toggle="tab" href="#tracklist-tab">Tracklist</a>
+              <div class="dropdown-divider"></div>
+                <a class="dropdown-item" data-toggle="tab" href="#graphs-tab">Graphs</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" data-toggle="tab" href="#highlights-tab">Highlights</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" data-toggle="tab" href="#album-stats-tab">Stats</a>
             </div>
-            <div class="panel-body">
-              <div class="tab-content">
-                  <div class="tab-pane fade in active" id="tracklist">
-                    <table table class="table table-striped table-hover " style="width:300px" align="center">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Track</th>
-                        </tr>
-                      </thead>
-                      <tbody id="album_table"></tbody>
-                    </table>
-                  </div>
-                  <div class="tab-pane fade" id="summary">
-                    <table table class="table table-striped table-hover " style="width:300px" align="center">
-                      <thead>
-                        <tr>
-                          <th><i class="fa fa-info-circle" title="Highlights are based on the highest and <br>lowest values on the album.<br><br><b>Note:</b> Being <i>representative</i> or <i>unique</i> is<br>based around how similar the track is<br>to the album in terms of duration, loudness,<br>energy, mood and danceability."></i> Album's most...</th>
-                          <th>Title</th>
-                        </tr>
-                      </thead>
-                      <tbody id="album_highlights"></tbody>
-                    </table>
-                  </div>
-                  <div class="tab-pane fade" id="album_stats">
-                    <table table class="table table-striped table-hover " style="width:300px" align="center">
-                    <tbody id="album-stats"></tbody>
+            </li>
+        </ul>
+            <div class="tab-content">
+
+                <div class="tab-pane container active" id="lyrics-tab">
+                    <div id="mobile_rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}"><span id="myText_mobile"></span></div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js" ></script>
+                </div>
+
+                <div class="tab-pane container fade" id="attributes-tab">
+                  <div class="card">
+                    <div class="card-header" align="center">
+                      Track Attributes
+                    </div>
+                    <table class="table table-hover">
+                    <tbody>
+                      <tr>
+                  <td><b>Time Signature</b></td><td>{{ song_dict.time_signature}}/4</td><td><span></span></td></tr>
+                  <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
+                  <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
+                  <tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
+                  <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
+                  <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
+                  <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
+                  <script type="text/javascript">
+                  
+                    $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
+                      type: 'bullet',
+                      targetWidth: 1,
+                      targetColor: '#000000',
+                      performanceColor: '#2b64bf',
+                      disableInteraction: true
+                    });
+            
+                    $(".barchart-mood").sparkline([0.5,s_mood,1,0,0], {
+                      type: 'bullet',
+                      targetWidth: 1,
+                      targetColor: '#000000',
+                      performanceColor: '#2b64bf',
+                      disableInteraction: true});
+            
+                    $(".barchart-valence").sparkline([0.5,s_valence,1,0,0], {
+                      type: 'bullet',
+                      targetWidth: 1,
+                      targetColor: '#000000',
+                      performanceColor: '#2b64bf',
+                      disableInteraction: true});
+            
+                    $(".barchart-lyrics").sparkline([0.5,s_lyrvalence,1,0,0], {
+                      type: 'bullet',
+                      targetWidth: 1,
+                      targetColor: '#000000',
+                      performanceColor: '#2b64bf',
+                      disableInteraction: true});
+            
+                    $(".barchart-dance").sparkline([0.5,s_dance,1,0,0], {
+                      type: 'bullet',
+                      targetWidth: 1,
+                      targetColor: '#000000',
+                      performanceColor: '#2b64bf',
+                      disableInteraction: true});
+                    </script>
+                </tbody>
+                </table>
+              </div>
+                </div>
+
+                <div class="tab-pane container fade" id="tracklist-tab">
+                  <table table class="table table-hover" >
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>#</th>
+                        <th>Track</th>
+                      </tr>
+                    </thead>
+                    <tbody id="album_table_mobile"></tbody>
+                  </table>
+                 </div>
+
+                 <div class="tab-pane container fade" id="graphs-tab">
+                  <div class="card" id="charts-mobile">
+                    <div id="vibe-header-mobile"><i class="fa fa-info-circle" title="The journey of the album from start to finish.<br><br>The energy of the album is charted, while the colors <br>represent a <b><span style='color:#02c39a;'>positive</span></b>, <b>neutral</b>, or <b><span style='color:#a11d33;'>negative</span></b> mood."></i> Album Vibe</div><div id="vibe_chart_mobile"></div>
+                    <div id="track-header-mobile"><i class="fa fa-info-circle" title="A breakdown of the album based on four quadrants <br>around a song's mood and energy.<br><br>The larger the circle, the more <b>unique</b> the song is <br>compared to the rest of the album."></i> Mood Quadrants</div><div id="track_chart_mobile"></div>
+                    </div>
+                 </div>
+
+                 <div class="tab-pane container fade" id="highlights-tab">
+                  <table table class="table table-hover">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th><i class="fa fa-info-circle" title="Highlights are based on the highest and <br>lowest values on the album.<br><br><b>Note:</b> Being <i>representative</i> or <i>unique</i> is<br>based around how similar the track is<br>to the album in terms of duration, loudness,<br>energy, mood and danceability."></i> Album's most...</th>
+                        <th>Title</th>
+                      </tr>
+                    </thead>
+                    <tbody id="album_highlights_mobile"></tbody>
+                  </table>
+                </div>
+
+                <div class="tab-pane container fade" id="album-stats-tab">
+                  <table table class="table table-hover">
+                    <tbody id="album-stats-mobile"></tbody>
                   </table>
                     <div class="album-header">Lyric Cloud:</div>
                     <br>
-                    <div id="wordchart"></div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-            
-      </div>
-      <div class="col-xs-1">
-      </div>
-      <div class="col-xs-4" id="second-column">
-      <div align="center">
-        <div class="panel panel-primary" id="lyrics-panel">
-          <div class="panel-heading">
-            <h3 class="panel-title" id="header">"{{ song_dict.title }}" by {{ song_dict.artist }}</h3>
-          </div>
-          <div class="panel-body">
-            <!-- <div id="lyrics-placeholder">No data.</div> -->
-        <!-- <div id="embed_lyrics"></div> -->
-        <!-- <script id = "genius_script"></script> -->
-        <div id="rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}"><span id="myText"></span></div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js"></script>          </div>
-        </div>
-             </div></div>
-             <div class="col-xs-1">
-            </div>
-      <div align="center" class="col-xs-3" id="third-column">
-        <div class="panel panel-primary" style="width:350px">
-          <div class="panel-heading">
-            <h3 class="panel-title">Track Attributes</h3>
-          </div>
-          <!-- <div class="panel-body" id="attributes"> -->
-            <!-- <div id="attributes-placeholder">No data.</div> -->
-            <!-- <p><b>Time Signature</b>: {{ song_dict.time_signature}}/4</p>
-            <p><b>Key</b>: {{ song_dict.song_key}} {{ song_dict.mode}}</p>
-            <p><b>Energy</b>: {{ song_dict.energy_des}} ({{ song_dict.energy}})</p>
-            <p><b>Overall Mood</b>: {{ song_dict.mood_des}} ({{ song_dict.mood}})</p>
-            <p><b>Musical Valence</b>: {{ song_dict.valence_des}} ({{ song_dict.valence}})</p>
-            <p><b>Lyrical Sentiment</b>: {{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</p>
-            <p><b>Danceability</b>: {{ song_dict.dance_des}} ({{ song_dict.danceability}})</p> -->
-            <table class="table table-striped table-hover ">
-              <tbody>
-                <tr>
-            <td><b>Time Signature</b></td><td>{{ song_dict.time_signature}}/4</td><td><span></span></td></tr>
-            <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
-            <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
-            <tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
-            <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
-            <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
-            <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
-            <script type="text/javascript">
-            
-              $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
-                type: 'bullet',
-                targetWidth: 1,
-                targetColor: '#000000',
-                performanceColor: '#2b64bf',
-                disableInteraction: true
-              });
+                    <div id="wordchartmobile"></div>
+                </div>
 
-              $(".barchart-mood").sparkline([0.5,s_mood,1,0,0], {
-                type: 'bullet',
-                targetWidth: 1,
-                targetColor: '#000000',
-                performanceColor: '#2b64bf',
-                disableInteraction: true});
-
-              $(".barchart-valence").sparkline([0.5,s_valence,1,0,0], {
-                type: 'bullet',
-                targetWidth: 1,
-                targetColor: '#000000',
-                performanceColor: '#2b64bf',
-                disableInteraction: true});
-
-              $(".barchart-lyrics").sparkline([0.5,s_lyrvalence,1,0,0], {
-                type: 'bullet',
-                targetWidth: 1,
-                targetColor: '#000000',
-                performanceColor: '#2b64bf',
-                disableInteraction: true});
-
-              $(".barchart-dance").sparkline([0.5,s_dance,1,0,0], {
-                type: 'bullet',
-                targetWidth: 1,
-                targetColor: '#000000',
-                performanceColor: '#2b64bf',
-                disableInteraction: true});
-              </script>
-          </tbody>
-          </table>
-        </div>
-          <div id="vibe-header"><i class="fa fa-info-circle" title="The journey of the album from start to finish.<br><br>The energy of the album is charted, while the colors <br>represent a <b><span style='color:#02c39a;'>positive</span></b>, <b>neutral</b>, or <b><span style='color:#a11d33;'>negative</span></b> mood."></i> Album Vibe</div><div id="vibe_chart"></div>
-          <div id="track-header"><i class="fa fa-info-circle" title="A breakdown of the album based on four quadrants <br>around a song's mood and energy.<br><br>The larger the circle, the more <b>unique</b> the song is <br>compared to the rest of the album."></i> Mood Quadrants</div><div id="track_chart"></div>
-        </div>
-      </div>
-    </div>
-
- <!-- Mobile view -->
-
- <div class="container-fluid" id="mobile-view" align="center">
-  <div class="row">
-    <div class="col-xs-12">
-      <div id="spotify_player-mobile" align="center">
-        <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="350" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-        </div>
-
-      <div class="panel with-nav-tabs panel-primary" id="home-panel" align="center">
-          <div class="panel-heading">
-                  <ul class="nav nav-tabs">
-                      <li class="active"><a href="#tab1primary" data-toggle="tab">Lyrics</a></li>
-                      <li><a href="#tab2primary" data-toggle="tab">Attributes</a></li>
-                      <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                        Album Info<span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                          <li><a href="#tab3primary" data-toggle="tab">Tracklist</a></li>
-                          <li class="divider"></li>
-                          <li><a href="#tab4primary" data-toggle="tab">Graphs</a></li>
-                          <li class="divider"></li>
-                          <li><a href="#tab5primary" data-toggle="tab">Highlights</a></li>
-                          <li class="divider"></li>
-                          <li><a href="#stats-mobile" data-toggle="tab">Stats</a></li>
-                          <li class="divider"></li>
-                          <li><a href="#wordchartmobile" data-toggle="tab">Word Cloud</a></li>
-                        </ul>
-                      </li>
-                  </ul>
-          </div>
-          <div class="panel-body">
-              <div class="tab-content">
-                  <div class="tab-pane fade in active" id="tab1primary">
-                    <div id="mobile-rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}"><span id="myText2"></span></div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js"></script>
-                  </div>
-                  <div class="tab-pane fade" id="tab2primary">
-                    <table class="table table-striped table-hover ">
-                      <tbody>
-                        <tr>
-                    <td><b>Time Signature</b></td><td>{{ song_dict.time_signature}}/4</td><td><span></span></td></tr>
-                    <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
-                    <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
-                    <tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
-                    <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
-                    <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
-                    <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
-                    </tbody></table>
-                    
-                  </div>
-                  <div class="tab-pane fade" id="tab3primary">
-                    <table table class="table table-striped table-hover " style="width:300px" align="center">
-                      <thead>
-                        <tr tr class="active">
-                          <th>#</th>
-                          <th>Track</th>
-                        </tr>
-                      </thead>
-                      <tbody id="album_table_mobile"></tbody>
-                    </table>
-                  </div>
-                  <div class="tab-pane fade" id="tab4primary">
-                    <div id="vibe-header-mobile"><i class="fa fa-info-circle" title="The journey of the album from start to finish.<br><br>The energy of the album is charted, while the colors <br>represent a <b><span style='color:#02c39a;'>positive</span></b>, <b>neutral</b>, or <b><span style='color:#a11d33;'>negative</span></b> mood."></i> Album Vibe</div><div id="vibe_chart_mobile"></div>
-                    <div id="track-header-mobile"><i class="fa fa-info-circle" title="A breakdown of the album based on four quadrants <br>around a song's mood and energy.<br><br>The larger the circle, the more <b>unique</b> the song is <br>compared to the rest of the album."></i> Mood Quadrants</div><div id="track_chart_mobile"></div>
-                  </div>
-                  <div class="tab-pane fade" id="tab5primary">
-                    <table table class="table table-striped table-hover " style="width:300px" align="center">
-                      <thead>
-                        <tr tr class="active">
-                          <th><i class="fa fa-info-circle" title="Highlights are based on the highest and <br>lowest values on the album.<br><br><b>Note:</b> Being <i>representative</i> or <i>unique</i> is<br>based around how similar the track is<br>to the album in terms of duration, loudness,<br>energy, mood and danceability."></i> Album's most...</th>
-                          <th>Title</th>
-                        </tr>
-                      </thead>
-                      <tbody id="album_highlights_mobile"></tbody>
-                    </table>
-                  </div>
-                  <div class="tab-pane fade" id="stats-mobile">
-                    <table table class="table table-striped table-hover " style="width:300px" align="center">
-                      <tbody id="album-stats-mobile"></tbody></table>
-                  </div>
-                  <div class="tab-pane fade" id="wordchartmobile"></div>
+                </div>
               </div>
+              </div>
+            </div>
           </div>
-      </div>
-  </div>
-      </div>
+
+
+  <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
+    <div class="container text-center">
+      <small><i class="fab fa-github-alt"></i> <a href="https://github.com/rthawkins/Album_Companion" target="_blank">rthawkins</a> | bootstrap: <a href="https://hackerthemes.com/bootstrap-themes/demo/wizardry/" target="_blank">wizardry</a></small>
     </div>
+  </footer>  
 
 </body>
 

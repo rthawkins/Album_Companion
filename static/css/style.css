@@ -13,6 +13,11 @@
   min-width: 350px
 }
 
+#error{
+  color: red!important;
+  text-shadow: whitesmoke;
+}
+
 #home-info {
   border: 1px solid #a8a8a8;
   height: 600px;

@@ -129,6 +129,11 @@ def autocomplete():
                columns =['label', 'value']) 
     df = df.to_dict('records')
     return jsonify(matching_results=df)
+
+# Error page
+@app.errorhandler(Exception)
+def all_exception_handler(error):
+   return render_template("error.html")
         
 if __name__ == '__main__':
     app.run(debug=True)

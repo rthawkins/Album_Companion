@@ -16,6 +16,8 @@
 #home-info {
   border: 1px solid #a8a8a8;
   height: 600px;
+  max-width: 1000px;
+  text-align: center;
 }
 
 #full-screen {
@@ -172,6 +174,10 @@ tr:nth-child(even) {
   background: #1b1e36!important;  /* your preferred color */
 }
 
+.center-pills {
+  display: flex;
+  justify-content: center;
+}
 
 
 /* Mobile optimization */

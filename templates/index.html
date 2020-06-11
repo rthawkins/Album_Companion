@@ -48,14 +48,14 @@
 
 
 <body>
-  <div class="jumbotron bg-wizardry bg-dark text-white mb-0 radius-0">
+  <div class="jumbotron bg-wizardry bg-dark text-white mb-0 radius-0" id="jumbotron" align="center">
     <div class="container">
   
         <h1 class="display-1 text-light">Album Companion
           <span class="fa fa-music text-warning display-icon"></span>
         </h1>
         <span class="lead">Follow the journey of an album through data<br><br></span>
-        <form class="form-inline" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
+        <form class="form-inline justify-content-center" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
           <i class="fas fa-search" aria-hidden="true"></i>
           <input type="text" id="search_form_input" class="form-control form-control-sm ml-3 w-75" style="height:50px" name="album-search" placeholder="Search for your album" autocomplete="off">
         <button type="submit" class="btn btn-default" id="submit-button" disabled><span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Analyzing...</button>
@@ -64,7 +64,7 @@
     </div>
   </div>
   <div class="container py-5" id="home-info" style="background-color:#f0f0f5;">
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills center-pills">
       <li class="nav-item">
         <a class="nav-link active" data-toggle="pill" href="#tab1primary">About</a>
       </li>
@@ -173,7 +173,7 @@
               </div>
               </div>
       </div>
-      <div id="tab3primary" class="tab-pane container fade">
+      <div id="tab3primary" class="tab-pane container fade" align="left">
         <br>
         <ul>
           <li><p><a href="https://developer.spotify.com/documentation/web-api/" target="_blank">Spotify API</a></p></li>

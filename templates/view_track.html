@@ -83,7 +83,7 @@
             <a class="navbar-brand" href="/" id="home-button"><i class="fa fa-fw fa-home" title="Home"></i></a>
           </div>
             <div class="input-form">
-            <form class="form-inline" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
+            <form class="form-inline justify-content-center" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
                 <input type="text" id="search_form_input" class="form-control" name="album-search" placeholder="Search" autocomplete="off">
                 <button type="submit" class="btn btn-default" id="submit-button" disabled><span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Analyzing...</button>
             </form>
@@ -105,7 +105,7 @@
         <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>
     </div>
-          <ul class="nav nav-tabs" id="album-panel">
+          <ul class="nav nav-tabs justify-content-center" id="album-panel">
           <li class="nav-item">
             <a class="nav-link active" href="#tracklist" data-toggle="tab">Tracklist</a>
           </li>
@@ -169,7 +169,7 @@
       <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
       <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
       <tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
-      <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
+      <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>, according to Spotify's analysis"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
       <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
       <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
       <script type="text/javascript">
@@ -234,7 +234,7 @@
         <iframe src="https://open.spotify.com/embed/track/{{ song_dict.sp_id }}" width="300" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>
     </div>
-          <ul class="nav nav-tabs">
+          <ul class="nav nav-tabs justify-content-center">
           <li class="nav-item">
             <a class="nav-link active" href="#lyrics-tab" data-toggle="tab">Lyrics</a>
           </li>
@@ -274,7 +274,7 @@
                   <tr><td><b>Key</b></td><td>{{ song_dict.key}} {{ song_dict.mode}}</td><td><span></span></td></tr>
                   <tr><td><b>Energy</b></td><td>{{ song_dict.energy_des}} ({{ song_dict.energy}})</td><td><span class="barchart-energy"></span></td></tr>
                   <tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>{{ song_dict.mood_des}} ({{ song_dict.mood}})</td><td><span class="barchart-mood"></span></td></tr>
-                  <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
+                  <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>, according to Spotify's analysis"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
                   <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
                   <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
                   <script type="text/javascript">

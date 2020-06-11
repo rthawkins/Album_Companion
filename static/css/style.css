@@ -71,27 +71,9 @@
   left: 25%;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  height: 100px;
-  width: 100px;
-  outline: black;
-  background-size: 100%, 100%;
-  border-radius: 50%;
-  background-image: none;
-}
-
-.carousel-control-next-icon:after
-{
-  content: '>';
-  font-size: 55px;
-  color: #454545;
-}
-
-.carousel-control-prev-icon:after {
-  content: '<';
-  font-size: 55px;
-  color: #454545;
+.carousel-control-next,
+.carousel-control-prev {
+    filter: invert(100%);
 }
 
 .carousel-item img{
@@ -203,12 +185,12 @@ tr:nth-child(even) {
   #full-screen { display: none; }
   #mobile-view { 
     display: block;
-    padding-top: 15px;
-    padding-right: 15%;
-    padding-left: 15%;
-    display: flex;
+    padding-top: 10px;
     flex: 1 0 auto;
     background: linear-gradient(to bottom, #ebebf0, #ccccf0);
+   }
+   #home-info {
+     height: 100%;
    }
   #search_form_input {width: 150px}
 }

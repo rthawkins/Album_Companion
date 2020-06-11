@@ -52,7 +52,7 @@
     <div class="container">
   
         <h1 class="display-1 text-light">Album Companion
-          <span class="fa fa-magic text-warning display-icon"></span>
+          <span class="fa fa-music text-warning display-icon"></span>
         </h1>
         <span class="lead">Follow the journey of an album through data<br><br></span>
         <form class="form-inline" action="{{ url_for('search_result') }}" method="post" role="search" id="search_form"> 
@@ -63,7 +63,7 @@
   
     </div>
   </div>
-  <div class="container py-5" style="background-color:#fafafa;">
+  <div class="container py-5" id="home-info" style="background-color:#f0f0f5;">
     <ul class="nav nav-pills">
       <li class="nav-item">
         <a class="nav-link active" data-toggle="pill" href="#tab1primary">About</a>
@@ -80,13 +80,43 @@
       <div id="tab1primary" class="tab-pane container active">
         <br>
         <p>This app will give you background about the album you're listening to, including lyric content/insights from Genius.com, song attributes from Spotify, and a graphical overview of the album journey.</p>
-        <p>Please use the search tool at the top to find the album.</p>
-        <p>Here are some examples to get you started:</p>
-        <p><a href="/song/4BRkPBUxOYffM2QXVlq7aC">'Revolver' by The Beatles</a></p>
-        <p><a href="/song/5CaXxLM568tBh1PwhXdciZ">'Graduation' by Kanye West</a></p>
-        <p><a href="/song/4nzyOwogJuWn1s6QuGFZ6w">'Weezer (The Blue Album)' by Weezer</a></p>
-        <p><a href="/song/3OsUjkcv1C1v5udFhgRSFg">'OK Computer' by Radiohead</a></p>
-        <p><a href="/song/6ie2Bw3xLj2JcGowOlcMhb">'Melodrama' by Lorde</a></p>
+        <p>Please use the search tool at the top to find the album or choose from an example below.</p>
+        <br>
+        <div class="col-sm-6 col-centered">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="width:400px">
+          <div class="carousel-inner" role="listbox" >
+            <div class="carousel-item"><a href="/song/3OsUjkcv1C1v5udFhgRSFg">
+              <img class="d-block img-fluid" src="https://upload.wikimedia.org/wikipedia/en/a/a1/Radiohead.okcomputer.albumart.jpg" alt="OK Computer"></a>
+            </div>
+            <div class="carousel-item active"><a href="/song/4BRkPBUxOYffM2QXVlq7aC">
+              <img class="d-block img-fluid" src="https://upload.wikimedia.org/wikipedia/en/1/16/Revolver.jpg" alt="Revolver"></a>
+            </div>
+            <div class="carousel-item"><a href="/song/4nzyOwogJuWn1s6QuGFZ6w">
+              <img class="d-block img-fluid" src="https://upload.wikimedia.org/wikipedia/en/7/70/Weezer_-_Blue_Album.png" alt="Weezer"></a>
+            </div>
+            <div class="carousel-item"><a href="/song/5fJqkPtaFohDuNXWJdXyVS">
+              <img class="d-block img-fluid" src="https://upload.wikimedia.org/wikipedia/en/9/91/FKATwigs_Magdalene.png" alt="MAGDALENE"></a>
+            </div>
+            <div class="carousel-item"><a href="/song/5jzma6gCzYtKB1DbEwFZKH">
+              <img class="d-block img-fluid" src="https://upload.wikimedia.org/wikipedia/en/0/00/TheClashLondonCallingalbumcover.jpg" alt="London Calling"></a>
+            </div>
+            <div class="carousel-item"><a href="/song/5CaXxLM568tBh1PwhXdciZ">
+              <img class="d-block img-fluid" src="https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg" alt="Graduation"></a>
+            </div>
+            <div class="carousel-item"><a href="/song/6ie2Bw3xLj2JcGowOlcMhb">
+              <img class="d-block img-fluid" src="https://upload.wikimedia.org/wikipedia/en/b/b2/Lorde_-_Melodrama.png" alt="Melodrama"></a>
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
       </div>
       <div id="tab2primary" class="tab-pane container fade">
         <div class="panel-group" id="faqAccordion">
@@ -153,10 +183,17 @@
           <li><p><a href="http://www.rcharlie.net/sentify/" target="_blank">Sentify by RCharlie</a></p></li>
           <li><p><a href="https://github.com/salimzubair/lyric-sentiment" target="_blank">Lyric Sentiment Project</a></p></li>
           <li><p><a href="https://github.com/willamesoares/lyrics-crawler" target="_blank">Lyrics Crawler</a></p></li>
+          <li><p><a href="https://unsplash.com/photos/CMnNiQBkwBI" target="_blank">Photo by Jack Hamilton on Unsplash</a></p></li>
         </ul>
       </div>
     </div>
     </div>
+    <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
+      <div class="container text-center">
+        <small><i class="fab fa-github-alt"></i> <a href="https://github.com/rthawkins/Album_Companion" target="_blank">rthawkins</a> | bootstrap: <a href="https://hackerthemes.com/bootstrap-themes/demo/wizardry/" target="_blank">wizardry</a></small>
+      </div>
+    </footer>
+
 </body>
 
 

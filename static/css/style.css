@@ -185,6 +185,7 @@ tr:nth-child(even) {
   #full-screen { display: none; }
   #mobile-view { 
     display: block;
+    align-items: center;
     padding-top: 10px;
     flex: 1 0 auto;
     background: linear-gradient(to bottom, #ebebf0, #ccccf0);

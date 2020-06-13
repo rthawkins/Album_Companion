@@ -63,7 +63,8 @@ $.getJSON(`/album/${selected_album}`,
       +"<tr><td><i>Positive</i></td><td><a href='/song/" + _.maxBy(data, 'mood').sp_id + "'> " + _.maxBy(data, 'mood').title + "</td></tr>"
       +"<tr><td><i>Negative</i></td><td><a href='/song/" + _.minBy(data, 'mood').sp_id + "'> " + _.minBy(data, 'mood').title + "</td></tr>"
       +"<tr><td><i>Loud</i></td><td><a href='/song/" + _.maxBy(data, 'loudness').sp_id + "'> " + _.maxBy(data, 'loudness').title + "</td></tr>"
-      +"<tr><td><i>Quiet</i></td><td><a href='/song/" + _.minBy(data, 'loudness').sp_id + "'> " + _.minBy(data, 'loudness').title + "</td></tr>")
+      +"<tr><td><i>Quiet</i></td><td><a href='/song/" + _.minBy(data, 'loudness').sp_id + "'> " + _.minBy(data, 'loudness').title + "</td></tr>"
+      +"<tr><td><i>Danceable</i></td><td><a href='/song/" + _.maxBy(data, 'danceability').sp_id + "'> " + _.maxBy(data, 'danceability').title + "</td></tr>")
       tr_summary.appendTo("#album_highlights_mobile, #album_highlights");
 
 // Charting total album attributes

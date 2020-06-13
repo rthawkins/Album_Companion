@@ -1,3 +1,4 @@
+
 $.getJSON(`/album/${selected_album}/lyrics`,
 function (myWords) {
 
@@ -41,8 +42,16 @@ svg
     .attr("transform", function(d) {
       return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
     })
-    .text(function(d) { return d.text; });
+    .text(function(d) { return d.text; })
 }
+    unique_lexical = myWords.length;
+    total_words = myWords[0].total_words;
+    var total_lexical_words = 0;
+    for (var i in myWords){
+      total_lexical_words += parseInt(myWords[i].size, 10);}
+    lexical_density = ((total_lexical_words / total_words)*100).toFixed(1);
+    let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="The number of lexical words (n, adv, adj, v) out of total words. The average fiction/general prose is between 48% and 51%."></i><b> Lexical Density</b></td><td>' + lexical_density + "%</td></tr>")
+    tr_album_stats_lexical.appendTo("#album-stats,#album-stats-mobile");
     });
 
 $.getJSON(`/album/${selected_album}`,
@@ -89,7 +98,6 @@ $.getJSON(`/album/${selected_album}`,
       else{var description="Very Negative";}
       return description
     }
-
     var album_energy = meanVal('energy').toFixed(3);
     var album_energy_desc = text_value(album_energy);
     var album_mood = meanVal('mood').toFixed(3);

@@ -46,11 +46,15 @@ svg
 }
     unique_lexical = myWords.length;
     total_words = myWords[0].total_words;
+    total_unique_words = myWords[0].total_unique_words;
     var total_lexical_words = 0;
     for (var i in myWords){
       total_lexical_words += parseInt(myWords[i].size, 10);}
     lexical_density = ((total_lexical_words / total_words)*100).toFixed(1);
-    let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="The number of lexical words (n, adv, adj, v) out of total words. The average fiction/general prose is between 48% and 51%."></i><b> Lexical Density</b></td><td>' + lexical_density + "%</td></tr>")
+    lexical_diversity = ((unique_lexical / total_unique_words)*100).toFixed(1);
+    console.log(lexical_diversity);
+    let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="The number of lexical words (n, adv, adj, v) out of total words. The average fiction/general prose is between 48% and 51%."></i><b> Lexical Density</b></td><td>' + lexical_density + "%</td></tr>"
+      +'<tr><td><i class="fa fa-info-circle" title="The number of unique lexical words (n, adv, adj, v) out of total unique words."></i><b> Lexical Diversity</b></td><td>' + lexical_diversity + "%</td></tr>")
     tr_album_stats_lexical.appendTo("#album-stats,#album-stats-mobile");
     });
 

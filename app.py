@@ -136,4 +136,4 @@ def all_exception_handler(error):
    return render_template("error.html")
         
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

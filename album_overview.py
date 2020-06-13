@@ -309,13 +309,14 @@ def album_wordcloud(dict):
         }
         results.append(lyrics_overview)
     df = pd.DataFrame(results)
+    # Have to take out pronouns since Genius lyrics will sometimes contain the artist's name within the lyrics
+    df = df.loc[df["token_pos"]!='PROPN']
+    df = df[df["token_lemma"].apply(lambda x:x not in ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo'])]
     df_lyrics = df
     # Remove irrelevant words
     df_lyrics = df_lyrics.loc[df_lyrics["token_isstop"]==False]
     df_lyrics = df_lyrics.loc[df_lyrics["token_pos"].isin(['NOUN','ADJ','ADV','VERB'])]
     df_lyrics = df_lyrics.loc[df_lyrics["token_isalpha"]==True]
-    # Have to take out pronouns since it usually contains the artist's name from the lyrics
-    df_lyrics = df_lyrics.loc[df_lyrics["token_pos"]!='PROPN']
     df_lyrics = df_lyrics[df_lyrics["token_lemma"].apply(lambda x:x not in ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo'])]
     # Tranform into a dict with words and counts, sorted
     count_df = df_lyrics[["token_lemma"]].reset_index()

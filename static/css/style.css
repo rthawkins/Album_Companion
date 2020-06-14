@@ -2,9 +2,10 @@
 
 #submit-button {
   display: none;
-  background-color: #1b1e36;
+  background-color: Transparent;
+  border: none;
+  outline:none;
   color: white;
-  border-color: white;
   height: 50px;
   padding-left: 10px;
 }

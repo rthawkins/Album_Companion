@@ -52,10 +52,10 @@ svg
     for (var i in myWords){
       total_lexical_words += parseInt(myWords[i].size, 10);}
     lexical_density = ((total_lexical_words / total_words)*100).toFixed(1);
-    lexical_diversity = ((unique_lexical / total_words)*100).toFixed(1);
-    lexical_richness_avg = (unique_lexical / total_songs).toFixed(1);
-    let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="Represents wordiness. The number of unique lexical words (n, adv, adj, v) per song."></i><b> Lexical Richness</b></td><td>' + lexical_richness_avg + "/song</td></tr>"
-      +'<tr><td><i class="fa fa-info-circle" title="The number of unique lexical words (n, adv, adj, v) out of the total words."></i><b> Lexical Diversity</b></td><td>' + lexical_diversity + "%</td></tr>")
+    lexical_diversity = ((total_unique_words / total_words)*100).toFixed(1);
+    lexical_richness_avg = (total_lexical_words / total_songs).toFixed(0);
+    let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="Represents the quantity of lyrics per song. Calculated as the number of lexical words (n, adv, adj, v) per song."></i><b> Lexical Richness</b></td><td>' + lexical_richness_avg + " per song</td></tr>"
+      +'<tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words."></i><b> Lexical Diversity</b></td><td>' + lexical_diversity + "%</td></tr>")
     tr_album_stats_lexical.appendTo("#album-stats,#album-stats-mobile");
     });
 

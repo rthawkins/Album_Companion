@@ -44,22 +44,6 @@ svg
     })
     .text(function(d) { return d.text; })
 }
-    unique_lexical = myWords.length;
-    total_words = myWords[0].total_words;
-    total_unique_words = myWords[0].total_unique_words;
-    total_songs = myWords[0].total_songs;
-    var total_lexical_words = 0;
-    for (var i in myWords){
-      total_lexical_words += parseInt(myWords[i].size, 10);}
-    lexical_density = ((total_lexical_words / total_words)*100).toFixed(1);
-    lexical_diversity = ((total_unique_words / total_words)*100).toFixed(1);
-    lexical_richness_avg = (total_lexical_words / total_songs).toFixed(0);
-    cliche_words = d3.sum(myWords.filter(myWords => myWords.word == 'baby' || myWords.word == 'love' || myWords.word == 'feel' || myWords.word == 'down' || myWords.word == 'boy' || myWords.word == 'girl' || myWords.word == 'heart' || myWords.word == 'happy' || myWords.word == 'sad' || myWords.word == 'blue' || myWords.word == 'cry'),d => d.size);
-    cliche_perc = ((cliche_words / total_words)*100).toFixed(1);
-    let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="Represents the quantity of lyrics per song. Calculated as the number of lexical words (n, adv, adj, v) per song."></i><b> Lexical Richness</b></td><td>' + lexical_richness_avg + " per song</td></tr>"
-      +'<tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words."></i><b> Lexical Diversity</b></td><td>' + lexical_diversity + "%</td></tr>"
-      +'<tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, down, boy/girl, happy/sad, blue and heart."></i><b> Cliche Pop Words</b></td><td>' + cliche_perc + "%</td></tr>")
-    tr_album_stats_lexical.appendTo("#album-stats,#album-stats-mobile");
     });
 
 $.getJSON(`/album/${selected_album}`,
@@ -116,6 +100,13 @@ $.getJSON(`/album/${selected_album}`,
     var album_lyr_valence_desc = pos_neg(album_lyr_valence);
     var album_dance = meanVal('danceability').toFixed(3);
     var album_dance_desc = text_value(album_dance);
+    var album_ttr = (meanVal('msttr')*100).toFixed(1);
+    var album_lexicaldepth = meanVal('lexical_depth').toFixed(0);
+    var album_cliche = d3.sum(data,d => d.cliche_total_words);
+    var album_total_words = d3.sum(data,d => d.lexical_depth);
+    console.log(album_cliche);
+    console.log(album_total_words);
+    var cliche_perc = ((album_cliche/album_total_words)*100).toFixed(1);
     var upbeat_perc = ((data.filter(data => data.energy > .5 && data.mood >.5).length / data.length)*100).toFixed(0);
     var chill_perc = ((data.filter(data => data.energy < .5 && data.mood >.5).length / data.length)*100).toFixed(0);
     var aggr_perc = ((data.filter(data => data.energy > .5 && data.mood <.5).length / data.length)*100).toFixed(0);
@@ -127,7 +118,10 @@ $.getJSON(`/album/${selected_album}`,
       +"<tr><td><b>Chill Tracks</b></td><td>" + chill_perc + "%</td></tr>"
       +"<tr><td><b>Aggressive Tracks</b></td><td>" + aggr_perc + "%</td></tr>"
       +"<tr><td><b>Somber Tracks</b></td><td>" + somber_perc + "%</td></tr>"
-      +"<tr><td><b>Danceability</b></td><td>" + album_dance_desc + "</td></tr>")
+      +"<tr><td><b>Danceability</b></td><td>" + album_dance_desc + "</td></tr>"
+      + '<tr><td><i class="fa fa-info-circle" title="Represents the quantity of lyrics per song. Calculated as the number of lexical words (n, adv, adj, v) per song. Avg: 109"></i><b> Lexical Richness</b></td><td>' + album_lexicaldepth + " per song</td></tr>"
+      +'<tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words. Avg: 55.8%"></i><b> Lexical Diversity</b></td><td>' + album_ttr + "%</td></tr>"
+      +'<tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, boy/girl, happy/sad, and heart. Avg: 2%"></i><b> Cliche Pop Words</b></td><td>' + cliche_perc + "%</td></tr>")
       tr_album_stats.appendTo("#album-stats,#album-stats-mobile");
     });
 

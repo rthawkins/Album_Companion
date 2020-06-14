@@ -27,6 +27,7 @@ stopwords = set(stopwords.words('english'))
 from spacy.lang.en import English
 nlp = English()
 nlp.max_length = 10000000
+from lexical_diversity import lex_div as ld
 from song_overview import clean_lyrics
 from song_overview import get_lyric_sentiment
 from song_overview import request_song_info
@@ -201,6 +202,10 @@ def analyze_album(album_id):
         genius_songid = []
         keywords = []
         affect_freq = []
+        msttr = []
+        lexical_depth = []
+        cliche_word_perc = []
+        cliche_total_count = []
         df["metacritic"] = search_metacritic(artist, album_name)
         
 
@@ -228,6 +233,24 @@ def analyze_album(album_id):
                     genius_url.append(url)
                     genius_songid.append(str(remote_song_info['result']['id']))
                     lyrics = get_lyrics(url)
+                    flt = ld.flemmatize(clean_lyrics(lyrics))
+                    cliche_words = ['baby','love','boy','girl','feel','heart','happy','sad','cry']
+                    excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','1','2','3','4','5','','na','doo']
+                    clean_flt = [x for x in flt if x.lower() not in excluded_words]
+                    spacy_stopwords = list(spacy.lang.en.stop_words.STOP_WORDS)
+                    depth = sum([1 for x in clean_flt if x.lower() not in spacy_stopwords])
+                    cliche_count = sum([1 for x in clean_flt if x.lower() in cliche_words])
+                    cliche_perc = cliche_count/depth
+                    if depth >= 5: 
+                        msttr.append(ld.msttr((clean_flt),window_length=100))
+                        lexical_depth.append(depth)
+                        cliche_word_perc.append(cliche_perc)
+                        cliche_total_count.append(cliche_count)
+                    else:
+                        msttr.append(None)
+                        lexical_depth.append(None)
+                        cliche_word_perc.append(None)
+                        cliche_total_count.append(None)
                     keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
                     sent = sentiment_analyzer_scores(lyrics)
                     sent = round((sent + 1) / 2,3)
@@ -242,6 +265,10 @@ def analyze_album(album_id):
                     affect_freq.append(None)
                     genius_url.append(None)
                     genius_songid.append(None)
+                    msttr.append(None)
+                    lexical_depth.append(None)
+                    cliche_word_perc.append(None)
+                    cliche_total_count.append(None)
             except:
                 sent_score.append(None)
                 song_lyrics.append(None)
@@ -249,6 +276,10 @@ def analyze_album(album_id):
                 affect_freq.append(None)
                 genius_url.append(None)
                 genius_songid.append(None)
+                msttr.append(None)
+                lexical_depth.append(None)
+                cliche_word_perc.append(None)
+                cliche_total_count.append(None)
 
         
         df['title'] = new_titles
@@ -272,6 +303,14 @@ def analyze_album(album_id):
         df["lyr_valence"] = df["lyr_valence"].replace({np.nan: None}) 
         df["mood_discrep"] = df["mood_discrep"].replace({np.nan: None}) 
         df["lyr_valence_des"] = df["lyr_valence_des"].replace({'0': 'Not Found'}) 
+        df['msttr'] = msttr
+        df['lexical_depth'] = lexical_depth
+        df['cliche_word_perc'] = cliche_word_perc
+        df['cliche_total_words'] = cliche_total_count
+        df["lexical_depth"] = df["lexical_depth"].replace({np.nan: None}) 
+        df["msttr"] = df["msttr"].replace({np.nan: None}) 
+        df["cliche_word_perc"] = df["cliche_word_perc"].replace({np.nan: None}) 
+        df["cliche_total_words"] = df["cliche_total_words"].replace({np.nan: None}) 
         
         
         df = df.rename(columns={"valence": "mus_valence"})
@@ -283,7 +322,7 @@ def analyze_album(album_id):
         duration_z = abs(stats.zscore(df["duration"])) 
         loudness_z = abs(stats.zscore(df["loudness"])) 
         df["uniqueness"] = (energy_z + dance_z + duration_z + loudness_z + mood_z) / 5
-        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic"]]
+        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic","msttr","lexical_depth","cliche_word_perc","cliche_total_words"]]
         
         df = df.to_dict('records')
         return df
@@ -291,7 +330,7 @@ def analyze_album(album_id):
 def album_wordcloud(dict):
 
     all_lyrics = ', '.join(d['lyrics'] for d in dict)
-    all_lyrics = preprocess(clean_lyrics(all_lyrics))
+    all_lyrics = clean_lyrics(all_lyrics)
 
     results = []
 
@@ -309,7 +348,7 @@ def album_wordcloud(dict):
         }
         results.append(lyrics_overview)
     df = pd.DataFrame(results)
-    excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah']
+    excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude']
     # Have to take out pronouns since Genius lyrics will sometimes contain the artist's name within the lyrics
     df = df.loc[df["token_pos"]!='PROPN']
     df = df[df["token_lemma"].apply(lambda x:x not in excluded_words)]

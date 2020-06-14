@@ -54,8 +54,11 @@ svg
     lexical_density = ((total_lexical_words / total_words)*100).toFixed(1);
     lexical_diversity = ((total_unique_words / total_words)*100).toFixed(1);
     lexical_richness_avg = (total_lexical_words / total_songs).toFixed(0);
+    cliche_words = d3.sum(myWords.filter(myWords => myWords.word == 'baby' || myWords.word == 'love' || myWords.word == 'feel' || myWords.word == 'down' || myWords.word == 'boy' || myWords.word == 'girl' || myWords.word == 'heart'),d => d.size);
+    cliche_perc = ((cliche_words / total_words)*100).toFixed(1);
     let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="Represents the quantity of lyrics per song. Calculated as the number of lexical words (n, adv, adj, v) per song."></i><b> Lexical Richness</b></td><td>' + lexical_richness_avg + " per song</td></tr>"
-      +'<tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words."></i><b> Lexical Diversity</b></td><td>' + lexical_diversity + "%</td></tr>")
+      +'<tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words."></i><b> Lexical Diversity</b></td><td>' + lexical_diversity + "%</td></tr>"
+      +'<tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, down, boy/girl, and heart."></i><b> Cliche Pop Words</b></td><td>' + cliche_perc + "%</td></tr>")
     tr_album_stats_lexical.appendTo("#album-stats,#album-stats-mobile");
     });
 

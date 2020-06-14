@@ -54,9 +54,9 @@ svg
     lexical_density = ((total_lexical_words / total_words)*100).toFixed(1);
     lexical_diversity = ((unique_lexical / total_words)*100).toFixed(1);
     lexical_richness_avg = (unique_lexical / total_songs).toFixed(1);
-    let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="The number of unique lexical words (n, adv, adj, v) per song. Modern avg: 44/song"></i><b> Lexical Richness</b></td><td>' + lexical_richness_avg + "/song</td></tr>"
-    +'<tr><td><i class="fa fa-info-circle" title="The number of lexical words (n, adv, adj, v) out of total words. Modern avg: 69%"></i><b> Lexical Density</b></td><td>' + lexical_density + "%</td></tr>"
-      +'<tr><td><i class="fa fa-info-circle" title="The number of unique lexical words (n, adv, adj, v) out of the total words. Modern avg: 31%"></i><b> Lexical Diversity</b></td><td>' + lexical_diversity + "%</td></tr>")
+    let tr_album_stats_lexical = $('<tr><td><i class="fa fa-info-circle" title="Represents wordiness. The number of unique lexical words (n, adv, adj, v) per song."></i><b> Lexical Richness</b></td><td>' + lexical_richness_avg + "/song</td></tr>"
+      +'<tr><td><i class="fa fa-info-circle" title="The number of unique lexical words (n, adv, adj, v) out of the total words."></i><b> Lexical Diversity</b></td><td>' + lexical_diversity + "%</td></tr>"
+      +'<tr><td><i class="fa fa-info-circle" title="Represents descriptiveness. The number of lexical words (n, adv, adj, v) out of total words. Modern avg: 69%"></i><b> Lexical Density</b></td><td>' + lexical_density + "%</td></tr>")
     tr_album_stats_lexical.appendTo("#album-stats,#album-stats-mobile");
     });
 

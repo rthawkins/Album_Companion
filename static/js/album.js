@@ -63,9 +63,10 @@ $.getJSON(`/album/${selected_album}`,
       +"<tr><td><i>Slow</i></td><td><a href='/song/" + _.minBy(data, 'energy').sp_id + "'> " + _.minBy(data, 'energy').title + "</td></tr>"
       +"<tr><td><i>Positive</i></td><td><a href='/song/" + _.maxBy(data, 'mood').sp_id + "'> " + _.maxBy(data, 'mood').title + "</td></tr>"
       +"<tr><td><i>Negative</i></td><td><a href='/song/" + _.minBy(data, 'mood').sp_id + "'> " + _.minBy(data, 'mood').title + "</td></tr>"
-      +"<tr><td><i>Loud</i></td><td><a href='/song/" + _.maxBy(data, 'loudness').sp_id + "'> " + _.maxBy(data, 'loudness').title + "</td></tr>"
-      +"<tr><td><i>Quiet</i></td><td><a href='/song/" + _.minBy(data, 'loudness').sp_id + "'> " + _.minBy(data, 'loudness').title + "</td></tr>"
-      +"<tr><td><i>Danceable</i></td><td><a href='/song/" + _.maxBy(data, 'danceability').sp_id + "'> " + _.maxBy(data, 'danceability').title + "</td></tr>")
+      +"<tr><td><i>Danceable</i></td><td><a href='/song/" + _.maxBy(data, 'danceability').sp_id + "'> " + _.maxBy(data, 'danceability').title + "</td></tr>"
+      +"<tr><td><i>Lyrically Diverse</i></td><td><a href='/song/" + _.maxBy(data, 'msttr').sp_id + "'> " + _.maxBy(data, 'msttr').title + "</td></tr>"
+      +"<tr><td><i>Wordy</i></td><td><a href='/song/" + _.maxBy(data, 'lexical_depth').sp_id + "'> " + _.maxBy(data, 'lexical_depth').title + "</td></tr>"
+      +"<tr><td><i>Lyrically Cliche</i></td><td><a href='/song/" + _.maxBy(data, 'cliche_word_perc').sp_id + "'> " + _.maxBy(data, 'cliche_word_perc').title + "</td></tr>")
       tr_summary.appendTo("#album_highlights_mobile, #album_highlights");
 
 // Charting total album attributes
@@ -121,7 +122,7 @@ $.getJSON(`/album/${selected_album}`,
       +"<tr><td><b>Danceability</b></td><td>" + album_dance_desc + "</td></tr>"
       + '<tr><td><i class="fa fa-info-circle" title="Represents the quantity of lyrics per song. Calculated as the number of lexical words (n, adv, adj, v) per song. Avg: 109"></i><b> Lexical Richness</b></td><td>' + album_lexicaldepth + " per song</td></tr>"
       +'<tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words. Avg: 55.8%"></i><b> Lexical Diversity</b></td><td>' + album_ttr + "%</td></tr>"
-      +'<tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, boy/girl, happy/sad, and heart. Avg: 2%"></i><b> Cliche Pop Words</b></td><td>' + cliche_perc + "%</td></tr>")
+      +'<tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, boy/girl, happy/sad, and heart. Avg: 4%"></i><b> Cliche Pop Words</b></td><td>' + cliche_perc + "%</td></tr>")
       tr_album_stats.appendTo("#album-stats,#album-stats-mobile");
     });
 

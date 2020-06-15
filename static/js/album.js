@@ -64,7 +64,7 @@ $.getJSON(`/album/${selected_album}`,
       +"<tr><td><i>Positive</i></td><td><a href='/song/" + _.maxBy(data, 'mood').sp_id + "'> " + _.maxBy(data, 'mood').title + "</td></tr>"
       +"<tr><td><i>Negative</i></td><td><a href='/song/" + _.minBy(data, 'mood').sp_id + "'> " + _.minBy(data, 'mood').title + "</td></tr>"
       +"<tr><td><i>Danceable</i></td><td><a href='/song/" + _.maxBy(data, 'danceability').sp_id + "'> " + _.maxBy(data, 'danceability').title + "</td></tr>"
-      +"<tr><td><i>Lyrically Diverse</i></td><td><a href='/song/" + _.maxBy(data, 'msttr').sp_id + "'> " + _.maxBy(data, 'msttr').title + "</td></tr>"
+      +"<tr><td><i>Lexically Diverse</i></td><td><a href='/song/" + _.maxBy(data, 'msttr').sp_id + "'> " + _.maxBy(data, 'msttr').title + "</td></tr>"
       +"<tr><td><i>Wordy</i></td><td><a href='/song/" + _.maxBy(data, 'lexical_depth').sp_id + "'> " + _.maxBy(data, 'lexical_depth').title + "</td></tr>"
       +"<tr><td><i>Lyrically Cliche</i></td><td><a href='/song/" + _.maxBy(data, 'cliche_word_perc').sp_id + "'> " + _.maxBy(data, 'cliche_word_perc').title + "</td></tr>")
       tr_summary.appendTo("#album_highlights_mobile, #album_highlights");
@@ -105,8 +105,6 @@ $.getJSON(`/album/${selected_album}`,
     var album_lexicaldepth = meanVal('lexical_depth').toFixed(0);
     var album_cliche = d3.sum(data,d => d.cliche_total_words);
     var album_total_words = d3.sum(data,d => d.lexical_depth);
-    console.log(album_cliche);
-    console.log(album_total_words);
     var cliche_perc = ((album_cliche/album_total_words)*100).toFixed(1);
     var upbeat_perc = ((data.filter(data => data.energy > .5 && data.mood >.5).length / data.length)*100).toFixed(0);
     var chill_perc = ((data.filter(data => data.energy < .5 && data.mood >.5).length / data.length)*100).toFixed(0);

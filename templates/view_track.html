@@ -17,8 +17,9 @@
   <script>var s_dance = '{{song_dict.danceability}}';</script>
   <script>var s_title = '{{song_dict.title}}';</script>
   <script>var s_tracknum = '{{song_dict.track}}';</script>
-  <script>var s_lexical_diversity = ('{{song_dict.msttr}}' * 100).toFixed(1);
-  </script>
+  <script>      
+    var s_lexical_diversity = ('{{song_dict.msttr}}' * 100).toFixed(1);
+    var s_lyrical_cliche = ('{{song_dict.cliche_word_perc}}' * 100).toFixed(1);</script>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
@@ -64,8 +65,14 @@
     });
   </script>
   <script>
-    function lyricsFunction() {
+    function loadFunction() {
       var lyrics = "{{song_dict.genius_songid}}";
+      var s_lexical_diversity = ('{{song_dict.msttr}}' * 100).toFixed(1);
+      var s_lyrical_cliche = ('{{song_dict.cliche_word_perc}}' * 100).toFixed(1);
+      document.getElementById("diverse").innerHTML = s_lexical_diversity + '%';
+      document.getElementById("cliche").innerHTML = s_lyrical_cliche + '%';
+      document.getElementById("diverse-mobile").innerHTML = s_lexical_diversity + '%';
+      document.getElementById("cliche-mobile").innerHTML = s_lyrical_cliche + '%';
       if (lyrics == "None"){
       document.getElementById("myText").innerHTML = "No lyrics found on Genius.";
       document.getElementById("myText_mobile").innerHTML = "No lyrics found on Genius.";
@@ -77,7 +84,7 @@
 
 
 
-<body  onload="lyricsFunction()" id="body-view-album">
+<body  onload="loadFunction()" id="body-view-album">
   <div class="navbar navbar-custom fixed-top">
     <div class="container">
       <nav class="navbar navbar-inverse navbar-fixed-top" id="track-nav">
@@ -176,6 +183,8 @@
       <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>, according to Spotify's analysis"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
       <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>, scaled to Spotify's 0-1 value range"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
       <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
+      <tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words. The average pop song is around 55%."></i><b> Lexical Diversity</b></td><td id="diverse"></td><td></td></tr>
+      <tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, boy/girl, happy/sad, and heart. The average pop song is around 4%."></i><b> Lyrical Cliche</b></td><td id="cliche"></td><td></td></tr>
       <script type="text/javascript">
       
         $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
@@ -213,6 +222,7 @@
           targetColor: '#000000',
           performanceColor: '#2b64bf',
           disableInteraction: true});
+
         </script>
     </tbody>
     </table>
@@ -282,6 +292,8 @@
                   <tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>, according to Spotify's analysis"></i><b> Musical Valence</b></td><td>{{ song_dict.valence_des}} ({{ song_dict.mus_valence}})</td><td><span class="barchart-valence"></span></td></tr>
                   <tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href='https://www.nltk.org/index.html' target='_blank'>NLTK</a>, scaled to Spotify's 0-1 value range"></i><b> Lyrical Sentiment</b></td><td>{{ song_dict.lyr_valence_des}} ({{ song_dict.lyr_valence}})</td><td><span class="barchart-lyrics"></span></td></tr>
                   <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
+                  <tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words. The average pop song is around 55%."></i><b> Lexical Diversity</b></td><td id="diverse-mobile"></td><td></td></tr>
+                  <tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, boy/girl, happy/sad, and heart. The average pop song is around 4%."></i><b> Lyrical Cliche</b></td><td id="cliche-mobile"></td><td></td></tr>
                   <script type="text/javascript">
                   
                     $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
@@ -319,6 +331,7 @@
                       targetColor: '#000000',
                       performanceColor: '#2b64bf',
                       disableInteraction: true});
+
                     </script>
                 </tbody>
                 </table>

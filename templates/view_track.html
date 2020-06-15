@@ -69,16 +69,21 @@
       var lyrics = "{{song_dict.genius_songid}}";
       var s_lexical_diversity = ('{{song_dict.msttr}}' * 100).toFixed(1);
       var s_lyrical_cliche = ('{{song_dict.cliche_word_perc}}' * 100).toFixed(1);
-      document.getElementById("diverse").innerHTML = s_lexical_diversity + '%';
-      document.getElementById("cliche").innerHTML = s_lyrical_cliche + '%';
-      document.getElementById("diverse-mobile").innerHTML = s_lexical_diversity + '%';
-      document.getElementById("cliche-mobile").innerHTML = s_lyrical_cliche + '%';
       if (lyrics == "None"){
-      document.getElementById("myText").innerHTML = "No lyrics found on Genius.";
-      document.getElementById("myText_mobile").innerHTML = "No lyrics found on Genius.";
-      document.getElementById("wordchart").innerHTML = "Incomplete album lyrics on Genius.";
-      document.getElementById("wordchartmobile").innerHTML = "Incomplete album lyrics on Genius.";
-    }};
+        document.getElementById("myText").innerHTML = "No lyrics found on Genius.";
+        document.getElementById("myText_mobile").innerHTML = "No lyrics found on Genius.";
+        document.getElementById("diverse").innerHTML = "Not Found";
+        document.getElementById("cliche").innerHTML = "Not Found";
+        document.getElementById("diverse-mobile").innerHTML = "Not Found";
+        document.getElementById("cliche-mobile").innerHTML = "Not Found";
+      }
+      else{
+        document.getElementById("diverse").innerHTML = s_lexical_diversity + '%';
+        document.getElementById("cliche").innerHTML = s_lyrical_cliche + '%';
+        document.getElementById("diverse-mobile").innerHTML = s_lexical_diversity + '%';
+        document.getElementById("cliche-mobile").innerHTML = s_lyrical_cliche + '%';}
+      }
+;
   </script>
 </head>
 

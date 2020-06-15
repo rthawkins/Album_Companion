@@ -84,8 +84,12 @@ def lyrics(album_id):
     documents = collection.find({"album_id": album_id}).sort([("album_id", 1), ("track", 1)])
     response = []
     for document in documents:
-        document['_id'] = str(document['_id'])
-        response.append(document)
+        try:
+            document['_id'] = str(document['_id'])
+            response.append(document)
+        except:
+            response.append(None)
+            log.info(f'Could not find {document}')
     x = album_wordcloud(response)
     return jsonify(x)
 
@@ -103,7 +107,7 @@ def search_result():
             album_new_data = JSONEncoder().encode(response)
             song_dict = json.loads(album_new_data)[0]
         else:
-            log.info("Could not find.")
+            log.info("Could not find album in MongoDb. Searching Spotify next.")
             
     except:
         album = analyze_album(album_search)
@@ -131,9 +135,9 @@ def autocomplete():
     return jsonify(matching_results=df)
 
 # Error page
-@app.errorhandler(Exception)
-def all_exception_handler(error):
-   return render_template("error.html")
+# @app.errorhandler(Exception)
+# def all_exception_handler(error):
+#    return render_template("error.html")
         
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

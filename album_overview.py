@@ -7,6 +7,9 @@ from decouple import config
 import numpy as np
 import mpld3
 import spotipy.util as util
+import logging
+log = logging.getLogger()
+logging.basicConfig(level=logging.INFO)
 import en_core_web_sm
 from spotipy.oauth2 import SpotifyClientCredentials
 from scipy import stats
@@ -318,18 +321,25 @@ def analyze_album(album_id):
         
         energy_z = abs(stats.zscore(df["energy"]))
         mood_z = abs(stats.zscore(df["mood"]))   
+        mus_valence_z = abs(stats.zscore(df["mus_valence"])) 
         dance_z = abs(stats.zscore(df["danceability"]))
         duration_z = abs(stats.zscore(df["duration"])) 
         loudness_z = abs(stats.zscore(df["loudness"])) 
-        df["uniqueness"] = (energy_z + dance_z + duration_z + loudness_z + mood_z) / 5
+        if None in df["msttr"].values:
+            df["uniqueness"] = (energy_z + dance_z + duration_z + loudness_z + mood_z) / 5
+        else:
+            lex_diversity = abs(stats.zscore(df["msttr"])) 
+            lyr_valence_z = abs(stats.zscore(df["lyr_valence"])) 
+            df["uniqueness"] = (energy_z + dance_z + duration_z + loudness_z + lyr_valence_z + mus_valence_z + lex_diversity) / 7
         df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic","msttr","lexical_depth","cliche_word_perc","cliche_total_words"]]
         
         df = df.to_dict('records')
         return df
-    
-def album_wordcloud(dict):
 
-    all_lyrics = ', '.join(d['lyrics'] for d in dict)
+
+def album_wordcloud(dict_name):
+    dict_name = [ row for row in dict_name if row['lyrics'] is not None ]
+    all_lyrics = ', '.join(d['lyrics'] for d in (dict_name))
     all_lyrics = clean_lyrics(all_lyrics)
 
     results = []
@@ -347,28 +357,20 @@ def album_wordcloud(dict):
         'token_isstop':token.is_stop
         }
         results.append(lyrics_overview)
-    df = pd.DataFrame(results)
-    excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude']
+    df_lyrics = pd.DataFrame(results)
+    excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','yah']
     # Have to take out pronouns since Genius lyrics will sometimes contain the artist's name within the lyrics
-    df = df.loc[df["token_pos"]!='PROPN']
-    df = df[df["token_lemma"].apply(lambda x:x not in excluded_words)]
-    count_orig_df = df[["token_lemma"]].reset_index()
-    count_orig_df = count_orig_df.groupby('token_lemma').count().reset_index()
-    count_orig_df.columns = ["word", "size"]
-    df_lyrics = df
+    df_lyrics = df_lyrics.loc[df_lyrics["token_pos"]!='PROPN']
+    df_lyrics = df_lyrics[df_lyrics["token_lemma"].apply(lambda x:x not in excluded_words)]
     # Remove irrelevant words
     df_lyrics = df_lyrics.loc[df_lyrics["token_isstop"]==False]
     df_lyrics = df_lyrics.loc[df_lyrics["token_pos"].isin(['NOUN','ADJ','ADV','VERB'])]
     df_lyrics = df_lyrics.loc[df_lyrics["token_isalpha"]==True]
-    df_lyrics = df_lyrics[df_lyrics["token_lemma"].apply(lambda x:x not in excluded_words)]
     # Tranform into a dict with words and counts, sorted
     count_df = df_lyrics[["token_lemma"]].reset_index()
     count_df = count_df.groupby('token_lemma').count().reset_index()
     count_df.columns = ["word", "size"]
     # count_df = count_df.loc[count_df["size"]>1]
     count_df = count_df.sort_values('size',ascending=False)
-    count_df['total_words'] = len(df)
-    count_df['total_unique_words'] = len(count_orig_df)
-    count_df['total_songs'] = len(dict)
     return count_df.to_dict('records')
         

@@ -135,9 +135,9 @@ def autocomplete():
     return jsonify(matching_results=df)
 
 # Error page
-# @app.errorhandler(Exception)
-# def all_exception_handler(error):
-#    return render_template("error.html")
+@app.errorhandler(Exception)
+def all_exception_handler(error):
+   return render_template("error.html")
         
 if __name__ == '__main__':
     app.run(debug=False)

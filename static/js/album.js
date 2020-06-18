@@ -1,4 +1,6 @@
 
+$('[data-toggle="tooltip"]').tooltip();
+
 $.getJSON(`/album/${selected_album}/lyrics`,
 function (myWords) {
 
@@ -67,7 +69,20 @@ $.getJSON(`/album/${selected_album}`,
       +"<tr><td><i>Lexically Diverse</i></td><td><a href='/song/" + _.maxBy(data, 'msttr').sp_id + "'> " + _.maxBy(data, 'msttr').title + "</td></tr>"
       +"<tr><td><i>Wordy</i></td><td><a href='/song/" + _.maxBy(data, 'lexical_depth').sp_id + "'> " + _.maxBy(data, 'lexical_depth').title + "</td></tr>"
       +"<tr><td><i>Lyrically Cliche</i></td><td><a href='/song/" + _.maxBy(data, 'cliche_word_perc').sp_id + "'> " + _.maxBy(data, 'cliche_word_perc').title + "</td></tr>")
+
+      // let track_attributes = $(`<tr><td><b>Time Signature</b></td><td>${data.time_signature}/4</td><td><span></span></td></tr>`
+      // +`<tr><td><b>Key</b></td><td>${data.key} ${data.mode}</td><td><span></span></td></tr>`
+      // +`<tr><td><b>Energy</b></td><td>${data.energy_des} (${data.energy})</td><td><span class="barchart-energy"></span></td></tr>`
+      // +`<tr><td><i class="fa fa-info-circle" title="Average of musical valence and lyrical sentiment"></i><b> Overall Mood</b></td><td>${data.mood_des} (${data.mood})</td><td><span class="barchart-mood"></span></td></tr>`
+      // +`<tr><td><i class="fa fa-info-circle" title="How positive the song <i>sounds</i>, according to Spotify"></i><b> Musical Valence</b></td><td>${data.valence_des} (${data.mus_valence})</td><td><span class="barchart-valence"></span></td></tr>`
+      // +`<tr><td><i class="fa fa-info-circle" title="Based on language sentiment analysis by <a href="https://www.nltk.org/index.html" target="_blank">NLTK</a>, scaled to the Spotify 0-1 value range"></i><b> Lyrical Sentiment</b></td><td>${data.lyr_valence_des} (${data.lyr_valence})</td><td><span class="barchart-lyrics"></span></td></tr>`
+      // +`<tr><td><b>Danceability</b></td><td>${data.dance_des} (${data.danceability})</td><td><span class="barchart-dance"></span></td></tr>`
+      // +`<tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words. The average pop song is around 55%."></i><b> Lexical Diversity</b></td><td id="diverse"></td><td></td></tr>`
+      // +`<tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, boy/girl, happy/sad, and heart. The average pop song is around 4%."></i><b> Lyrical Cliche</b></td><td id="cliche"></td><td></td></tr>`);
+
       tr_summary.appendTo("#album_highlights_mobile, #album_highlights");
+      // Track attributes for the future
+      // track_attributes.appendTo("#album_highlights_mobile, #album_highlights");
 
 // Charting total album attributes
       function meanVal(value) {

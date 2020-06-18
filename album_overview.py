@@ -358,7 +358,7 @@ def album_wordcloud(dict_name):
         }
         results.append(lyrics_overview)
     df_lyrics = pd.DataFrame(results)
-    excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','yah']
+    excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','yah','whoah']
     # Have to take out pronouns since Genius lyrics will sometimes contain the artist's name within the lyrics
     df_lyrics = df_lyrics.loc[df_lyrics["token_pos"]!='PROPN']
     df_lyrics = df_lyrics[df_lyrics["token_lemma"].apply(lambda x:x not in excluded_words)]

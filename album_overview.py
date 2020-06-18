@@ -255,7 +255,7 @@ def analyze_album(album_id):
                         cliche_word_perc.append(None)
                         cliche_total_count.append(None)
                     keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
-                    sent = sentiment_analyzer_scores(lyrics)
+                    sent = sentiment_analyzer_scores(clean_lyrics(lyrics))
                     sent = round((sent + 1) / 2,3)
                     sent_score.append(sent)
                     text_object = NRCLex(lyrics)

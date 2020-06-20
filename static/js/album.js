@@ -59,16 +59,18 @@ $.getJSON(`/album/${selected_album}`,
             tr.appendTo("#album_table, #album_table_mobile");
         }
 
-      let tr_summary = $("<tr><td><i>Representative</i></td><td><a href='/song/" + _.minBy(data, 'uniqueness').sp_id + "'> " +  _.minBy(data, 'uniqueness').title + "</td></tr>"
-      +"<tr><td><i>Unique</i></td><td><a href='/song/" + _.maxBy(data, 'uniqueness').sp_id + "'> " + _.maxBy(data, 'uniqueness').title + "</td></tr>"
-      +"<tr><td><i>Energetic</i></td><td><a href='/song/" + _.maxBy(data, 'energy').sp_id + "'> " + _.maxBy(data, 'energy').title + "</td></tr>"
-      +"<tr><td><i>Slow</i></td><td><a href='/song/" + _.minBy(data, 'energy').sp_id + "'> " + _.minBy(data, 'energy').title + "</td></tr>"
-      +"<tr><td><i>Positive</i></td><td><a href='/song/" + _.maxBy(data, 'mood').sp_id + "'> " + _.maxBy(data, 'mood').title + "</td></tr>"
-      +"<tr><td><i>Negative</i></td><td><a href='/song/" + _.minBy(data, 'mood').sp_id + "'> " + _.minBy(data, 'mood').title + "</td></tr>"
-      +"<tr><td><i>Danceable</i></td><td><a href='/song/" + _.maxBy(data, 'danceability').sp_id + "'> " + _.maxBy(data, 'danceability').title + "</td></tr>"
-      +"<tr><td><i>Lexically Diverse</i></td><td><a href='/song/" + _.maxBy(data, 'msttr').sp_id + "'> " + _.maxBy(data, 'msttr').title + "</td></tr>"
-      +"<tr><td><i>Wordy</i></td><td><a href='/song/" + _.maxBy(data, 'lexical_depth').sp_id + "'> " + _.maxBy(data, 'lexical_depth').title + "</td></tr>"
-      +"<tr><td><i>Lyrically Cliche</i></td><td><a href='/song/" + _.maxBy(data, 'cliche_word_perc').sp_id + "'> " + _.maxBy(data, 'cliche_word_perc').title + "</td></tr>")
+      var data_source = data.filter(data => data.duration > 1 && data.speechiness <.8);
+
+      let tr_summary = $("<tr><td><i>Representative</i></td><td><a href='/song/" + _.minBy(data_source, 'uniqueness').sp_id + "'> " +  _.minBy(data_source, 'uniqueness').title + "</td></tr>"
+      +"<tr><td><i>Unique</i></td><td><a href='/song/" + _.maxBy(data_source, 'uniqueness').sp_id + "'> " + _.maxBy(data_source, 'uniqueness').title + "</td></tr>"
+      +"<tr><td><i>Energetic</i></td><td><a href='/song/" + _.maxBy(data_source, 'energy').sp_id + "'> " + _.maxBy(data_source, 'energy').title + "</td></tr>"
+      +"<tr><td><i>Slow</i></td><td><a href='/song/" + _.minBy(data_source, 'energy').sp_id + "'> " + _.minBy(data_source, 'energy').title + "</td></tr>"
+      +"<tr><td><i>Positive</i></td><td><a href='/song/" + _.maxBy(data_source, 'mood').sp_id + "'> " + _.maxBy(data_source, 'mood').title + "</td></tr>"
+      +"<tr><td><i>Negative</i></td><td><a href='/song/" + _.minBy(data_source, 'mood').sp_id + "'> " + _.minBy(data_source, 'mood').title + "</td></tr>"
+      +"<tr><td><i>Danceable</i></td><td><a href='/song/" + _.maxBy(data_source, 'danceability').sp_id + "'> " + _.maxBy(data_source, 'danceability').title + "</td></tr>"
+      +"<tr><td><i>Lexically Diverse</i></td><td><a href='/song/" + _.maxBy(data_source, 'msttr').sp_id + "'> " + _.maxBy(data_source, 'msttr').title + "</td></tr>"
+      +"<tr><td><i>Wordy</i></td><td><a href='/song/" + _.maxBy(data_source, 'lexical_depth').sp_id + "'> " + _.maxBy(data_source, 'lexical_depth').title + "</td></tr>"
+      +"<tr><td><i>Lyrically Cliche</i></td><td><a href='/song/" + _.maxBy(data_source, 'cliche_word_perc').sp_id + "'> " + _.maxBy(data_source, 'cliche_word_perc').title + "</td></tr>")
 
       // let track_attributes = $(`<tr><td><b>Time Signature</b></td><td>${data.time_signature}/4</td><td><span></span></td></tr>`
       // +`<tr><td><b>Key</b></td><td>${data.key} ${data.mode}</td><td><span></span></td></tr>`

@@ -132,7 +132,7 @@ $.getJSON(`/album/${selected_album}`,
 
     let tr_album_stats = $("<tr><td><b>Upbeat Tracks</b></td><td>" + upbeat_perc + "%</td></tr>"
       +"<tr><td><b>Chill Tracks</b></td><td>" + chill_perc + "%</td></tr>"
-      +"<tr><td><b>Aggressive Tracks</b></td><td>" + aggr_perc + "%</td></tr>"
+      +"<tr><td><b>Aggressive/Cathartic Tracks</b></td><td>" + aggr_perc + "%</td></tr>"
       +"<tr><td><b>Somber Tracks</b></td><td>" + somber_perc + "%</td></tr>"
       +"<tr><td><b>Danceability</b></td><td>" + album_dance_desc + "</td></tr>"
       + '<tr><td><i class="fa fa-info-circle" title="Represents the quantity of lyrics per song. Calculated as the number of lexical words (n, adv, adj, v) per song. Avg: 109"></i><b> Lexical Richness</b></td><td>' + album_lexicaldepth + " per song</td></tr>"
@@ -413,10 +413,10 @@ $.getJSON(`/album/${selected_album}`,
             y: .99,
             xref: 'x',
             yref: 'y',
-            text: 'Aggressive',
+            text: 'Aggressive/Cathartic',
             font: {
               family: 'Verdana',
-              size: 9,
+              size: 8,
               color: '#AEAEAE'},
             showarrow: false,
           },
@@ -516,10 +516,10 @@ $.getJSON(`/album/${selected_album}`,
           y: .99,
           xref: 'x',
           yref: 'y',
-          text: 'Aggressive',
+          text: 'Aggressive/Cathartic',
           font: {
             family: 'Verdana',
-            size: 9,
+            size: 8,
             color: '#AEAEAE'},
           showarrow: false,
         },

@@ -48,6 +48,18 @@ svg
 }
     });
 
+$.getJSON(`/album/${selected_album}/lyrics`,
+  function(data) {
+  total_words = d3.sum(data,d => d.size);
+  let tr_themes = $("<tr><td><b>Drugs</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Drug'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>"
+  +"<tr><td><b>Nature</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Nature'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>"
+  +"<tr><td><b>Politics</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Political'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>"
+  +"<tr><td><b>Romance</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Romance'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>"
+  +"<tr><td><b>Spirituality</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Spiritual'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>");
+  tr_themes.appendTo("#themes");
+  }
+  );
+
 $.getJSON(`/album/${selected_album}`,
     function (data) {
         var tr;

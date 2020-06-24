@@ -55,6 +55,7 @@ def clean_lyrics(lyrics):
     lyrics = lyrics.replace(r'uh-huh', '')
     lyrics = lyrics.replace(r'whoa', '')
     lyrics = lyrics.replace(r'oh', '')
+    lyrics = re.sub(r'\[.*\]', '', lyrics)
     lyrics = lyrics.replace(r'[', '')
     lyrics = lyrics.replace(r']', '')
     lyrics = lyrics.replace(r',', '')

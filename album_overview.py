@@ -156,7 +156,7 @@ def sentiment_analyzer_scores(sentence):
     return score['compound']
 
 cliche_words = ['baby','love','boy','girl','feel','heart','happy','sad','cry']
-excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','yah','whoah','1','2','3','4','5','','na','doo']
+excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','yah','whoah','1','2','3','4','5','','na','doo','ayy','ay','da']
 cat_romance = ['date','marry','marriage','kiss','heart','baby','hug','hold','dream','beautiful','gorgeous','heartbreak','smile','eye','finger','hand','lips','touch','feel']
 cat_animals = ['monkey','panda','shark','zebra','gorilla','walrus','leopard','wolf','antelope','eagle','jellyfish','crab','giraffe','woodpecker','camel','starfish','koala','alligator','owl','tiger','bear','whale','coyote','chimpanzee','raccoon','lion','wolf','crocodile','dolphin','elephant','squirrel','snake','kangaroo','hippopotamus','elk','rabbit','fox','gorilla','bat','hare','toad','frog','deer','rat','badger','lizard','mole','hedgehog','otter','reindeer','cat','dog','rabbit']
 cat_political = ['peace','war','justice','injustice','protest','freedom','nation','country','citizen','movement','equal','equality','prejudice','terrorism','terrorist','world','work','worker']
@@ -176,7 +176,6 @@ def analyze_album(album_id):
             tracks.extend(results['items'])
         for track in tracks:
             track_ids.append(track['id'])
-        track_str = ','.join(map("'{0}'".format, track_ids)) 
         analysis_json = sp.audio_features(tracks=track_ids)
         analysis_json = list(filter(None, analysis_json)) 
         tracks_json = sp.album_tracks(album_id)["items"]
@@ -187,10 +186,7 @@ def analyze_album(album_id):
         album_name = sp.album(album_id)["name"]
         album_name = clean_lyrics(album_name)
         release_date = sp.album(album_id)["release_date"]
-        
-        regex2 = '\-.*'
 
-        titles = df["name"]
         artist = json_normalize(sp.album_tracks(album_id)["items"][0]["artists"])["name"][0]
         
         keys = {0:'C',1:'C#',2:'D',3:'D#',4:'E',5:'F',6:'F#',7:'G',8:'G#',9:'A',10:'A#',11:'B'}
@@ -225,7 +221,6 @@ def analyze_album(album_id):
 
         for title in df["name"]:
             try:
-                title = re.sub(regex2,'',title)
                 title = title.split("- Remaster", 1)[0]
                 title = title.split("[Remaster", 1)[0]
                 title = title.split("(Remaster", 1)[0]
@@ -269,7 +264,7 @@ def analyze_album(album_id):
                     sent_score.append(sent)
                     text_object = NRCLex(lyrics)
                     affect_freq.append(text_object.affect_frequencies)
-                    song_lyrics.append(lyrics)
+                    song_lyrics.append(clean_lyrics(lyrics))
                 else:
                     sent_score.append(None)
                     song_lyrics.append(None)
@@ -347,19 +342,19 @@ def analyze_album(album_id):
         return df
 
 def categorize_words(x):
-    if x in cat_animals:
+    if x.lower() in cat_animals:
         return 'Animal'
-    elif x in cat_drugs:
+    elif x.lower() in cat_drugs:
         return 'Drug'
-    elif x in cat_feelings:
+    elif x.lower() in cat_feelings:
         return 'Feeling'
-    elif x in cat_nature:
+    elif x.lower() in cat_nature:
         return 'Nature'
-    elif x in cat_romance:
+    elif x.lower() in cat_romance:
         return 'Romance'
-    elif x in cat_spiritual:
+    elif x.lower() in cat_spiritual:
         return 'Spiritual'
-    elif x in cat_political:
+    elif x.lower() in cat_political:
         return 'Political'
     else:
         return 'None'
@@ -385,13 +380,12 @@ def album_wordcloud(dict_name):
         }
         results.append(lyrics_overview)
     df_lyrics = pd.DataFrame(results)
-    excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','yah','whoah','1','2','3','4','5','','na','doo']
     # Have to take out pronouns since Genius lyrics will sometimes contain the artist's name within the lyrics
-    df_lyrics = df_lyrics.loc[df_lyrics["token_pos"]!='PROPN']
+    # df_lyrics = df_lyrics.loc[df_lyrics["token_pos"]!='PROPN']
     df_lyrics = df_lyrics[df_lyrics["token_lemma"].apply(lambda x:x not in excluded_words)]
     # Remove irrelevant words
     df_lyrics = df_lyrics.loc[df_lyrics["token_isstop"]==False]
-    df_lyrics = df_lyrics.loc[df_lyrics["token_pos"].isin(['NOUN','ADJ','ADV','VERB'])]
+    df_lyrics = df_lyrics.loc[df_lyrics["token_pos"].isin(['NOUN','ADJ','ADV','VERB','PROPN'])]
     df_lyrics = df_lyrics.loc[df_lyrics["token_isalpha"]==True]
     # Tranform into a dict with words and counts, sorted
     count_df = df_lyrics[["token_lemma"]].reset_index()

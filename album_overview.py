@@ -312,7 +312,6 @@ def analyze_album(album_id):
         df["cliche_total_words"] = df["cliche_total_words"].replace({np.nan: None}) 
         
         
-        
         df = df.rename(columns={"valence": "mus_valence"})
         df = df.rename(columns={"external_urls.spotify": "external_urls_spotify"})
         

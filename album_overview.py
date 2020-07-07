@@ -157,14 +157,6 @@ def sentiment_analyzer_scores(sentence):
 
 cliche_words = ['baby','love','boy','girl','feel','heart','happy','sad','cry']
 excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','yah','whoah','1','2','3','4','5','','na','doo','ayy','ay','da']
-cat_romance = ['date','marry','marriage','kiss','heart','baby','hug','hold','dream','beautiful','gorgeous','heartbreak','smile','eye','finger','hand','lips','touch','feel']
-cat_animals = ['monkey','panda','shark','zebra','gorilla','walrus','leopard','wolf','antelope','eagle','jellyfish','crab','giraffe','woodpecker','camel','starfish','koala','alligator','owl','tiger','bear','whale','coyote','chimpanzee','raccoon','lion','wolf','crocodile','dolphin','elephant','squirrel','snake','kangaroo','hippopotamus','elk','rabbit','fox','gorilla','bat','hare','toad','frog','deer','rat','badger','lizard','mole','hedgehog','otter','reindeer','cat','dog','rabbit']
-cat_political = ['peace','war','justice','injustice','protest','freedom','nation','country','citizen','movement','equal','equality','prejudice','terrorism','terrorist','world','work','worker']
-cat_drugs = ['pharmaceutical','bottle','booze','beer','alcohol','wine','drug','pill','weed','coke','cocaine','hydro','cannabis','purp','ganja','dank','dro','chronic','marijuana','bud','spliff','pot','blunt','yeyo','yayo','piff','powder','crack','blow','hash','dope','e','ecstasy','molly','mdma','promethazine','sizzurp','adderall','oxy','valium','ativan','lortab','oxycontin','percocet','vicodin','prozac','xanax','morphine','heroine','needle','meth','amphetamine','addiction']
-cat_feelings = ['adoring','admiration','accepting','annoyed','antsy','anxious','apologetic','appalled','awed','astonished','aroused','bashful','bemused','betrayed','bored','brave','brooding','bothered','calm','certain','cautious','challenged','carefree','captivated','clueless','cold','cranky','cynical','delighted','delirious','derisive','desperate','determined','disturbed','doubtful','down','drained','edgy','elated','embarrassed','empathetic','energetic','engrossed','enlightened','envious','excited','excluded','exhausted','flabbergasted','foolish','frazzled','free','fretful','frustrated','furious','giddy','glad','gleeful','gloomy','grief','guarded','guilty','hankering','hesitant','hollow','horror','horrified','hostile','humiliated','hurt','hysterical','indifferent','indignant','intense','interested','intoxicated','irritated','jittery','jocular','jolly','joyful','jumpy','keen','lazy','lethargic','lonely','lost','longing','lucky','lustful','melancholic','miserable','mortified','mournful','nasty','needy','nervous','numb','obsessed','offended','optimistic','overwhelmed','panicked','paranoid','passionate','peaceful','perky','perplexed','petrified','pessimistic','pleasured','positive','powerful','proud','raged','rattled','reassured','regretful','rueful','reflective','relaxed','relieved','remorseful','revolted','satisfied','self-conscious','selfish','sensual','sensitive','shameful','shock','sluggish','smug','snappy','somber','speechless','stressed','stunned','submissive','suffering','sympathetic','surprised','terror','tense','thankful','thoughtful','tormented','troubled','upbeat','uptight','wary','woeful','wretched','zealous']
-cat_nature = ['cloud','island','bay','riverbank','comet','beach','sea','ocean','coast','ground','dune','desert','cliff','park','meadow','jungle','forest','glacier','land','hill','field','grass','soil','mushroom','pebble','rock','stone','pond','river','wave','sky','water','tree','plant','moss','flower','bush','sand','mud','stars','space','planet','volcano','cave','rain','snow','leaf','moon','sun','sunshine','thunderstorm','lightning','thunder']
-cat_spiritual = ['peace','angel','destiny','bible ','buddhism ','christianity ','confucianism ','hindu ','islam ','judaism ','koran ','monotheistic ','muslim ','nirvana ','polytheistic ','reincarnation ','shintoism ','torah ','veda','buddha','allah','jesus','christ','karma','faith ','prayer ','meditate ','eternal ','grace ','peace ','enlighten ','salvation','god','godess','pray']
-
 
 def analyze_album(album_id):
         tracks = []
@@ -341,23 +333,23 @@ def analyze_album(album_id):
         df = df.to_dict('records')
         return df
 
-def categorize_words(x):
-    if x.lower() in cat_animals:
-        return 'Animal'
-    elif x.lower() in cat_drugs:
-        return 'Drug'
-    elif x.lower() in cat_feelings:
-        return 'Feeling'
-    elif x.lower() in cat_nature:
-        return 'Nature'
-    elif x.lower() in cat_romance:
-        return 'Romance'
-    elif x.lower() in cat_spiritual:
-        return 'Spiritual'
-    elif x.lower() in cat_political:
-        return 'Political'
-    else:
-        return 'None'
+# def categorize_words(x):
+#     if x.lower() in cat_animals:
+#         return 'Animal'
+#     elif x.lower() in cat_drugs:
+#         return 'Drug'
+#     elif x.lower() in cat_feelings:
+#         return 'Feeling'
+#     elif x.lower() in cat_nature:
+#         return 'Nature'
+#     elif x.lower() in cat_romance:
+#         return 'Romance'
+#     elif x.lower() in cat_spiritual:
+#         return 'Spiritual'
+#     elif x.lower() in cat_political:
+#         return 'Political'
+#     else:
+#         return 'None'
 
 def album_wordcloud(dict_name):
     dict_name = [ row for row in dict_name if row['lyrics'] is not None ]
@@ -392,9 +384,9 @@ def album_wordcloud(dict_name):
     count_df = count_df.groupby('token_lemma').count().reset_index()
     count_df.columns = ["word", "size"]
     categories = []
-    for word in count_df['word']:
-        categories.append(categorize_words(word))
-    count_df["category"] = categories
+    # for word in count_df['word']:
+    #     categories.append(categorize_words(word))
+    # count_df["category"] = categories
     # count_df = count_df.loc[count_df["size"]>1]
     count_df = count_df.sort_values('size',ascending=False)
     return count_df.to_dict('records')

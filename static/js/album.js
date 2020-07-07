@@ -56,7 +56,8 @@ $.getJSON(`/album/${selected_album}/lyrics`,
   +"<tr><td><b>Politics</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Political'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>"
   +"<tr><td><b>Romance</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Romance'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>"
   +"<tr><td><b>Spirituality</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Spiritual'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>");
-  tr_themes.appendTo("#themes");
+  // Remove feature for now
+  // tr_themes.appendTo("#themes");
   }
   );
 

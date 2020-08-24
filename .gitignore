@@ -2,4 +2,4 @@
 .cache-rthawkins
 __pycache__
 tweet.py
-static/images/album_charts/
+/static/images/album_charts/

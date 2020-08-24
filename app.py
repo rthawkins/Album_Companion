@@ -97,19 +97,15 @@ def lyrics(album_id):
 @app.route('/search_result', methods=['POST'])
 def search_result():
     album_search = request.form['album-search']
-    try: 
-        if collection.find({"album_id": album_search}):
-            documents = collection.find({"album_id": album_search}).sort([("album_id", 1), ("track", 1)])
-            response = []
-            for document in documents:
-                document['_id'] = str(document['_id'])
-                response.append(document)
-            album_new_data = JSONEncoder().encode(response)
-            song_dict = json.loads(album_new_data)[0]
-        else:
-            log.info("Could not find album in MongoDb. Searching Spotify next.")
-            
-    except:
+    if collection.count_documents({"album_id": album_search}, limit = 1):
+        documents = collection.find({"album_id": album_search}).sort([("album_id", 1), ("track", 1)])
+        response = []
+        for document in documents:
+            document['_id'] = str(document['_id'])
+            response.append(document)
+        album_new_data = JSONEncoder().encode(response)
+        song_dict = json.loads(album_new_data)[0]
+    else:
         album = analyze_album(album_search)
         song_dict = album[0]
         collection.insert_many(album)
@@ -135,9 +131,9 @@ def autocomplete():
     return jsonify(matching_results=df)
 
 # Error page
-@app.errorhandler(Exception)
-def all_exception_handler(error):
-   return render_template("error.html")
+# @app.errorhandler(Exception)
+# def all_exception_handler(error):
+#    return render_template("error.html")
         
 if __name__ == '__main__':
     app.run(debug=False)

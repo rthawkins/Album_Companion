@@ -273,8 +273,8 @@ def analyze_album(album_id):
                 song_lyrics.append(None)
                 keywords.append(None)
                 affect_freq.append(None)
-                genius_url.append(None)
-                genius_songid.append(None)
+                # genius_url.append(None)
+                # genius_songid.append(None)
                 msttr.append(None)
                 lexical_depth.append(None)
                 cliche_word_perc.append(None)
@@ -295,6 +295,8 @@ def analyze_album(album_id):
         df["album_name"] = album_name
         df["release_date"] = release_date
         df["sp_id"] = df["id"]
+        print(album_name)
+        print(genius_songid)
         df["genius_songid"] = genius_songid
         df["url"] = genius_url
         df['keywords'] = keywords

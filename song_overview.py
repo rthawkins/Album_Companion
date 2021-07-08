@@ -125,6 +125,8 @@ def get_album_id(song_id):
 def get_lyrics(url):
     page = requests.get(url)
     html = BeautifulSoup(page.text, 'html.parser')
-    lyrics = html.find('div', class_='lyrics').get_text()
+    lyrics = html.select_one(
+        'div[class^="lyrics"], div[class^="SongPage__Section"]'
+    ).get_text(separator="\n")
     return lyrics
 

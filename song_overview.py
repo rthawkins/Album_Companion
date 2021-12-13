@@ -72,9 +72,8 @@ def get_lyric_sentiment(lyrics):
 def request_song_info(song_title, artist_name):
     base_url = 'https://api.genius.com'
     headers = {'Authorization': 'Bearer ' + genius_token}
-    search_url = base_url + '/search'
-    data = {'q': song_title + ' ' + artist_name}
-    response = requests.get(search_url, data=data, headers=headers)
+    search_url = base_url + '/search?q=' + song_title + ' ' + artist_name
+    response = requests.get(search_url, headers=headers)
     json = response.json()
     remote_song_info = None
     for hit in json['response']['hits']:

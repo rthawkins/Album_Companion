@@ -263,7 +263,7 @@ def analyze_album(album_id):
                     keywords.append(None)
                     affect_freq.append(None)
                     genius_url.append(None)
-                    genius_songid.append(None)
+#                     genius_songid.append(None)
                     msttr.append(None)
                     lexical_depth.append(None)
                     cliche_word_perc.append(None)

@@ -128,7 +128,7 @@ def get_lyrics(url):
     lyrics = html.select_one(
         'div[class^="lyrics"], div[class^="SongPage__Section"]'
     ).get_text(separator="\n")
-    split_string = lyrics.split("Embed", 1)
+    split_string = lyrics.split("\nEmbed\nShare", 1)
     lyrics = split_string[0]
     return lyrics
 

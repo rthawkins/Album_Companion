@@ -43,6 +43,7 @@ def pos_neg(df, new_col, source_col):
 
 def clean_lyrics(lyrics):
     lyrics = lyrics.replace(r'mmm', '')
+    lyrics = lyrics.replace(r'Lyrics for this song have yet to be released. Please check back once the song has been released.', '')
     lyrics = lyrics.replace(r'yeah', '')
     lyrics = lyrics.replace(r'Verse', '')
     lyrics = lyrics.replace(r'Intro', '')
@@ -127,5 +128,7 @@ def get_lyrics(url):
     lyrics = html.select_one(
         'div[class^="lyrics"], div[class^="SongPage__Section"]'
     ).get_text(separator="\n")
+    split_string = lyrics.split("\nEmbed\nShare", 1)
+    lyrics = split_string[0]
     return lyrics
 

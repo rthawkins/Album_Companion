@@ -2,7 +2,7 @@ Flask==1.1.1
 gunicorn==20.0.0
 json5==0.8.5
 jsonschema==3.0.2
-pandas==0.25.1
+pandas==1.2.3
 spotipy==2.4.4
 numpy==1.16.5
 mpld3==0.3
@@ -12,7 +12,6 @@ lyricsgenius==1.7.0
 requests==2.22.0
 wordcloud==1.6.0
 plotly==4.2.1
-plotly-express==0.4.1
 Flask-PyMongo==2.3.0
 bs4==0.0.1
 dnspython==1.16.0

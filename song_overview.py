@@ -43,10 +43,13 @@ def pos_neg(df, new_col, source_col):
 
 def clean_lyrics(lyrics):
     lyrics = lyrics.replace(r'mmm', '')
+    lyrics = lyrics.replace(r'Lyrics for this song have yet to be released. Please check back once the song has been released.', '')
     lyrics = lyrics.replace(r'yeah', '')
     lyrics = lyrics.replace(r'Verse', '')
     lyrics = lyrics.replace(r'Intro', '')
     lyrics = lyrics.replace(r'Pre-Chorus', '')
+    lyrics = lyrics.replace(r'Interlude', '')
+    lyrics = lyrics.replace(r'Refrain', '')
     lyrics = lyrics.replace(r'Chorus', '')
     lyrics = lyrics.replace(r'Post-Chorus', '')
     lyrics = lyrics.replace(r'Guitar Solo', '')
@@ -72,9 +75,9 @@ def get_lyric_sentiment(lyrics):
 def request_song_info(song_title, artist_name):
     base_url = 'https://api.genius.com'
     headers = {'Authorization': 'Bearer ' + genius_token}
-    search_url = base_url + '/search'
-    data = {'q': song_title + ' ' + artist_name}
-    response = requests.get(search_url, data=data, headers=headers)
+    search_url = base_url + '/search?q=' + song_title + ' ' + artist_name
+    # data = {'q': song_title + ' ' + artist_name}
+    response = requests.get(search_url, headers=headers)
     json = response.json()
     remote_song_info = None
     for hit in json['response']['hits']:
@@ -125,6 +128,28 @@ def get_album_id(song_id):
 def get_lyrics(url):
     page = requests.get(url)
     html = BeautifulSoup(page.text, 'html.parser')
-    lyrics = html.find('div', class_='lyrics').get_text()
+    lyrics = html.select_one('div[class^="lyrics"], div[class^="SongPage__Section"]').get_text(separator="\n")
+    # lyrics = html.find('div', class_='lyrics').get_text()
+    split_string = lyrics.split("\nEmbed\nCancel", 1)
+    lyrics = split_string[0]
+    split_string = lyrics.split(" Lyrics\n", 1)
+    lyrics = split_string[1]
     return lyrics
 
+import os
+import openai
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def song_interpreter(lyrics):
+    response = openai.Completion.create(
+    model="text-davinci-002",
+    prompt="Lyrics:"+lyrics+"\n\nWhat is the meaning of the song?\n\n",
+    temperature=0.7,
+    max_tokens=64,
+    top_p=1,
+    frequency_penalty=0,
+    presence_penalty=0
+    )
+    song_interpretation = response.choices[0].text
+    return song_interpretation

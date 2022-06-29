@@ -131,6 +131,9 @@
           <li class="nav-item">
             <a class="nav-link" href="#album_stats" data-toggle="tab">Stats</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#album_themes" data-toggle="tab">Themes</a>
+          </li>
         </ul>
             <div class="tab-content">
                 <div class="tab-pane container active" id="tracklist">
@@ -163,7 +166,11 @@
                   <br>
                   <div id="wordchart"></div>
                 </div>
-                </div>
+                <div class="tab-pane container fade" id="album_themes"></div>
+                <table table class="table table-hover">
+                  <tbody id="themes"></tbody>
+                </table>
+              </div>
               </div>
     </div>
     <div class="div5" align="center" id="lyrics">
@@ -273,8 +280,8 @@
                 <a class="dropdown-item" data-toggle="tab" href="#highlights-tab">Highlights</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" data-toggle="tab" href="#album-stats-tab">Stats</a>
-                <!-- <div class="dropdown-divider"></div>
-                <a class="dropdown-item" data-toggle="tab" href="#album-themes-tab">Themes</a> -->
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" data-toggle="tab" href="#album-themes-tab">Themes</a>
             </div>
             </li>
         </ul>
@@ -387,7 +394,7 @@
                 </div>
                 <div class="tab-pane container fade" id="album-themes-tab">
                   <table table class="table table-hover">
-                    <tbody id="themes"></tbody>
+                    <tbody id="themes_mobile"></tbody>
                   </table>
                 </div>
 

@@ -125,10 +125,11 @@ def get_album_id(song_id):
 def get_lyrics(url):
     page = requests.get(url)
     html = BeautifulSoup(page.text, 'html.parser')
-    lyrics = html.select_one(
-        'div[class^="lyrics"], div[class^="SongPage__Section"]'
-    ).get_text(separator="\n")
-    split_string = lyrics.split("\nEmbed\nShare", 1)
+    lyrics = html.select_one('div[class^="lyrics"], div[class^="SongPage__Section"]').get_text(separator="\n")
+    # lyrics = html.find('div', class_='lyrics').get_text()
+    split_string = lyrics.split("\nEmbed\nCancel", 1)
     lyrics = split_string[0]
+    split_string = lyrics.split(" Lyrics\n", 1)
+    lyrics = split_string[1]
     return lyrics
 

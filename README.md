@@ -1,4 +1,4 @@
-### <a href="https://album-companion.herokuapp.com/" target="_blank">Click here to view the Heroku app</a>
+### <a href="https://albumcompanion.onrender.com/" target="_blank">Click here to view the Render app</a>
 
 # Album_Companion
 

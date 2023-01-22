@@ -18,6 +18,7 @@ from album_overview import analyze_album
 from album_overview import search_album
 from album_overview import sp
 from album_overview import album_wordcloud
+import os
 
 # JSON Encoding setup
 class JSONEncoder(json.JSONEncoder):

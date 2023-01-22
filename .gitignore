@@ -3,3 +3,5 @@
 __pycache__
 tweet.py
 /static/images/album_charts/
+/backup/
+/wip_templates/

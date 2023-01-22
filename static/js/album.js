@@ -56,8 +56,8 @@ $.getJSON(`/album/${selected_album}/lyrics`,
   +"<tr><td><b>Politics</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Political'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>"
   +"<tr><td><b>Romance</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Romance'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>"
   +"<tr><td><b>Spirituality</b></td><td>"+ ((d3.sum(data.filter(d => d.category == 'Spiritual'),d => d.size)/ total_words)*100).toFixed(1)+"%</td></tr>");
-  // Remove feature for now
-  // tr_themes.appendTo("#themes");
+  // Remove features
+  tr_themes.appendTo("#themes","#themes_mobile");
   }
   );
 
@@ -291,7 +291,7 @@ $.getJSON(`/album/${selected_album}`,
                         size: 11
                         },
                     linecolor: 'black',
-                    gridwidth: 2,
+                    gridwidth: 1,
                     gridcolor: 'black',
                     tickvals: [0,.5,1], 
                     range: [0,1],

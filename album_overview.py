@@ -40,6 +40,8 @@ import requests
 from bs4 import BeautifulSoup
 from song_overview import high_low
 from song_overview import pos_neg
+from song_overview import song_interpreter
+import openai
 
 id_ = config("spotify_id")
 secret = config("spotify_secret")
@@ -158,6 +160,15 @@ def sentiment_analyzer_scores(sentence):
 cliche_words = ['baby','love','boy','girl','feel','heart','happy','sad','cry']
 excluded_words = ['\n','oh','verse','chorus','pre-chorus','bridge','woah','ya','la','nah','let','hoo','woo','thing','o','oo','whoa','yeah','guitar solo','haa','ayo','aah','interlude','yah','whoah','1','2','3','4','5','','na','doo','ayy','ay','da']
 
+cat_romance = ['date','marry','marriage','kiss','heart','baby','hug','hold','dream','beautiful','gorgeous','heartbreak','smile','eye','finger','hand','lips','touch','feel']
+cat_animals = ['monkey','panda','shark','zebra','gorilla','walrus','leopard','wolf','antelope','eagle','jellyfish','crab','giraffe','woodpecker','camel','starfish','koala','alligator','owl','tiger','bear','whale','coyote','chimpanzee','raccoon','lion','wolf','crocodile','dolphin','elephant','squirrel','snake','kangaroo','hippopotamus','elk','rabbit','fox','gorilla','bat','hare','toad','frog','deer','rat','badger','lizard','mole','hedgehog','otter','reindeer','cat','dog','rabbit']
+cat_political = ['peace','war','justice','injustice','protest','freedom','nation','country','citizen','movement','equal','equality','prejudice','terrorism','terrorist','world','work','worker']
+cat_drugs = ['smoked','drugs','drink','pharmaceutical','bottle','booze','beer','alcohol','wine','drug','pill','weed','coke','cocaine','hydro','cannabis','purp','ganja','dank','dro','chronic','marijuana','bud','spliff','pot','blunt','yeyo','yayo','piff','powder','crack','blow','hash','dope','e','ecstasy','molly','mdma','promethazine','sizzurp','adderall','oxy','valium','ativan','lortab','oxycontin','percocet','vicodin','prozac','xanax','morphine','heroine','needle','meth','amphetamine','addiction']
+cat_feelings = ['adoring','admiration','accepting','annoyed','antsy','anxious','apologetic','appalled','awed','astonished','aroused','bashful','bemused','betrayed','bored','brave','brooding','bothered','calm','certain','cautious','challenged','carefree','captivated','clueless','cold','cranky','cynical','delighted','delirious','derisive','desperate','determined','disturbed','doubtful','down','drained','edgy','elated','embarrassed','empathetic','energetic','engrossed','enlightened','envious','excited','excluded','exhausted','flabbergasted','foolish','frazzled','free','fretful','frustrated','furious','giddy','glad','gleeful','gloomy','grief','guarded','guilty','hankering','hesitant','hollow','horror','horrified','hostile','humiliated','hurt','hysterical','indifferent','indignant','intense','interested','intoxicated','irritated','jittery','jocular','jolly','joyful','jumpy','keen','lazy','lethargic','lonely','lost','longing','lucky','lustful','melancholic','miserable','mortified','mournful','nasty','needy','nervous','numb','obsessed','offended','optimistic','overwhelmed','panicked','paranoid','passionate','peaceful','perky','perplexed','petrified','pessimistic','pleasured','positive','powerful','proud','raged','rattled','reassured','regretful','rueful','reflective','relaxed','relieved','remorseful','revolted','satisfied','self-conscious','selfish','sensual','sensitive','shameful','shock','sluggish','smug','snappy','somber','speechless','stressed','stunned','submissive','suffering','sympathetic','surprised','terror','tense','thankful','thoughtful','tormented','troubled','upbeat','uptight','wary','woeful','wretched','zealous']
+cat_nature = ['cloud','island','bay','riverbank','comet','beach','sea','ocean','coast','ground','dune','desert','cliff','park','meadow','jungle','forest','glacier','land','hill','field','grass','soil','mushroom','pebble','rock','stone','pond','river','wave','sky','water','tree','plant','moss','flower','bush','sand','mud','stars','space','planet','volcano','cave','rain','snow','leaf','moon','sun','sunshine','thunderstorm','lightning','thunder']
+cat_spiritual = ['peace','angel','destiny','bible ','buddhism ','christianity ','confucianism ','hindu ','islam ','judaism ','koran ','monotheistic ','muslim ','nirvana ','polytheistic ','reincarnation ','shintoism ','torah ','veda','buddha','allah','jesus','christ','karma','faith ','prayer ','meditate ','eternal ','grace ','peace ','enlighten ','salvation','god','godess','pray']
+
+
 def analyze_album(album_id):
         tracks = []
         track_ids = []
@@ -208,6 +219,7 @@ def analyze_album(album_id):
         lexical_depth = []
         cliche_word_perc = []
         cliche_total_count = []
+        interpretations = []
         df["metacritic"] = search_metacritic(artist, album_name)
         
 
@@ -279,11 +291,46 @@ def analyze_album(album_id):
                 lexical_depth.append(None)
                 cliche_word_perc.append(None)
                 cliche_total_count.append(None)
+            keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
+            sent = sentiment_analyzer_scores(clean_lyrics(lyrics))
+            sent = round((sent + 1) / 2,3)
+            sent_score.append(sent)
+            print(clean_lyrics(lyrics))
+            interpreted = song_interpreter(clean_lyrics(lyrics))
+            print(interpreted)
+            interpretations.append(interpreted)
+            text_object = NRCLex(lyrics)
+            affect_freq.append(text_object.affect_frequencies)
+            song_lyrics.append(clean_lyrics(lyrics))
+                # else:
+                #     sent_score.append(None)
+                #     song_lyrics.append(None)
+                #     keywords.append(None)
+                #     affect_freq.append(None)
+                #     genius_url.append(None)
+                #     genius_songid.append(None)
+                #     msttr.append(None)
+                #     lexical_depth.append(None)
+                #     cliche_word_perc.append(None)
+                #     cliche_total_count.append(None)
+            # except:
+            #     sent_score.append(None)
+            #     song_lyrics.append(None)
+            #     keywords.append(None)
+            #     affect_freq.append(None)
+            #     genius_url.append(None)
+            #     genius_songid.append(None)
+            #     msttr.append(None)
+            #     lexical_depth.append(None)
+            #     cliche_word_perc.append(None)
+            #     cliche_total_count.append(None)
 
         
         df['title'] = new_titles
         df["lyr_valence"] = sent_score   
-        df['mood'] = np.where(df['lyr_valence'].isnull(), df['valence'], round((df["lyr_valence"] + df["valence"]) / 2,3) )
+        df["interpretation"] = interpretations  
+        print(df)
+        df['mood'] = np.where(df['lyr_valence'].isnull(), df['valence'], (df["lyr_valence"] + df["valence"]) / 2 )
         df["mood_discrep"] = df["valence"] - df["lyr_valence"]
         df["lyrics"] = song_lyrics
         pos_neg(df, 'lyr_valence_des', 'lyr_valence')
@@ -334,23 +381,23 @@ def analyze_album(album_id):
         df = df.to_dict('records')
         return df
 
-# def categorize_words(x):
-#     if x.lower() in cat_animals:
-#         return 'Animal'
-#     elif x.lower() in cat_drugs:
-#         return 'Drug'
-#     elif x.lower() in cat_feelings:
-#         return 'Feeling'
-#     elif x.lower() in cat_nature:
-#         return 'Nature'
-#     elif x.lower() in cat_romance:
-#         return 'Romance'
-#     elif x.lower() in cat_spiritual:
-#         return 'Spiritual'
-#     elif x.lower() in cat_political:
-#         return 'Political'
-#     else:
-#         return 'None'
+def categorize_words(x):
+    if x.lower() in cat_animals:
+        return 'Animal'
+    elif x.lower() in cat_drugs:
+        return 'Drug'
+    elif x.lower() in cat_feelings:
+        return 'Feeling'
+    elif x.lower() in cat_nature:
+        return 'Nature'
+    elif x.lower() in cat_romance:
+        return 'Romance'
+    elif x.lower() in cat_spiritual:
+        return 'Spiritual'
+    elif x.lower() in cat_political:
+        return 'Political'
+    else:
+        return 'None'
 
 def album_wordcloud(dict_name):
     dict_name = [ row for row in dict_name if row['lyrics'] is not None ]
@@ -384,11 +431,12 @@ def album_wordcloud(dict_name):
     count_df = df_lyrics[["token_lemma"]].reset_index()
     count_df = count_df.groupby('token_lemma').count().reset_index()
     count_df.columns = ["word", "size"]
+    # count_df.to_csv('lyrics_audit.csv')
     categories = []
-    # for word in count_df['word']:
-    #     categories.append(categorize_words(word))
-    # count_df["category"] = categories
-    # count_df = count_df.loc[count_df["size"]>1]
+    for word in count_df['word']:
+        categories.append(categorize_words(word))
+    count_df["category"] = categories
+    count_df = count_df.loc[count_df["size"]>=1]
     count_df = count_df.sort_values('size',ascending=False)
     return count_df.to_dict('records')
         

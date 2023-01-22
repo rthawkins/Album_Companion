@@ -17,6 +17,7 @@
   <script>var s_dance = '{{song_dict.danceability}}';</script>
   <script>var s_title = '{{song_dict.title}}';</script>
   <script>var s_tracknum = '{{song_dict.track}}';</script>
+  <script>var s_interpretation = '{{song_dict.interpretation}}';</script>
   <script>      
     var s_lexical_diversity = ('{{song_dict.msttr}}' * 100).toFixed(1);
     var s_lyrical_cliche = ('{{song_dict.cliche_word_perc}}' * 100).toFixed(1);</script>
@@ -131,6 +132,9 @@
           <li class="nav-item">
             <a class="nav-link" href="#album_stats" data-toggle="tab">Stats</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#album_themes" data-toggle="tab">Themes</a>
+          </li>
         </ul>
             <div class="tab-content">
                 <div class="tab-pane container active" id="tracklist">
@@ -163,7 +167,12 @@
                   <br>
                   <div id="wordchart"></div>
                 </div>
+                <div class="tab-pane container fade" id="album_themes">
+                  <table table class="table table-hover">
+                    <tbody id="themes"></tbody>
+                  </table>
                 </div>
+              </div>
               </div>
     </div>
     <div class="div5" align="center" id="lyrics">
@@ -171,6 +180,7 @@
         <div class="card-header" align="center">
           <h5>"{{song_dict.title}}"</h5></div>
       <div id="rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}"><span id="myText"></span></div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js" ></script>
+      <!-- <p><b>AI Says: </b>{{ song_dict.interpretation}}</p> -->
     </div>
     </div>
     <div class="div6">
@@ -273,8 +283,8 @@
                 <a class="dropdown-item" data-toggle="tab" href="#highlights-tab">Highlights</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" data-toggle="tab" href="#album-stats-tab">Stats</a>
-                <!-- <div class="dropdown-divider"></div>
-                <a class="dropdown-item" data-toggle="tab" href="#album-themes-tab">Themes</a> -->
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" data-toggle="tab" href="#album-themes-tab">Themes</a>
             </div>
             </li>
         </ul>
@@ -387,7 +397,8 @@
                 </div>
                 <div class="tab-pane container fade" id="album-themes-tab">
                   <table table class="table table-hover">
-                    <tbody id="themes"></tbody>
+                    <tbody id="themes_mobile">
+                    </tbody>
                   </table>
                 </div>
 

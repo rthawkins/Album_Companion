@@ -282,9 +282,9 @@ def analyze_album(album_id):
             # aimood = song_mood_ai(clean_lyrics(lyrics))
             print(interpreted)
             interpretations.append(interpreted)
-            themes_ai.append(themes)
+            # themes_ai.append(themes)
             # mood_ai.append(aimood)
-            # text_object = NRCLex(lyrics)
+            text_object = NRCLex(lyrics)
             affect_freq.append(text_object.affect_frequencies)
             song_lyrics.append(clean_lyrics(lyrics))
                 # else:

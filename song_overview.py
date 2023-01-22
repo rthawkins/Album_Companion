@@ -1,6 +1,7 @@
 import spotipy
 import spotipy.util as util
 import pandas as pd
+import openai
 from scipy import stats
 from math import log
 from wordcloud import WordCloud
@@ -16,6 +17,8 @@ import textblob
 from textblob import TextBlob 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from bs4 import BeautifulSoup
+import os
+import openai
 
 
 id_ = config("spotify_id")
@@ -136,17 +139,27 @@ def get_lyrics(url):
     lyrics = split_string[1]
     return lyrics
 
-import os
-import openai
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
 def song_interpreter(lyrics):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.Completion.create(
-    model="text-davinci-002",
-    prompt="Lyrics:"+lyrics+"\n\nWhat is the meaning of the song?\n\n",
+    model="text-davinci-003",
+    prompt="Lyrics:"+lyrics+"\n\nIn two sentences, write a thoughtful analysis about the meaning of these lyrics:\n\n",
     temperature=0.7,
-    max_tokens=64,
+    max_tokens=256,
+    top_p=1,
+    frequency_penalty=0,
+    presence_penalty=0
+    )
+    song_interpretation = response.choices[0].text
+    return song_interpretation
+
+def song_themes(lyrics):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    response = openai.Completion.create(
+    model="text-davinci-003",
+    prompt="Lyrics:"+lyrics+"\n\nComma separated, list the themes in these lyrics:\n\n",
+    temperature=0.7,
+    max_tokens=256,
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0

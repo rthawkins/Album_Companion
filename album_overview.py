@@ -35,12 +35,13 @@ from song_overview import clean_lyrics
 from song_overview import get_lyric_sentiment
 from song_overview import request_song_info
 from song_overview import get_lyrics
-from song_overview import song_interpreter
 import re
 import requests
 from bs4 import BeautifulSoup
 from song_overview import high_low
 from song_overview import pos_neg
+from song_overview import song_interpreter
+import openai
 
 id_ = config("spotify_id")
 secret = config("spotify_secret")
@@ -251,7 +252,6 @@ def analyze_album(album_id):
             genius_url.append(url)
             genius_songid.append(str(remote_song_info['result']['id']))
             lyrics = get_lyrics(url)
-            print(lyrics)
             flt = ld.flemmatize(clean_lyrics(lyrics))
             clean_flt = [x for x in flt if x.lower() not in excluded_words]
             spacy_stopwords = list(spacy.lang.en.stop_words.STOP_WORDS)
@@ -272,8 +272,10 @@ def analyze_album(album_id):
             sent = sentiment_analyzer_scores(clean_lyrics(lyrics))
             sent = round((sent + 1) / 2,3)
             sent_score.append(sent)
-            interp = song_interpreter(clean_lyrics(lyrics))
-            interpretations.append(interp)
+            print(clean_lyrics(lyrics))
+            interpreted = song_interpreter(clean_lyrics(lyrics))
+            print(interpreted)
+            interpretations.append(interpreted)
             text_object = NRCLex(lyrics)
             affect_freq.append(text_object.affect_frequencies)
             song_lyrics.append(clean_lyrics(lyrics))
@@ -303,7 +305,7 @@ def analyze_album(album_id):
         
         df['title'] = new_titles
         df["lyr_valence"] = sent_score   
-        df['interpretation'] = interpretations
+        df["interpretation"] = interpretations  
         print(df)
         df['mood'] = np.where(df['lyr_valence'].isnull(), df['valence'], (df["lyr_valence"] + df["valence"]) / 2 )
         df["mood_discrep"] = df["valence"] - df["lyr_valence"]
@@ -351,7 +353,7 @@ def analyze_album(album_id):
             lex_diversity = abs(stats.zscore(df["msttr"])) 
             lyr_valence_z = abs(stats.zscore(df["lyr_valence"])) 
             df["uniqueness"] = (energy_z + dance_z + duration_z + loudness_z + lyr_valence_z + mus_valence_z + lex_diversity) / 7
-        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic","msttr","lexical_depth","cliche_word_perc","cliche_total_words","interpretation"]]
+        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic","msttr","lexical_depth","cliche_word_perc","cliche_total_words"]]
         
         df = df.to_dict('records')
         return df

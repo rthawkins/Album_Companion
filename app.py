@@ -31,7 +31,7 @@ class JSONEncoder(json.JSONEncoder):
 # Flask Setup
 #################################################
 app = Flask(__name__)
-
+    
 
 # Mongo DB configuration
 mg_usr = config('mg_usr')

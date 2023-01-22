@@ -157,12 +157,26 @@ def song_themes(lyrics):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.Completion.create(
     model="text-davinci-003",
-    prompt="Lyrics:"+lyrics+"\n\nComma separated, list the themes in these lyrics:\n\n",
+    prompt="Lyrics:"+lyrics+"\n\nList three themes in these lyrics (each theme comma separated):\n\n",
     temperature=0.7,
-    max_tokens=256,
+    max_tokens=64,
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0
     )
-    song_interpretation = response.choices[0].text
-    return song_interpretation
+    song_themes = response.choices[0].text
+    return song_themes
+
+def song_mood_ai(lyrics):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    response = openai.Completion.create(
+    model="text-davinci-003",
+    prompt="Lyrics:"+lyrics+"\n\nOne word that describes the mood of the lyrics:\n\n",
+    temperature=0.7,
+    max_tokens=64,
+    top_p=1,
+    frequency_penalty=0,
+    presence_penalty=0
+    )
+    song_mood_ai = response.choices[0].text
+    return song_mood_ai

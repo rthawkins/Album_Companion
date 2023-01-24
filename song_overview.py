@@ -136,6 +136,8 @@ def get_lyrics(url):
     split_string = lyrics.split("\nEmbed\nCancel", 1)
     lyrics = split_string[0]
     split_string = lyrics.split(" Lyrics\n", 1)
+    if len(split_string) < 2:
+        return ""
     lyrics = split_string[1]
     return lyrics
 
@@ -143,7 +145,7 @@ def song_interpreter(lyrics):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.Completion.create(
     model="text-davinci-003",
-    prompt="Lyrics:"+lyrics+"\n\nIn two sentences, write a thoughtful analysis about the meaning of these lyrics:\n\n",
+    prompt="Lyrics:"+lyrics+"\n\nAnswer these questions separated by semi-colons:\n1) Thoughtfully analyze the meaning of these lyrics in two sentences, maximum of 50 words.\n2) Describe the mood of these lyrics in one word.\n3) List three themes of these lyrics, comma separated.\n\n",
     temperature=0.7,
     max_tokens=256,
     top_p=1,

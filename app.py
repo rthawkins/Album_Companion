@@ -31,7 +31,9 @@ class JSONEncoder(json.JSONEncoder):
 # Flask Setup
 #################################################
 app = Flask(__name__)
-    
+
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 180
+
 
 # Mongo DB configuration
 mg_usr = config('mg_usr')
@@ -132,9 +134,9 @@ def autocomplete():
     return jsonify(matching_results=df)
 
 # Error page
-# @app.errorhandler(Exception)
-# def all_exception_handler(error):
-#    return render_template("error.html")
+@app.errorhandler(Exception)
+def all_exception_handler(error):
+   return render_template("error.html")
         
 if __name__ == '__main__':
     app.run(debug=False)

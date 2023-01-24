@@ -170,6 +170,19 @@ cat_feelings = ['adoring','admiration','accepting','annoyed','antsy','anxious','
 cat_nature = ['cloud','island','bay','riverbank','comet','beach','sea','ocean','coast','ground','dune','desert','cliff','park','meadow','jungle','forest','glacier','land','hill','field','grass','soil','mushroom','pebble','rock','stone','pond','river','wave','sky','water','tree','plant','moss','flower','bush','sand','mud','stars','space','planet','volcano','cave','rain','snow','leaf','moon','sun','sunshine','thunderstorm','lightning','thunder']
 cat_spiritual = ['peace','angel','destiny','bible ','buddhism ','christianity ','confucianism ','hindu ','islam ','judaism ','koran ','monotheistic ','muslim ','nirvana ','polytheistic ','reincarnation ','shintoism ','torah ','veda','buddha','allah','jesus','christ','karma','faith ','prayer ','meditate ','eternal ','grace ','peace ','enlighten ','salvation','god','godess','pray']
 
+def clean_title(title):
+    title = title.split("- Remaster", 1)[0]
+    title = title.split("[Remaster", 1)[0]
+    title = title.split("(Remaster", 1)[0]
+    title = title.split("- Mono", 1)[0]
+    title = title.split("(Mono", 1)[0]
+    title = title.split("[Mono", 1)[0]
+    title = title.split("(with", 1)[0]
+    title = title.split("[with", 1)[0]
+    title = title.split("(featuring", 1)[0]
+    title = title.split("- featuring", 1)[0]
+    title = title.split("[featuring", 1)[0]
+    return title
 
 def analyze_album(album_id):
         tracks = []
@@ -224,115 +237,52 @@ def analyze_album(album_id):
         interpretations = []
         themes_ai = []
         mood_ai = []
-        df["metacritic"] = search_metacritic(artist, album_name)
+        # df["metacritic"] = search_metacritic(artist, album_name)
         
 
         for title in df["name"]:
-            try:
-                title = title.split("- Remaster", 1)[0]
-                title = title.split("[Remaster", 1)[0]
-                title = title.split("(Remaster", 1)[0]
-                title = title.split("- Mono", 1)[0]
-                title = title.split("(Mono", 1)[0]
-                title = title.split("[Mono", 1)[0]
-                title = title.split("(with", 1)[0]
-                title = title.split("[with", 1)[0]
-                title = title.split("(featuring", 1)[0]
-                title = title.split("- featuring", 1)[0]
-                title = title.split("[featuring", 1)[0]
-                new_titles.append(title)
-                remote_song_info = request_song_info(title, artist)
-                matching_artist = remote_song_info['result']['primary_artist']['name']
-                matching_artist = matching_artist.lower()
-                ratio = levenshtein_ratio_and_distance(artist.lower(),matching_artist,ratio_calc = True)
-                if ratio > .6:
-                    url = remote_song_info['result']['url']
-                    genius_url.append(url)
-                    genius_songid.append(str(remote_song_info['result']['id']))
-                    lyrics = get_lyrics(url)
-                    flt = ld.flemmatize(clean_lyrics(lyrics))
-                    clean_flt = [x for x in flt if x.lower() not in excluded_words]
-                    spacy_stopwords = list(spacy.lang.en.stop_words.STOP_WORDS)
-                    depth = sum([1 for x in clean_flt if x.lower() not in spacy_stopwords])
-                    cliche_count = sum([1 for x in clean_flt if x.lower() in cliche_words])
-                    cliche_perc = cliche_count/depth                       
-                    if depth >= 5: 
-                        msttr.append(ld.msttr((clean_flt),window_length=100))
-                        lexical_depth.append(depth)
-                        cliche_word_perc.append(cliche_perc)
-                        cliche_total_count.append(cliche_count)
-                    else:
-                        msttr.append(None)
-                        lexical_depth.append(None)
-                        cliche_word_perc.append(None)
-                        cliche_total_count.append(None)
-                    keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
-                    sent = sentiment_analyzer_scores(clean_lyrics(lyrics))
-                    sent = round((sent + 1) / 2,3)
-                    sent_score.append(sent)
-                    text_object = NRCLex(lyrics)
-                    affect_freq.append(text_object.affect_frequencies)
-                    song_lyrics.append(clean_lyrics(lyrics))
+            print(title)
+            title = clean_title(title)
+            new_titles.append(title)
+            remote_song_info = request_song_info(title, artist)
+            print(remote_song_info)
+            matching_artist = remote_song_info['result']['primary_artist']['name'].lower()
+            print(matching_artist)
+            print(artist.lower())
+            # ratio = levenshtein_ratio_and_distance(artist.lower(),matching_artist,ratio_calc = True)
+            # print(ratio)
+            # if ratio > .6:
+            url = remote_song_info['result']['url']
+            print(url)
+            genius_url.append(url)
+            genius_songid.append(str(remote_song_info['result']['id']))
+            lyrics = get_lyrics(url)
+            flt = ld.flemmatize(clean_lyrics(lyrics))
+            clean_flt = [x for x in flt if x.lower() not in excluded_words]
+            spacy_stopwords = list(spacy.lang.en.stop_words.STOP_WORDS)
+            depth = sum([1 for x in clean_flt if x.lower() not in spacy_stopwords])
+            cliche_count = sum([1 for x in clean_flt if x.lower() in cliche_words])
+            if depth == 0:
+                cliche_perc = 0
+            else:
+                cliche_perc = cliche_count/depth                      
+            if depth >= 5: 
+                msttr.append(ld.msttr((clean_flt),window_length=100))
+                lexical_depth.append(depth)
+                cliche_word_perc.append(cliche_perc)
+                cliche_total_count.append(cliche_count)
                 else:
-                    sent_score.append(None)
-                    song_lyrics.append(None)
-                    keywords.append(None)
-                    affect_freq.append(None)
-                    genius_url.append(None)
-                    genius_songid.append(None)
                     msttr.append(None)
                     lexical_depth.append(None)
                     cliche_word_perc.append(None)
                     cliche_total_count.append(None)
-            except:
-                sent_score.append(None)
-                song_lyrics.append(None)
-                keywords.append(None)
-                affect_freq.append(None)
-#                 genius_url.append(None)
-#                 genius_songid.append(None)
-                msttr.append(None)
-                lexical_depth.append(None)
-                cliche_word_perc.append(None)
-                cliche_total_count.append(None)
-            keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
-            sent = sentiment_analyzer_scores(clean_lyrics(lyrics))
-            sent = round((sent + 1) / 2,3)
-            sent_score.append(sent)
-            print(clean_lyrics(lyrics))
-            interpreted = song_interpreter(clean_lyrics(lyrics))
-            # themes = song_themes(clean_lyrics(lyrics))
-            # aimood = song_mood_ai(clean_lyrics(lyrics))
-            print(interpreted)
-            interpretations.append(interpreted)
-            # themes_ai.append(themes)
-            # mood_ai.append(aimood)
-            text_object = NRCLex(lyrics)
-            affect_freq.append(text_object.affect_frequencies)
-            song_lyrics.append(clean_lyrics(lyrics))
-                # else:
-                #     sent_score.append(None)
-                #     song_lyrics.append(None)
-                #     keywords.append(None)
-                #     affect_freq.append(None)
-                #     genius_url.append(None)
-                #     genius_songid.append(None)
-                #     msttr.append(None)
-                #     lexical_depth.append(None)
-                #     cliche_word_perc.append(None)
-                #     cliche_total_count.append(None)
-            # except:
-            #     sent_score.append(None)
-            #     song_lyrics.append(None)
-            #     keywords.append(None)
-            #     affect_freq.append(None)
-            #     genius_url.append(None)
-            #     genius_songid.append(None)
-            #     msttr.append(None)
-            #     lexical_depth.append(None)
-            #     cliche_word_perc.append(None)
-            #     cliche_total_count.append(None)
-
+                keywords.append(return_keywords(preprocess(clean_lyrics(lyrics))))
+                sent = sentiment_analyzer_scores(clean_lyrics(lyrics))
+                sent = round((sent + 1) / 2,3)
+                sent_score.append(sent)
+                text_object = NRCLex(lyrics)
+                affect_freq.append(text_object.affect_frequencies)
+                song_lyrics.append(clean_lyrics(lyrics))
         
         df['title'] = new_titles
         df["lyr_valence"] = sent_score   
@@ -356,7 +306,7 @@ def analyze_album(album_id):
         print(genius_songid)
         df["genius_songid"] = genius_songid
         df["url"] = genius_url
-        df['keywords'] = keywords
+        # df['keywords'] = keywords
         df['affect_freq'] = affect_freq
         df["lyr_valence"] = df["lyr_valence"].replace({np.nan: None}) 
         df["mood_discrep"] = df["mood_discrep"].replace({np.nan: None}) 
@@ -386,7 +336,7 @@ def analyze_album(album_id):
             lex_diversity = abs(stats.zscore(df["msttr"])) 
             lyr_valence_z = abs(stats.zscore(df["lyr_valence"])) 
             df["uniqueness"] = (energy_z + dance_z + duration_z + loudness_z + lyr_valence_z + mus_valence_z + lex_diversity) / 7
-        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid", "keywords", "affect_freq","metacritic","msttr","lexical_depth","cliche_word_perc","cliche_total_words","interpretation"]]
+        df = df[["title", "energy", "mus_valence", "lyr_valence", "mood", "danceability", "loudness", "tempo", "key", "mode","time_signature","duration","sp_id","track","lyrics","speechiness","acousticness","instrumentalness","liveness","artist","album_name","disc_number","explicit","external_urls_spotify","mood_discrep","release_date","uniqueness","lyr_valence_des","valence_des","mood_des","energy_des","dance_des","album_id","url","genius_songid","affect_freq","msttr","lexical_depth","cliche_word_perc","cliche_total_words","interpretation"]]
         
         df = df.to_dict('records')
         return df

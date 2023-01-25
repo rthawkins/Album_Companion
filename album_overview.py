@@ -41,8 +41,8 @@ from bs4 import BeautifulSoup
 from song_overview import high_low
 from song_overview import pos_neg
 from song_overview import song_interpreter
-from song_overview import song_themes
-from song_overview import song_mood_ai
+# from song_overview import song_themes
+# from song_overview import song_mood_ai
 import openai
 
 id_ = config("spotify_id")
@@ -171,17 +171,7 @@ cat_nature = ['cloud','island','bay','riverbank','comet','beach','sea','ocean','
 cat_spiritual = ['peace','angel','destiny','bible ','buddhism ','christianity ','confucianism ','hindu ','islam ','judaism ','koran ','monotheistic ','muslim ','nirvana ','polytheistic ','reincarnation ','shintoism ','torah ','veda','buddha','allah','jesus','christ','karma','faith ','prayer ','meditate ','eternal ','grace ','peace ','enlighten ','salvation','god','godess','pray']
 
 def clean_title(title):
-    title = title.split("- Remaster", 1)[0]
-    title = title.split("[Remaster", 1)[0]
-    title = title.split("(Remaster", 1)[0]
-    title = title.split("- Mono", 1)[0]
-    title = title.split("(Mono", 1)[0]
-    title = title.split("[Mono", 1)[0]
-    title = title.split("(with", 1)[0]
-    title = title.split("[with", 1)[0]
-    title = title.split("(featuring", 1)[0]
-    title = title.split("- featuring", 1)[0]
-    title = title.split("[featuring", 1)[0]
+    title = re.sub(r'(?i)-\sRemaster|\[Remaster|\(Remaster|-\sMono|\(Mono|\[Mono|\(with|\[with|\(featuring|-\sfeaturing|\[featuring', '', title)
     return title
 
 keys = {0:'C',1:'C#',2:'D',3:'D#',4:'E',5:'F',6:'F#',7:'G',8:'G#',9:'A',10:'A#',11:'B'}

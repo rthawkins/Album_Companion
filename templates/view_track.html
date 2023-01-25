@@ -84,16 +84,28 @@
         document.getElementById("cliche").innerHTML = s_lyrical_cliche + '%';
         document.getElementById("diverse-mobile").innerHTML = s_lexical_diversity + '%';
         document.getElementById("cliche-mobile").innerHTML = s_lyrical_cliche + '%';}
-      var variables = ('{{song_dict.interpretation}}').split(";");
-      var interpret = variables[0].charAt(0).toUpperCase() + variables[0].slice(1);
-      document.getElementById("interpret_message").innerHTML = interpret;
-      document.getElementById("interpret_message2").innerHTML = interpret;
-      var mood = variables[1].charAt(0).toUpperCase() + variables[1].slice(1); 
-      document.getElementById("mood_message").innerHTML = mood;
-      document.getElementById("mood_message2").innerHTML = mood;
-      var themes = variables[2].charAt(0).toUpperCase() + variables[2].slice(1); 
-      document.getElementById("themes_message").innerHTML = themes;
-      document.getElementById("themes_message2").innerHTML = themes;
+      function splitAndCleanText(text) {
+        // remove instances of "Answer: ", "1) ", "2) " and "3) "
+        text = text.replace(/Answer: /g, "");
+        text = text.replace(/1\) /g, "");
+        text = text.replace(/2\) /g, "");
+        text = text.replace(/3\) /g, "");
+        // split text into separate variables
+        var variables = text.split(";");
+        return variables;
+      }
+      var variables = splitAndCleanText(('{{song_dict.interpretation}}'));
+      if(variables.length > 0){
+        var interpret = variables[0].charAt(0).toUpperCase() + variables[0].slice(1);
+        document.getElementById("interpret_message").innerHTML = interpret;
+        document.getElementById("interpret_message2").innerHTML = interpret;
+        var mood = variables[1].charAt(0).toUpperCase() + variables[1].slice(1); 
+        document.getElementById("mood_message").innerHTML = mood;
+        document.getElementById("mood_message2").innerHTML = mood;
+        var themes = variables[2].charAt(0).toUpperCase() + variables[2].slice(1); 
+        document.getElementById("themes_message").innerHTML = themes;
+        document.getElementById("themes_message2").innerHTML = themes;
+      }
       }
 ;
   </script>

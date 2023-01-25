@@ -45,25 +45,12 @@ def pos_neg(df, new_col, source_col):
     df[new_col] = np.select(criteria, values, 0)
 
 def clean_lyrics(lyrics):
-    lyrics = lyrics.replace(r'mmm', '')
-    lyrics = lyrics.replace(r'Lyrics for this song have yet to be released. Please check back once the song has been released.', '')
-    lyrics = lyrics.replace(r'yeah', '')
-    lyrics = lyrics.replace(r'Verse', '')
-    lyrics = lyrics.replace(r'Intro', '')
-    lyrics = lyrics.replace(r'Pre-Chorus', '')
-    lyrics = lyrics.replace(r'Interlude', '')
-    lyrics = lyrics.replace(r'Refrain', '')
-    lyrics = lyrics.replace(r'Chorus', '')
-    lyrics = lyrics.replace(r'Post-Chorus', '')
-    lyrics = lyrics.replace(r'Guitar Solo', '')
-    lyrics = lyrics.replace(r'Outro', '')
-    lyrics = lyrics.replace(r'Bridge', '')
-    lyrics = lyrics.replace(r'uh-huh', '')
-    lyrics = lyrics.replace(r'whoa', '')
-    lyrics = lyrics.replace(r'oh', '')
+    to_replace = ["mmm", "Lyrics for thissong have yet to be released. Please check back once the song has been released.",
+                  "yeah", "Verse", "Intro", "Pre-Chorus", "Interlude", "Refrain", "Chorus", "Post-Chorus",
+                  "Guitar Solo", "Outro", "Bridge", "uh-huh", "whoa", "oh"]
+    for s in to_replace:
+        lyrics = lyrics.replace(s, '')
     lyrics = re.sub(r'\[.*\]', '', lyrics)
-    lyrics = lyrics.replace(r'[', '')
-    lyrics = lyrics.replace(r']', '')
     lyrics = lyrics.replace(r',', '')
     lyrics = lyrics.replace(r'?', '')
     lyrics = lyrics.replace(r'&', 'and')
@@ -155,30 +142,30 @@ def song_interpreter(lyrics):
     song_interpretation = response.choices[0].text
     return song_interpretation
 
-def song_themes(lyrics):
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt="Lyrics:"+lyrics+"\n\nList three themes in these lyrics (each theme comma separated):\n\n",
-    temperature=0.7,
-    max_tokens=64,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
-    )
-    song_themes = response.choices[0].text
-    return song_themes
+# def song_themes(lyrics):
+#     openai.api_key = os.getenv("OPENAI_API_KEY")
+#     response = openai.Completion.create(
+#     model="text-davinci-003",
+#     prompt="Lyrics:"+lyrics+"\n\nList three themes in these lyrics (each theme comma separated):\n\n",
+#     temperature=0.7,
+#     max_tokens=64,
+#     top_p=1,
+#     frequency_penalty=0,
+#     presence_penalty=0
+#     )
+#     song_themes = response.choices[0].text
+#     return song_themes
 
-def song_mood_ai(lyrics):
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt="Lyrics:"+lyrics+"\n\nOne word that describes the mood of the lyrics:\n\n",
-    temperature=0.7,
-    max_tokens=64,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
-    )
-    song_mood_ai = response.choices[0].text
-    return song_mood_ai
+# def song_mood_ai(lyrics):
+#     openai.api_key = os.getenv("OPENAI_API_KEY")
+#     response = openai.Completion.create(
+#     model="text-davinci-003",
+#     prompt="Lyrics:"+lyrics+"\n\nOne word that describes the mood of the lyrics:\n\n",
+#     temperature=0.7,
+#     max_tokens=64,
+#     top_p=1,
+#     frequency_penalty=0,
+#     presence_penalty=0
+#     )
+#     song_mood_ai = response.choices[0].text
+#     return song_mood_ai

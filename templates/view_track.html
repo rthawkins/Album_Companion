@@ -91,7 +91,7 @@
         text = text.replace(/2\) /g, "");
         text = text.replace(/3\) /g, "");
         // split text into separate variables
-        var variables = text.split(";");
+        var variables = text.split(/;(?!')/);
         return variables;
       }
       var variables = splitAndCleanText(('{{song_dict.interpretation}}'));

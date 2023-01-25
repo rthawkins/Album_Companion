@@ -18,8 +18,7 @@
   <script>var s_title = '{{song_dict.title}}';</script>
   <script>var s_tracknum = '{{song_dict.track}}';</script>
   <script>var s_interpretation = '{{song_dict.interpretation}}';</script>
-  <script>var s_themes = '{{song_dict.themes_ai}}';</script>
-  <script>var s_aimood = '{{song_dict.mood_ai}}';</script>
+
   <script>      
     var s_lexical_diversity = ('{{song_dict.msttr}}' * 100).toFixed(1);
     var s_lyrical_cliche = ('{{song_dict.cliche_word_perc}}' * 100).toFixed(1);</script>
@@ -85,6 +84,16 @@
         document.getElementById("cliche").innerHTML = s_lyrical_cliche + '%';
         document.getElementById("diverse-mobile").innerHTML = s_lexical_diversity + '%';
         document.getElementById("cliche-mobile").innerHTML = s_lyrical_cliche + '%';}
+      var variables = ('{{song_dict.interpretation}}').split(";");
+      var interpret = variables[0].charAt(0).toUpperCase() + variables[0].slice(1);
+      document.getElementById("interpret_message").innerHTML = interpret;
+      document.getElementById("interpret_message2").innerHTML = interpret;
+      var mood = variables[1].charAt(0).toUpperCase() + variables[1].slice(1); 
+      document.getElementById("mood_message").innerHTML = mood;
+      document.getElementById("mood_message2").innerHTML = mood;
+      var themes = variables[2].charAt(0).toUpperCase() + variables[2].slice(1); 
+      document.getElementById("themes_message").innerHTML = themes;
+      document.getElementById("themes_message2").innerHTML = themes;
       }
 ;
   </script>
@@ -182,7 +191,7 @@
         <div class="card-header" align="center">
           <h5>"{{song_dict.title}}"</h5></div>
       <div id="rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}"><span id="myText"></span></div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js" ></script>
-      <p><b>AI Says: </b>{{ song_dict.interpretation}}</p>
+      <p><b>AI Says: </b><span id = "interpret_message"></span></p>
     </div>
     </div>
     <div class="div6">
@@ -202,8 +211,8 @@
       <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
       <tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words. The average pop song is around 55%."></i><b> Lexical Diversity</b></td><td id="diverse"></td><td></td></tr>
       <tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, boy/girl, happy/sad, and heart. The average pop song is around 4%."></i><b> Lyrical Cliche</b></td><td id="cliche"></td><td></td></tr>
-      <!-- <tr><td><b>Mood Type</b></td><td>{{ song_dict.mood_ai}}</td><td><span></span></td></tr>
-      <tr><td><b>Themes</b></td><td>{{ song_dict.themes_ai}}</td><td><span></span></td></tr> -->
+      <tr><td><b>Mood Type</b></td><td><span id = "mood_message2"></span></td><td><span></span></td></tr>
+      <tr><td><b>Themes</b></td><td><span id = "themes_message2"></span></td><td><span></span></td></tr>
       <script type="text/javascript">
       
         $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {
@@ -296,7 +305,7 @@
 
                 <div class="tab-pane container active" id="lyrics-tab">
                     <div id="mobile_rg_embed_link_{{song_dict.genius_songid}}" class="rg_embed_link" data-song-id="{{song_dict.genius_songid}}"><span id="myText_mobile"></span></div> <script crossorigin src="//genius.com/songs/{{song_dict.genius_songid}}/embed.js" ></script>
-                    <p><b>AI Says: </b>{{ song_dict.interpretation}}</p>
+                    <p><b>AI Says: </b><span id = "interpret_message2"></span></p>
                   </div>
                 <div class="tab-pane container fade" id="attributes-tab">
                   <div class="card">
@@ -315,8 +324,8 @@
                   <tr><td><b>Danceability</b></td><td>{{ song_dict.dance_des}} ({{ song_dict.danceability}})</td><td><span class="barchart-dance"></span></td></tr>
                   <tr><td><i class="fa fa-info-circle" title="Represents how lyrically diverse the songs are. Calculated as the number of unique words out of the total words. The average pop song is around 55%."></i><b> Lexical Diversity</b></td><td id="diverse-mobile"></td><td></td></tr>
                   <tr><td><i class="fa fa-info-circle" title="Percentage of words containing baby, love, feel, boy/girl, happy/sad, and heart. The average pop song is around 4%."></i><b> Lyrical Cliche</b></td><td id="cliche-mobile"></td><td></td></tr>
-                    <!-- <tr><td><b>Mood Type</b></td><td>{{ song_dict.mood_ai}}</td><td><span></span></td></tr>
-                    <tr><td><b>Themes</b></td><td>{{ song_dict.themes_ai}}</td><td><span></span></td></tr> -->
+                  <tr><td><b>Mood Type</b></td><td><span id = "mood_message"></span></td><td><span></span></td></tr>
+                  <tr><td><b>Themes</b></td><td><span id = "themes_message"></span></td><td><span></span></td></tr>
                   <script type="text/javascript">
                   
                     $(".barchart-energy").sparkline([0.5,s_energy,1,0,0], {

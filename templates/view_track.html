@@ -17,7 +17,6 @@
   <script>var s_dance = '{{song_dict.danceability}}';</script>
   <script>var s_title = '{{song_dict.title}}';</script>
   <script>var s_tracknum = '{{song_dict.track}}';</script>
-  <script>var s_interpretation = '{{song_dict.interpretation}}';</script>
 
   <script>      
     var s_lexical_diversity = ('{{song_dict.msttr}}' * 100).toFixed(1);
@@ -84,30 +83,34 @@
         document.getElementById("cliche").innerHTML = s_lyrical_cliche + '%';
         document.getElementById("diverse-mobile").innerHTML = s_lexical_diversity + '%';
         document.getElementById("cliche-mobile").innerHTML = s_lyrical_cliche + '%';}
-      function splitAndCleanText(text) {
-        // remove instances of "Answer: ", "1) ", "2) " and "3) "
-        text = text.replace(/Answer: /g, "");
-        text = text.replace(/1\) /g, "");
-        text = text.replace(/2\) /g, "");
-        text = text.replace(/3\) /g, "");
-        // split text into separate variables
-        var variables = text.split(";");
-        return variables;
-      }
-      var variables = splitAndCleanText(('{{song_dict.interpretation}}'));
-      if(variables.length > 0){
-        var interpret = variables[0].charAt(0).toUpperCase() + variables[0].slice(1);
-        document.getElementById("interpret_message").innerHTML = interpret;
-        document.getElementById("interpret_message2").innerHTML = interpret;
-        var mood = variables[1].charAt(0).toUpperCase() + variables[1].slice(1); 
-        document.getElementById("mood_message").innerHTML = mood;
-        document.getElementById("mood_message2").innerHTML = mood;
-        var themes = variables[2].charAt(0).toUpperCase() + variables[2].slice(1); 
-        document.getElementById("themes_message").innerHTML = themes;
-        document.getElementById("themes_message2").innerHTML = themes;
-      }
       }
 ;
+  </script>
+  <script>
+  function loadFunction() {
+    function splitAndCleanText(text) {
+      // remove instances of "Answer: ", "1) ", "2) " and "3) "
+      text = text.replace(/Answer: /g, "");
+      text = text.replace(/1\) /g, "");
+      text = text.replace(/2\) /g, "");
+      text = text.replace(/3\) /g, "");
+      // split text into separate variables
+      var variables = text.split("; ");
+      return variables;
+    }
+    console.log(splitAndCleanText(('{{song_dict.interpretation}}')));
+    var variables = splitAndCleanText(('{{song_dict.interpretation}}'));
+    if(variables.length > 0) {
+      var interpret = variables.slice(0,1);
+      document.getElementById("interpret_message").innerHTML = interpret;
+      document.getElementById("interpret_message2").innerHTML = interpret;
+      var mood = variables.slice(1,2); 
+      document.getElementById("mood_message").innerHTML = mood;
+      document.getElementById("mood_message2").innerHTML = mood;
+      var themes = variables.slice(2,3); 
+      document.getElementById("themes_message").innerHTML = themes;
+      document.getElementById("themes_message2").innerHTML = themes;
+    }}
   </script>
 </head>
 

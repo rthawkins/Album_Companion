@@ -5,12 +5,13 @@ import logging
 import pandas as pd
 log = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
-import song_overview
-import album_overview
 import locale
 from decouple import config
 from pymongo.errors import BulkWriteError
 from bson import ObjectId
+import os
+import song_overview
+import album_overview
 from song_overview import get_song_features
 from song_overview import get_album_id
 from song_overview import search_song_id
@@ -18,7 +19,6 @@ from album_overview import analyze_album
 from album_overview import search_album
 from album_overview import sp
 from album_overview import album_wordcloud
-import os
 
 # JSON Encoding setup
 class JSONEncoder(json.JSONEncoder):

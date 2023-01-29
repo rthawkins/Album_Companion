@@ -132,7 +132,7 @@ def song_interpreter(lyrics):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.Completion.create(
     model="text-davinci-003",
-    prompt="Lyrics:"+lyrics+"\n\nAnswer these questions, with each response separated by a semi-colon:\n1) Thoughtfully analyze the meaning of these lyrics in two sentences, maximum of 50 words.\n2) Describe the mood of these lyrics in one word.\n3) List three themes of these lyrics, comma separated.\n\n",
+    prompt="Lyrics:"+lyrics+"\n\nAnswer these questions, with each response separated by a semi-colon:\n1) Thoughtfully analyze the meaning of these lyrics in a paragraph.\n2) Describe the mood of these lyrics in one word.\n3) List three themes of these lyrics, comma separated.\n\n",
     temperature=0.7,
     max_tokens=256,
     top_p=1,

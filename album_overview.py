@@ -34,7 +34,7 @@ from lexical_diversity import lex_div as ld
 from song_overview import clean_lyrics
 from song_overview import get_lyric_sentiment
 from song_overview import request_song_info
-from song_overview import get_lyrics
+from song_overview import genius_find_song_lyrics
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -240,7 +240,7 @@ def analyze_album(album_id):
                 print(url)
                 genius_url.append(url)
                 genius_songid.append(str(remote_song_info['result']['id']))
-                lyrics = get_lyrics(url)
+                lyrics = genius_find_song_lyrics(f"{matching_artist} {title}",genius_token)
                 cleaned_lyrics = clean_lyrics(lyrics)
                 flt = ld.flemmatize(cleaned_lyrics)
                 clean_flt = [x for x in flt if x.lower() not in excluded_words]
@@ -375,6 +375,7 @@ def categorize_words(x):
         return 'None'
 
 def album_wordcloud(dict_name):
+    
     dict_name = [ row for row in dict_name if row['lyrics'] is not None ]
     all_lyrics = ', '.join(d['lyrics'] for d in (dict_name))
     all_lyrics = clean_lyrics(all_lyrics)
